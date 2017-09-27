@@ -3,13 +3,13 @@ import csv
 
 orders = order.objects(download_link=None)
 for o in orders:
-	with open('tmp.csv', 'w') as f:
+	with open('tmp.csv', 'w') as csv:
 		datapoints = []
 
 		if o.data == 'wave':
 			fieldnames = ['long', 'lat', 'height']
 			writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    		writer.writeheader()
+			writer.writeheader()
 
 			datapoints = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry':o.polygon}}})
 			for d in datapoints:
@@ -19,8 +19,8 @@ for o in orders:
 					print e
 		elif o.data == 'bathymetry':
 			fieldnames = ['long', 'lat', 'depth']
-    		writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    		writer.writeheader()
+			writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+			writer.writeheader()
 
 			datapoints = bathymetry.objects(__raw__={'l':{'$geoWithin':{'$geometry':o.polygon}}})
 			for d in datapoints:
