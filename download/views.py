@@ -67,17 +67,17 @@ def orderData(request):
 
 	try:
 		polygon = json.loads(polygon)
-		if data and polygon and email and organization:
+		if data and data in ['wave', 'bathymetry'] and polygon and email and organization:
 			o = order(oid=str(uuid.uuid4()))
 			o.data = data
 			o.polygon = polygon
 			o.organization = organization
 			o.email = email
-			o.price = getPrice(data, polygon)
+			o.price = getPrice(data, polygon)[0]
 			o.save()
 
-		res['status'] = True
-		res['msg'] = 'order placed.'
+			res['status'] = True
+			res['msg'] = 'order placed.'
 	except Exception, e:
 		print e
 		res['status'] = False
