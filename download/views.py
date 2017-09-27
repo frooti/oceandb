@@ -33,6 +33,7 @@ def fetchPrice(request):
 			elif data == 'bathymetry':
 				datapoints = bathymetry.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
 			res['status'] = True
+			res['msg'] = 'success'
 			res['price'] = '$'+str(datapoints*0.1)
 			res['datapoints'] = datapoints
 			res['size'] = str(datapoints*20/1024)+' KB'
