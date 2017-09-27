@@ -14,7 +14,7 @@ class order(Document):
 	oid = StringField(db_field='oid', max_length=50, required=True)
 	email = StringField(db_field='e', max_length=200, required=True)
 	organization = StringField(db_field='o', max_length=200, required=True)
-	polygon = PolygonField(db_field='p', auto_index=True, required=True)
+	polygon = PolygonField(db_field='pl', auto_index=True, required=True)
 	data = StringField(db_field='d', max_length=50, required=True)
 	price = DecimalField(db_field='p', precision=2, rounding='ROUND_HALF_UP', required=True) 
 	payment_status = BooleanField(db_field='ps', default=False)

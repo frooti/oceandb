@@ -59,7 +59,7 @@ def getPrice(data, polygon):
 			pass
 	return -1, 0
 
-def fetchData(request):
+def orderData(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	polygon = request.GET.get('polygon', None)
 	data =  request.GET.get('data', None)
