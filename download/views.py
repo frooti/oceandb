@@ -22,20 +22,20 @@ def default(obj):
 def fetchPrice(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	polygon = request.GET.get('polygon', None)
-	dtype =  request.GET.get('dtype', None)
+	data =  request.GET.get('data', None)
 	
 	datapoints = 0
 	try:
 		polygon = json.loads(polygon)
-		if dtype and polygon:
-			if dtype == 'wave':
+		if data and polygon:
+			if data == 'wave':
 				datapoints = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
-			elif dtype == 'bathymetry':
+			elif data == 'bathymetry':
 				datapoints = bathymetry.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
-		res['status'] = True
-		res['price'] = '$'+str(datapoints*0.1)
-		res['datapoints'] = datapoints
-		res['size'] = str(datapoints*20/1024)+' KB'
+			res['status'] = True
+			res['price'] = '$'+str(datapoints*0.1)
+			res['datapoints'] = datapoints
+			res['size'] = str(datapoints*20/1024)+' KB'
 	except Exception, e:
 		print e
 		res['status'] = False
