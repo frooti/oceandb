@@ -8,7 +8,7 @@ for o in orders:
 
 		if o.data == 'wave':
 			fieldnames = ['long', 'lat', 'height']
-    		writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+			writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     		writer.writeheader()
 
 			datapoints = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry':o.polygon}}})
