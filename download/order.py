@@ -20,7 +20,7 @@ def upload_file(filename, oid):
 
 orders = order.objects(download_link=None)
 for o in orders:
-	with open('/home/ubuntu/projects/oceandb/download/tmp.csv', 'r+') as f:
+	with open('/home/ubuntu/projects/oceandb/download/tmp.csv', 'w') as f:
 		datapoints = []
 
 		if o.data == 'wave':
