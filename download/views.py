@@ -8,8 +8,6 @@ from models import order, wave, bathymetry
 DEFAULT_RESPONSE = '{"status":false, "msg": "bad request."}'
 
 from django.http import HttpResponse
-import boto3
-import redis
 import json
 import uuid
 import time
