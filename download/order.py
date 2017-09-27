@@ -20,7 +20,7 @@ def upload_file(filename, oid):
 
 orders = order.objects(download_link=None)
 for o in orders:
-	with open('tmp.csv', 'r+') as f:
+	with open('/home/ubuntu/projects/oceandb/download/tmp.csv', 'r+') as f:
 		datapoints = []
 
 		if o.data == 'wave':
@@ -47,4 +47,5 @@ for o in orders:
 					print e
 
 		# publish to s3
-		
+		upload_file('/home/ubuntu/projects/oceandb/download/tmp.csv', o.oid)
+		print 'https://s3-ap-southeast-1.amazonaws.com/dataraftoceandb/'+o.oid
