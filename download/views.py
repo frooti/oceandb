@@ -73,11 +73,13 @@ def orderData(request):
 			o.polygon = polygon
 			o.organization = organization
 			o.email = email
-			o.price = getPrice(data, polygon)[0]
-			o.save()
+			price = getPrice(data, polygon)[0]
+			if price:
+				o.price = price 
+				o.save()
 
-			res['status'] = True
-			res['msg'] = 'order placed.'
+				res['status'] = True
+				res['msg'] = 'order placed.'
 	except Exception, e:
 		print e
 		res['status'] = False
