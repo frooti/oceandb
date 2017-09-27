@@ -45,7 +45,8 @@ for o in orders:
 					writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'depth': d.depth})
 				except Exception, e:
 					print e
-
+		f.close()
+		
 		# publish to s3
 		upload_file('/home/ubuntu/projects/oceandb/download/tmp.csv', o.oid)
 		print 'https://s3-ap-southeast-1.amazonaws.com/dataraftoceandb/'+o.oid
