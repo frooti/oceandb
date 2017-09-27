@@ -27,7 +27,7 @@ def fetchPrice(request):
 	datapoints = 0
 	try:
 		polygon = json.loads(polygon)
-		if data and polygon:
+		if data and polygon and data in ['wave', 'bathymetry']:
 			if data == 'wave':
 				datapoints = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
 			elif data == 'bathymetry':
