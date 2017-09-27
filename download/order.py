@@ -1,4 +1,4 @@
-from model import order
+from models import order
 
 orders = order.objects(download_link=None)
 for o in orders:
