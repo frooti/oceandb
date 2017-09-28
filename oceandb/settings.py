@@ -25,7 +25,10 @@ SECRET_KEY = 'p!3v@7jw9$2-yppl*+ainglpo1v&y&u2ji)b!v*791)=91mmj7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['13.229.95.21', 'ec2-13-229-95-21.ap-southeast-1.compute.amazonaws.com']
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '13.229.95.21', 'ec2-13-229-95-21.ap-southeast-1.compute.amazonaws.com']
 
 
 # Application definition
@@ -37,11 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
