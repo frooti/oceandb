@@ -1,6 +1,6 @@
 from models import *
 import csv
-import boto3
+from datetime import datetime, timedelta
 s3 = boto3.resource('s3')
 
 def upload_file(filename, oid):
@@ -31,7 +31,11 @@ for o in orders:
 			datapoints = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry':o.polygon}}})
 			for d in datapoints:
 				try:
-					writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'height': d.height})
+					values = d.values
+					for year in values:
+						for d, v in enumerate(d.values[year]):
+							date = datetime(year=2017, month=1, day=1)+timedelta(days=d).strftime('%Y-%m-%d %H:%M')
+							writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'height': v, 'date':date})
 				except Exception, e:
 					print e
 		elif o.data == 'bathymetry':
@@ -46,7 +50,7 @@ for o in orders:
 				except Exception, e:
 					print e
 		f.close()
-		
+
 		# publish to s3
 		upload_file('/home/ubuntu/projects/oceandb/download/tmp.csv', o.oid)
 		print 'https://s3-ap-southeast-1.amazonaws.com/dataraftoceandb/'+o.oid

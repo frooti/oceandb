@@ -1,15 +1,15 @@
 from datetime import datetime, timedelta
-from models import wave
 from mongoengine import *
 
-connect('ocean')
+connect('ocean', host='mongodb://13.229.95.21:27017/ocean')
+#connect('ocean', host='13.229.95.21', port=27017)
 
 class wave(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
 
 ## CONFIG ##
-file_path = 'wave.dat'
+file_path = '../hs.txt'
 date = datetime(day=1, month=9, year=2017) #GMT
 timestep = timedelta(hours=24)
 grid = (361, 321)
@@ -24,20 +24,25 @@ with open(file_path, 'r') as f:
 	i, j = (0, 0)
 	for r in f:
 		i += 1
-
+		print i
 		r = r.split()
-		if len(r)==grid[1]: # process only if full row data is present
+		if len(r)==grid[0]: # process only if full row data is present
+			if j==grid[0]:
+				j = 0
 			for v in r:
 				j += 1
-				v = float(v)
+				#print j
+				v = round(float(v), 2)
 
 				if v>=0.0:
 					loc = {'type': 'Point', 'coordinates': [round(longitude1+(longitude_delta*(j-1)), 3), round(latitude1+(latitude_delta*(i-1)), 3)]}
 					value = round(v, 3)
 					year = date.year
 					day = date.timetuple().tm_yday
-					wave.objects(loc=loc).update_one(values__year__day=value, upsert=True)
-					wave
-		if i>grid[0]:
-			i, j = (0, 0)
+					data = {}
+					data['set__values__'+year+'__'+day] = value
+					data['upsert'] = True
+					wave.objects(loc=loc).update_one(**data)
+		if i==grid[1]:
+			i = 0
 			date += timedelta 
