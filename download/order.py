@@ -33,8 +33,9 @@ for o in orders:
 				try:
 					values = d.values
 					for year in values:
-						for d, v in enumerate(d.values[year]):
-							date = datetime(year=2017, month=1, day=1)+timedelta(days=d).strftime('%Y-%m-%d %H:%M')
+						for day in d.values[year]):
+							value = d.values[year][day]
+							date = datetime(year=2017, month=1, day=1)+timedelta(days=int(day)).strftime('%Y-%m-%d %H:%M')
 							writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'height': v, 'date':date})
 				except Exception, e:
 					print e
