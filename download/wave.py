@@ -27,8 +27,6 @@ with open(file_path, 'r') as f:
 		print i
 		r = r.split()
 		if len(r)==grid[0]: # process only if full row data is present
-			if j==grid[0]:
-				j = 0
 			for v in r:
 				j += 1
 				#print j
@@ -45,4 +43,6 @@ with open(file_path, 'r') as f:
 					wave.objects(loc=loc).update_one(**data)
 		if i==grid[1]:
 			i = 0
-			date += timestep 
+			date += timestep
+		if j==grid[0]:
+			j = 0
