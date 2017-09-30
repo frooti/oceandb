@@ -1,5 +1,12 @@
 from datetime import datetime, timedelta
 from models import wave
+from mongoengine import *
+
+connect('ocean')
+
+class wave(Document):
+	loc = PointField(db_field='l', auto_index=True, required=True)
+	values = DictField()
 
 ## CONFIG ##
 file_path = 'wave.dat'
