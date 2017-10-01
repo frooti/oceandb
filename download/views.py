@@ -21,21 +21,11 @@ def default(obj):
         return float(obj)
     raise TypeError
 
-def fetchPrice(request):
-	res = json.loads(DEFAULT_RESPONSE)
-	polygon = request.GET.get('polygon', None)
-	data =  request.GET.get('data', None)
-	from_date = request.GET.get('from_date', (datetime(day=1, month=9, year=2017)-timedelta(days=7)).isoformat())
-	to_date = request.GET.get('to_date', (datetime(day=1, month=9, year=2017)+timedelta(days=7)).isoformat())
-	
+def getPrice(data, polygon, from_date, to_date):
 	datapoints = 0
-	try:
-		from_date = dateutil.parser.parse(from_date)
-		to_date = dateutil.parser.parse(to_date)
-		polygon = json.loads(polygon)
-		
-		if data and polygon and data in ['wave', 'bathymetry']:
-			if data == 'wave':
+	if data and polygon and from_date and to_date:
+		try:
+			if data=='wave':
 				spatialpoints = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
 				available_days = 0
 				sample = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}})[0]
@@ -51,22 +41,39 @@ def fetchPrice(request):
 					from_date += timedelta(days=1)
 
 				datapoints = spatialpoints*available_days
-				res['status'] = True
-				res['msg'] = 'success'
-				res['datapoints'] = datapoints
-				if datapoints:
-					res['price'] = '$'+str(round(500+(datapoints*0.1), 0))
-				else:
-					res['price'] = '$0'
 				
-				res['size'] = str(datapoints*20/1024)+' KB'
-			elif data == 'bathymetry':
+				return round(500+(datapoints*0.1), 0), datapoints
+			elif dtype == 'bathymetry':
 				datapoints = bathymetry.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
-				res['status'] = True
-				res['msg'] = 'success'
-				res['price'] = '$'+str(round(500+(datapoints*0.1), 0))
-				res['datapoints'] = datapoints
-				res['size'] = str(datapoints*20/1024)+' KB'
+				return round(500+(datapoints*0.1), 0), datapoints
+		except:
+			pass
+	return -1, 0
+
+def fetchPrice(request):
+	res = json.loads(DEFAULT_RESPONSE)
+	polygon = request.GET.get('polygon', None)
+	data =  request.GET.get('data', None)
+	from_date = request.GET.get('from_date', (datetime(day=1, month=9, year=2017)-timedelta(days=7)).isoformat())
+	to_date = request.GET.get('to_date', (datetime(day=1, month=9, year=2017)+timedelta(days=7)).isoformat())
+	
+	datapoints = 0
+	try:
+		from_date = dateutil.parser.parse(from_date)
+		to_date = dateutil.parser.parse(to_date)
+		polygon = json.loads(polygon)
+		
+		if data and polygon and data in ['wave', 'bathymetry']:
+			price, datapoints = getPrice(data, polygon, from_date, to_date)
+
+			res['status'] = True
+			res['msg'] = 'success'
+			res['datapoints'] = datapoints
+			if price>=0:
+				res['price'] = '$'+str(price)
+			else:
+				res['price'] = '$0'
+			res['size'] = str(datapoints*20/1024)+' KB'
 	except Exception, e:
 		print e
 		res['status'] = False
@@ -74,36 +81,29 @@ def fetchPrice(request):
 
 	return HttpResponse(json.dumps(res, default=default))
 
-def getPrice(data, polygon):
-	datapoints = 0
-	if data and polygon:
-		try:
-			if data=='wave':
-				datapoints = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
-				return datapoints*0.1, datapoints
-			elif dtype == 'bathymetry':
-				datapoints = bathymetry.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
-				return datapoints*0.1, datapoints
-		except:
-			pass
-	return -1, 0
-
 def orderData(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	polygon = request.GET.get('polygon', None)
 	data =  request.GET.get('data', None)
+	from_date = request.GET.get('from_date', (datetime(day=1, month=9, year=2017)-timedelta(days=7)).isoformat())
+	to_date = request.GET.get('to_date', (datetime(day=1, month=9, year=2017)+timedelta(days=7)).isoformat())
 	email = request.GET.get('email', None)
 	organization = request.GET.get('organization', None)
 
 	try:
 		polygon = json.loads(polygon)
+		from_date = dateutil.parser.parse(from_date)
+		to_date = dateutil.parser.parse(to_date)
+
 		if data and data in ['wave', 'bathymetry'] and polygon and email and organization:
 			o = order(oid=str(uuid.uuid4()))
 			o.data = data
 			o.polygon = polygon
+			o.from_date = from_date
+			o.to_date = to_date
 			o.organization = organization
 			o.email = email
-			price = getPrice(data, polygon)[0]
+			price = getPrice(data, polygon, from_date, to_date)[0]
 			if price:
 				o.price = price 
 				o.save()
