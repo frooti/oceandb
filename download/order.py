@@ -35,8 +35,8 @@ for o in orders:
 					for year in values:
 						for day in d.values[year]):
 							value = d.values[year][day]
-							date = datetime(year=2017, month=1, day=1)+timedelta(days=int(day)).strftime('%Y-%m-%d %H:%M')
-							writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'height': v, 'date':date})
+							date = datetime(year=year, month=1, day=1)+timedelta(days=int(day)).strftime('%Y-%m-%d %H:%M')
+							writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'height': value, 'date':date})
 				except Exception, e:
 					print e
 		elif o.data == 'bathymetry':
