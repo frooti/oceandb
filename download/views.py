@@ -45,8 +45,9 @@ def fetchPrice(request):
 					year = str(from_date.year)
 					try:
 						sample.values[year][day]
-					except:
-						pass
+						print ok
+					except Exception, e:
+						print e
 					from_date += timedelta(days=1)
 
 				for d in check_days:
