@@ -40,14 +40,18 @@ def fetchPrice(request):
 				available_days = 0
 				sample = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}})[0]
 				
-				check_days = []
 				while from_date<=to_date:
-					check_days.append([from_date.timetuple().tm_yday, from_date.year])
+					day = str(from_date.timetuple().tm_yday)
+					year = str(from_date.year)
+					try:
+						sample.values[year][day]
+					except:
+						pass
 					from_date += timedelta(days=1)
 
 				for d in check_days:
 					try:
-						sample.values[d[1]][d[0]]
+						
 						available_days += 1
 					except Exception, e:
 						print e
