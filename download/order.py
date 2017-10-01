@@ -71,10 +71,10 @@ while True:
 				# email client
 				email_msg = 'Hi, \n Below is your order #'+o.oid+' download link:\n'+download_link
 				email = {
-					Source = 'order@dataraft.in',
-					Destination = {'ToAddresses': o.email},
-					Message = {'Subject': {'Data': 'reg: Order #'+str(o.oid), ''}},
-					Body = {'Text': {'Data': email_msg}}
+					Source: 'order@dataraft.in',
+					Destination: {'ToAddresses': o.email},
+					Message: {'Subject': {'Data': 'reg: Order #'+str(o.oid), ''}},
+					Body: {'Text': {'Data': email_msg}}
 				}
 				ses.send_email(**email)
 
