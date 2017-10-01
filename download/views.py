@@ -45,22 +45,19 @@ def fetchPrice(request):
 					year = str(from_date.year)
 					try:
 						sample.values[year][day]
-						print ok
-					except Exception, e:
-						print e
+						available_days += 1
+					except:
+						pass
 					from_date += timedelta(days=1)
 
-				for d in check_days:
-					try:
-						
-						available_days += 1
-					except Exception, e:
-						print e
 				datapoints = spatialpoints*available_days
 				res['status'] = True
 				res['msg'] = 'success'
 				res['datapoints'] = datapoints
-				res['price'] = '$'+str(max(datapoints*0.1, 1500))
+				if datapoints:
+					res['price'] = '$'+str(max(datapoints*0.1, 1500))
+				else:
+					res['price'] = '$0'
 				
 				res['size'] = str(datapoints*20/1024)+' KB'
 			elif data == 'bathymetry':
