@@ -32,11 +32,15 @@ for o in orders:
 			for d in datapoints:
 				try:
 					values = d.values
-					for year in values:
-						for day in d.values[year]):
-							value = d.values[year][day]
-							date = datetime(year=year, month=1, day=1)+timedelta(days=int(day)).strftime('%Y-%m-%d %H:%M')
-							writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'height': value, 'date':date})
+
+					while from_date<=to_date:
+						day = str(from_date.timetuple().tm_yday)
+						year = str(from_date.year)
+						try:
+							writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'height': d.values[year][day], 'date':from_date.strftime('%Y-%m-%d %H:%M')})
+						except:
+							pass
+						from_date += timedelta(days=1)
 				except Exception, e:
 					print e
 		elif o.data == 'bathymetry':
