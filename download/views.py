@@ -25,8 +25,8 @@ def fetchPrice(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	polygon = request.GET.get('polygon', None)
 	data =  request.GET.get('data', None)
-	from_date = request.GET.get('from_date', (datetime.utcnow()-timedelta(days=7)).isoformat())
-	to_date = request.GET.get('to_date', (datetime.utcnow()+timedelta(days=7)).isoformat())
+	from_date = request.GET.get('from_date', (datetime(day=1, month=9, year=2017)-timedelta(days=7)).isoformat())
+	to_date = request.GET.get('to_date', (datetime(day=1, month=9, year=2017)+timedelta(days=7)).isoformat())
 	
 	datapoints = 0
 	try:
