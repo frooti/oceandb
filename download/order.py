@@ -31,11 +31,12 @@ for o in orders:
 			writer = csv.DictWriter(f, fieldnames=fieldnames)
 			writer.writeheader()
 
-			datapoints = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry':o.polygon}}})
-			for d in datapoints:
+			spatialpoints = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry':o.polygon}}})
+			for d in spatialpoints:
 				try:
 					values = d.values
-
+					from_date = o.from_date
+					
 					while from_date<=to_date:
 						day = str(from_date.timetuple().tm_yday)
 						year = str(from_date.year)
@@ -51,8 +52,8 @@ for o in orders:
 			writer = csv.DictWriter(f, fieldnames=fieldnames)
 			writer.writeheader()
 
-			datapoints = bathymetry.objects(__raw__={'l':{'$geoWithin':{'$geometry':o.polygon}}})
-			for d in datapoints:
+			spatialpoints = bathymetry.objects(__raw__={'l':{'$geoWithin':{'$geometry':o.polygon}}})
+			for d in spatialpoints:
 				try:
 					writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'depth': d.depth})
 				except Exception, e:
