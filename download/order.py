@@ -19,13 +19,15 @@ def upload_file(filename, oid):
 	except Exception as e:
 		print "Error uploading: %s" % ( e )
 
-orders = order.objects(download_link=None)
+orders = order.objects(processed_at=None)
 for o in orders:
 	with open('/home/ubuntu/projects/oceandb/download/tmp.csv', 'w') as f:
 		datapoints = []
 
 		if o.data == 'wave':
-			fieldnames = ['long', 'lat', 'height']
+			from_date = o.from_date
+			to_date = o.to_date
+			fieldnames = ['long', 'lat', 'height', 'date']
 			writer = csv.DictWriter(f, fieldnames=fieldnames)
 			writer.writeheader()
 
