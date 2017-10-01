@@ -49,8 +49,8 @@ def fetchPrice(request):
 					try:
 						sample.values[d[1]][d[0]]
 						available_days += 1
-					except:
-						pass
+					except Exception, e:
+						print e
 				datapoints = spatialpoints*available_days
 				res['status'] = True
 				res['msg'] = 'success'
