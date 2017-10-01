@@ -47,7 +47,7 @@ def fetchPrice(request):
 
 				for d in check_days:
 					try:
-						sample.values[d]
+						sample.values[d[1]][d[0]]
 						available_days += 1
 					except:
 						pass
