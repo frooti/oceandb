@@ -47,7 +47,7 @@ while True:
 								try:
 									writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'height': d.values[year][day], 'date':from_date.strftime('%Y-%m-%d %H:%M')})
 								except Exception, e:
-									print e 
+									pass 
 								from_date += timedelta(days=1)
 						except Exception, e:
 							print e
@@ -61,7 +61,7 @@ while True:
 						try:
 							writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'depth': d.depth})
 						except Exception, e:
-							print e
+							pass
 				f.close()
 
 				# publish to s3
@@ -73,8 +73,10 @@ while True:
 				email = {
 					'Source': 'order@dataraft.in',
 					'Destination': {'ToAddresses': o.email},
-					'Message': {'Subject': {'Data': 'reg: Order #'+str(o.oid)}},
-					'Body': {'Text': {'Data': email_msg}}
+					'Message': {
+						'Subject': {'Data': 'reg: Order #'+str(o.oid)},
+						'Body': {'Text': {'Data': email_msg}},
+					},					
 				}
 				ses.send_email(**email)
 
