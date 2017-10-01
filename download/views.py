@@ -55,7 +55,7 @@ def fetchPrice(request):
 				res['msg'] = 'success'
 				res['datapoints'] = datapoints
 				if datapoints:
-					res['price'] = '$'+str(max(datapoints*0.1, 1500))
+					res['price'] = '$'+str(round(500+(datapoints*0.1), 0))
 				else:
 					res['price'] = '$0'
 				
@@ -64,7 +64,7 @@ def fetchPrice(request):
 				datapoints = bathymetry.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
 				res['status'] = True
 				res['msg'] = 'success'
-				res['price'] = '$'+str(max(datapoints*0.1, 1500))
+				res['price'] = '$'+str(round(500+(datapoints*0.1), 0))
 				res['datapoints'] = datapoints
 				res['size'] = str(datapoints*20/1024)+' KB'
 	except Exception, e:
