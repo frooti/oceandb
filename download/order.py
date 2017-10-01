@@ -81,6 +81,6 @@ while True:
 				o.processed_at = datetime.now()
 				o.download_link = download_link
 				o.save()
-		except Exception, e:
-			print e
+	except Exception, e:
+		print e
 	time.sleep(5)
