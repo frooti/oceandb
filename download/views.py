@@ -11,6 +11,8 @@ from django.http import HttpResponse
 import json
 import uuid
 import time
+from datetime import datetime, timedelta
+import dateutil.parser
 from decimal import Decimal
 
 # utilities
@@ -23,20 +25,46 @@ def fetchPrice(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	polygon = request.GET.get('polygon', None)
 	data =  request.GET.get('data', None)
+	from_date = request.GET.get('from_date', (datetime.utcnow()-timedelta(days=7)).isoformat())
+	to_date = request.GET.get('to_date', (datetime.utcnow()+timedelta(days=7)).isoformat())
 	
 	datapoints = 0
 	try:
+		from_date = dateutil.parser.parse(from_date)
+		to_date = dateutil.parser.parse(to_date)
 		polygon = json.loads(polygon)
+		
 		if data and polygon and data in ['wave', 'bathymetry']:
 			if data == 'wave':
-				datapoints = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
+				spatialpoints = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
+				available_days = 0
+				sample = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}})[0]
+				
+				check_days = []
+				while from_date<=to_date:
+					days.append([from_date.timetuple().tm_yday, from_date.year])
+					from_date += timedelta(days=1)
+
+				for d in check_days:
+					try:
+						sample.values[d]
+						available_days += 1
+					except:
+						pass
+				datapoints = spatialpoints*available_days
+				res['status'] = True
+				res['msg'] = 'success'
+				res['datapoints'] = datapoints
+				res['price'] = '$'+str(max(datapoints*0.1, 1500))
+				
+				res['size'] = str(datapoints*20/1024)+' KB'
 			elif data == 'bathymetry':
 				datapoints = bathymetry.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
-			res['status'] = True
-			res['msg'] = 'success'
-			res['price'] = '$'+str(datapoints*0.1)
-			res['datapoints'] = datapoints
-			res['size'] = str(datapoints*20/1024)+' KB'
+				res['status'] = True
+				res['msg'] = 'success'
+				res['price'] = '$'+str(max(datapoints*0.1, 1500))
+				res['datapoints'] = datapoints
+				res['size'] = str(datapoints*20/1024)+' KB'
 	except Exception, e:
 		print e
 		res['status'] = False
