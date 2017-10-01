@@ -41,8 +41,8 @@ for o in orders:
 						year = str(from_date.year)
 						try:
 							writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'height': d.values[year][day], 'date':from_date.strftime('%Y-%m-%d %H:%M')})
-						except:
-							pass
+						except Exception, e:
+							print e 
 						from_date += timedelta(days=1)
 				except Exception, e:
 					print e
