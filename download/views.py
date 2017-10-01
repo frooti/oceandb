@@ -42,7 +42,7 @@ def fetchPrice(request):
 				
 				check_days = []
 				while from_date<=to_date:
-					days.append([from_date.timetuple().tm_yday, from_date.year])
+					check_days.append([from_date.timetuple().tm_yday, from_date.year])
 					from_date += timedelta(days=1)
 
 				for d in check_days:
