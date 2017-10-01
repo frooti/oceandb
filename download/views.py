@@ -73,7 +73,7 @@ def fetchPrice(request):
 				res['price'] = '$'+str(price)
 			else:
 				res['price'] = '$0'
-			res['size'] = str(datapoints*20/1024)+' KB'
+			res['size'] = str(datapoints*34/1024)+' KB'
 	except Exception, e:
 		print e
 		res['status'] = False
