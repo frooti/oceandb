@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import boto3
 import time
 
-ses = boto3.client('ses')
+ses = boto3.client('ses', region_name='us-east-1')
 
 def upload_file(filename, oid):
 	session = boto3.Session()
@@ -25,6 +25,7 @@ while True:
 	try:
 		orders = order.objects(processed_at=None)
 		for o in orders:
+			print 'processing: '+o.oid
 			with open('/home/ubuntu/projects/oceandb/download/tmp.csv', 'w') as f:
 				datapoints = []
 
@@ -79,7 +80,7 @@ while True:
 					},					
 				}
 				ses.send_email(**email)
-
+				print 'email sent.'
 				o.processed_at = datetime.now()
 				o.download_link = download_link
 				o.save()
