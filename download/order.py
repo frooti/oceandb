@@ -70,12 +70,12 @@ while True:
 				download_link = 'https://s3-ap-southeast-1.amazonaws.com/dataraftoceandb/'+o.oid
 				
 				# email client
-				email_msg = 'Hi, \n Below is your order #'+o.oid+' download link:\n'+download_link
+				email_msg = 'Hi, \n Below is your download link:\n'+download_link+'\nThank You,\nDataraft Team.'
 				email = {
 					'Source': 'order@dataraft.in',
 					'Destination': {'ToAddresses': [o.email]},
 					'Message': {
-						'Subject': {'Data': 'reg: Order #'+str(o.oid)},
+						'Subject': {'Data': 'Dataraft: Download link for your Order #'+str(o.oid)},
 						'Body': {'Text': {'Data': email_msg}},
 					},					
 				}
@@ -86,4 +86,4 @@ while True:
 				o.save()
 	except Exception, e:
 		print e
-	time.sleep(5)
+	time.sleep(1)
