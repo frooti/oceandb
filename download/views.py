@@ -21,6 +21,10 @@ def default(obj):
         return float(obj)
     raise TypeError
 
+MIN_PRICE = 1000
+WAVE_DATAPOINT_PRICE = 1
+BATHY_DATAPOINT_PRICE = 1
+
 def getPrice(data, polygon, from_date, to_date):
 	datapoints = 0
 	if data and polygon and from_date and to_date:
@@ -41,11 +45,22 @@ def getPrice(data, polygon, from_date, to_date):
 					from_date += timedelta(days=1)
 
 				datapoints = spatialpoints*available_days
-				
-				return round(500+(datapoints*0.1), 0), datapoints
+				price = 0
+
+				if datapoints:
+					price = round(MIN_PRICE+(datapoints*WAVE_DATAPOINT_PRICE), 0)
+				else:
+					price = 0, 0
+				return price, datapoints
 			elif dtype == 'bathymetry':
 				datapoints = bathymetry.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
-				return round(500+(datapoints*0.1), 0), datapoints
+				price = 0
+
+				if datapoints:
+					price = round(MIN_PRICE+(datapoints*BATHY_DATAPOINT_PRICE), 0)
+				else:
+					price = 0, 0
+				return price, datapoints
 		except:
 			pass
 	return -1, 0
