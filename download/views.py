@@ -131,3 +131,19 @@ def orderData(request):
 		res['msg'] = 'Someting went wrong.'
 
 	return HttpResponse(json.dumps(res, default=default))
+
+def heatMap(request):
+	res = json.loads(DEFAULT_RESPONSE)
+	timestep = request.GET.get('timestep', 1)
+
+	try:
+		f = open('./timestep/timestep'+timestep+'.json')
+		res['data'] = f.read()
+		res['status'] = True
+		res['msg'] = 'success' 
+	except Exception,e:
+		print e
+		res['status'] = False
+		res['msg'] = 'Someting went wrong.'
+
+	return HttpResponse(json.dumps(res, default=default))
