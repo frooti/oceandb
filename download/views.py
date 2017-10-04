@@ -134,10 +134,10 @@ def orderData(request):
 
 def heatMap(request):
 	res = json.loads(DEFAULT_RESPONSE)
-	timestep = request.GET.get('timestep', 1)
+	timestep = request.GET.get('timestep', '1')
 
 	try:
-		f = open('./timestep/timestep'+timestep+'.json')
+		f = open('/home/ubuntu/projects/oceandb/download/timestep/timestep'+timestep+'.json')
 		res['data'] = f.read()
 		res['status'] = True
 		res['msg'] = 'success' 
