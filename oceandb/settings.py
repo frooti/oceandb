@@ -31,7 +31,7 @@ CORS_ALLOW_CREDENTIALS = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '13.229.95.21', 'ec2-13-229-95-21.ap-southeast-1.compute.amazonaws.com', 'ocean.dataraft.in']
 
 ## SESSION ##
-SESSION_COOKIE_NAME = 'sessionid'
+SESSION_COOKIE_NAME = 'sid'
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 7 * 2
 SESSION_COOKIE_DOMAIN = None
 SESSION_COOKIE_SECURE = False
@@ -41,6 +41,12 @@ SESSION_SAVE_EVERY_REQUEST = False
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_ENGINE = 'oceandb.session_engine'
 
+## AUTH ##
+AUTH_USER_MODEL = 'auth.User'
+AUTHENTICATION_BACKENDS = ['oceandb.auth.ModelBackend']
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/accounts/profile/'
+LOGOUT_REDIRECT_URL = None
 
 # Application definition
 
