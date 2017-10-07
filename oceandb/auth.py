@@ -118,6 +118,8 @@ class ModelBackend(object):
 			username = kwargs.get('email')
 		try:
 			user = User.objects(email=username).first()
+			if not user:
+				raise
 		except:
 			# Run the default password hasher once to reduce the timing
 			# difference between an existing and a non-existing user (#20760).
