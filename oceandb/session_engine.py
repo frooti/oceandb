@@ -5,7 +5,7 @@ from django.contrib.sessions.backends.base import (CreateError, SessionBase, Upd
 # from django.db import DatabaseError, IntegrityError, router, transaction
 # from django.utils import timezone
 # from django.utils.encoding import force_text
-# from django.utils.functional import cached_property
+from django.utils.functional import cached_property
 
 from mongoengine import *
 from datetime import datetime, timedelta
