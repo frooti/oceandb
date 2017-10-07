@@ -66,7 +66,7 @@ while True:
 				f.close()
 
 				# publish to s3
-				upload_file('/home/ubuntu/projects/oceandb/download/tmp.csv', o.oid)
+				upload_file('/home/ubuntu/projects/oceandb/download/tmp.csv', o.oid+'.csv')
 				download_link = 'https://s3-ap-southeast-1.amazonaws.com/dataraftoceandb/'+o.oid+'.csv'
 				
 				# email client
