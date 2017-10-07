@@ -21,15 +21,6 @@ class User(Document):
 		full_name = '%s %s' % (self.first_name, self.last_name)
 		return full_name.strip()
 
-
-	expire_date = DateTimeField(db_field='ct', default=None)
-
-	meta = {
-		'indexes': [
-			('session_key', '-expire_date'),
-		]
-	}
-
 class AnonymousUser(object):
 	email = ''
 	is_staff = False
