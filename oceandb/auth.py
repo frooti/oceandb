@@ -23,46 +23,46 @@ class User(Document):
 		return full_name.strip()
 
 	def create_user(self, email, password, **extra_fields):
-        """
-        Creates and saves a User with the given username, email and password.
-        """
-        if not username:
-            raise ValueError('The given username must be set')
-        email = self.normalize_email(email)
-        user = User(email=email, **extra_fields)
-        user.set_password(password)
-        user.save()
-        return user
+		"""
+		Creates and saves a User with the given username, email and password.
+		"""
+		if not username:
+			raise ValueError('The given username must be set')
+		email = self.normalize_email(email)
+		user = User(email=email, **extra_fields)
+		user.set_password(password)
+		user.save()
+		return user
 
-    @classmethod
-    def normalize_email(cls, email):
-        """
-        Normalize the email address by lowercasing the domain part of it.
-        """
-        email = email or ''
-        try:
-            email_name, domain_part = email.strip().rsplit('@', 1)
-        except ValueError:
-            pass
-        else:
-            email = '@'.join([email_name, domain_part.lower()])
-        return email
+	@classmethod
+	def normalize_email(cls, email):
+		"""
+		Normalize the email address by lowercasing the domain part of it.
+		"""
+		email = email or ''
+		try:
+			email_name, domain_part = email.strip().rsplit('@', 1)
+		except ValueError:
+			pass
+		else:
+			email = '@'.join([email_name, domain_part.lower()])
+		return email
 
-    def set_password(self, raw_password):
-        self.password = make_password(raw_password)
-        self._password = raw_password
+	def set_password(self, raw_password):
+		self.password = make_password(raw_password)
+		self._password = raw_password
 
-    def check_password(self, raw_password):
-        """
-        Return a boolean of whether the raw_password was correct. Handles
-        hashing formats behind the scenes.
-        """
-        def setter(raw_password):
-            self.set_password(raw_password)
-            # Password hash upgrades shouldn't be considered password changes.
-            self._password = None
-            self.save(update_fields=["password"])
-        return check_password(raw_password, self.password, setter)
+	def check_password(self, raw_password):
+		"""
+		Return a boolean of whether the raw_password was correct. Handles
+		hashing formats behind the scenes.
+		"""
+		def setter(raw_password):
+			self.set_password(raw_password)
+			# Password hash upgrades shouldn't be considered password changes.
+			self._password = None
+			self.save(update_fields=["password"])
+		return check_password(raw_password, self.password, setter)
 
 class AnonymousUser(object):
 	email = ''
