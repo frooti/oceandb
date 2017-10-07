@@ -67,7 +67,7 @@ while True:
 
 				# publish to s3
 				upload_file('/home/ubuntu/projects/oceandb/download/tmp.csv', o.oid)
-				download_link = 'https://s3-ap-southeast-1.amazonaws.com/dataraftoceandb/'+o.oid
+				download_link = 'https://s3-ap-southeast-1.amazonaws.com/dataraftoceandb/'+o.oid+'.csv'
 				
 				# email client
 				email_msg = 'Hi, \n Below is your download link:\n'+download_link+'\nThank You,\nDataraft Team.'
