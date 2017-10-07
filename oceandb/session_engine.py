@@ -45,7 +45,7 @@ class SessionStore(SessionBase):
 			return {}
 
 	def exists(self, session_key):
-		if self.model.objects(session_key=session_key).first()
+		if self.model.objects(session_key=session_key).first():
 			return True
 		else:
 			return False
