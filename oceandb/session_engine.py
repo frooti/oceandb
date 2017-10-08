@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 connect('ocean')
 
 class Session(Document):
+	email = StringField(db_field='e', max_length=150)
 	session_key = StringField(db_field='sid', max_length=50, required=True, primary_key=True)
 	session_data = StringField(db_field='sdata', max_length=500, required=True)
 	expire_date = DateTimeField(db_field='ct', default=None)
@@ -86,6 +87,7 @@ class SessionStore(SessionBase):
 			return self.create()
 		data = self._get_session(no_load=must_create)
 		obj = self.create_model_instance(data)
+		obj.email = data['_auth_user_id']
 
 		try:
 			obj.save()
