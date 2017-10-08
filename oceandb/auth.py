@@ -10,6 +10,8 @@ class User(Document):
 	uid = StringField(db_field='uid', max_length=40, required=True)
 	email = StringField(db_field='e', max_length=150, required=True, primary_key=True)
 	password = StringField(db_field='p', max_length=100)
+	organization = StringField(db_field='org', max_length=100)
+	phone = StringField(db_field='ph', max_length=20)
 	first_name = StringField(db_field='fn', max_length=100)
 	last_name = StringField(db_field='ln', max_length=100)
 	is_staff = BooleanField(db_field='is', default=False)
@@ -33,7 +35,6 @@ class User(Document):
 		email = self.normalize_email(email)
 		user = User(email=email, **extra_fields)
 		user.uid = str(uuid.uuid4())
-		user._meta.pk = user.uid
 		user.set_password(password)
 		user.save()
 		return user

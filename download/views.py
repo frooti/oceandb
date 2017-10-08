@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from models import order, wave, bathymetry
+from oceandb.auth import User
 
 # Create your views here.
 DEFAULT_RESPONSE = '{"status":false, "msg": "bad request."}'
@@ -46,6 +47,29 @@ def logout(request):
 	auth.logout(request)
 	return HttpResponseRedirect('/')
 
+def signup(request):
+	res = json.loads(DEFAULT_RESPONSE)
+	email = request.GET.get('email', None)
+	password = request.GET.get('password', None)
+	organization = request.GET.get('organization', None)
+	phone = request.GET.get('phone', None)
+	first_name = request.GET.get('first_name', None)
+	last_name = request.GET.get('last_name', None)
+
+	if email and password and organization and phone and first_name and last_name:
+		try:
+			if User.objects(email=email).first():
+				res['status'] = False
+				res['msg'] = 'email already exists.'
+			else:
+				user = User().create_user(email=email, password=password, organization=organization, phone=phone, first_name=first_name, last_name=last_name)
+				res['status'] = True
+				res['msg'] = 'user registered.'
+		except:
+			res['status'] = True
+			res['msg'] = 'someting went wrong.'
+
+	return HttpResponse(json.dumps(res, default=default))
 
 def getPrice(data, polygon, from_date, to_date):
 	datapoints = 0
