@@ -70,18 +70,18 @@ def getPrice(data, polygon, from_date, to_date):
 				price = 0
 
 				if datapoints:
-					price = round(MIN_PRICE+(datapoints*WAVE_DATAPOINT_PRICE), 0)
+					price = (round(MIN_PRICE+(datapoints*WAVE_DATAPOINT_PRICE), 0), datapoints)
 				else:
-					price = 0, 0
+					price = (0, 0)
 				return price, datapoints
 			elif dtype == 'bathymetry':
 				datapoints = bathymetry.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
 				price = 0
 
 				if datapoints:
-					price = round(MIN_PRICE+(datapoints*BATHY_DATAPOINT_PRICE), 0)
+					price = (round(MIN_PRICE+(datapoints*BATHY_DATAPOINT_PRICE), 0), datapoints)
 				else:
-					price = 0, 0
+					price = (0, 0)
 				return price, datapoints
 		except:
 			pass
