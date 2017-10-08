@@ -7,7 +7,8 @@ from models import order, wave, bathymetry
 # Create your views here.
 DEFAULT_RESPONSE = '{"status":false, "msg": "bad request."}'
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth import authenticate, login, logout
 import json
 import uuid
 import time
@@ -24,6 +25,27 @@ def default(obj):
 MIN_PRICE = 1000
 WAVE_DATAPOINT_PRICE = 1
 BATHY_DATAPOINT_PRICE = 1
+
+def login(request):
+	res = json.loads(DEFAULT_RESPONSE)
+	email = request.GET.get('email', '')
+	password = request.GET.get('password', '')
+
+	user = authenticate(request=request, username=email, password=password)
+	if user:
+		login(request, user)
+		res['msg'] = 'login successful.'
+		res['status'] = True
+		res['data'] = {'email': email}
+	else:
+		res['msg'] = 'email/password does not match.'
+		res['status'] = False
+	return HttpResponse(json.dumps(res, default=default))
+ 
+def logout(request):
+	logout(request)
+	return HttpResponseRedirect('/')
+
 
 def getPrice(data, polygon, from_date, to_date):
 	datapoints = 0
