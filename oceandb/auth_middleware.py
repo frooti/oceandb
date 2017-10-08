@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.utils.crypto import constant_time_compare
 from auth import User, AnonymousUser
+from django.utils.deprecation import MiddlewareMixin
+from django.utils.functional import SimpleLazyObject
 
 SESSION_KEY = '_auth_user_id'
 BACKEND_SESSION_KEY = '_auth_user_backend'
