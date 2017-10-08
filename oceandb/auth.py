@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 from django.utils.crypto import get_random_string, salted_hmac
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from mongoengine import *
 from datetime import datetime, timedelta
 connect('ocean')
