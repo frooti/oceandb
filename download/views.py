@@ -8,7 +8,8 @@ from models import order, wave, bathymetry
 DEFAULT_RESPONSE = '{"status":false, "msg": "bad request."}'
 
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate
+import django.contrib.auth.login, django.contrib.auth.logout
 import json
 import uuid
 import time
@@ -33,7 +34,7 @@ def login(request):
 
 	user = authenticate(request=request, username=email, password=password)
 	if user:
-		login(request, user)
+		auth.login(request, user)
 		res['msg'] = 'login successful.'
 		res['status'] = True
 		res['data'] = {'email': email}
@@ -43,7 +44,7 @@ def login(request):
 	return HttpResponse(json.dumps(res, default=default))
  
 def logout(request):
-	logout(request)
+	auth.logout(request)
 	return HttpResponseRedirect('/')
 
 
