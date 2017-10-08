@@ -112,6 +112,10 @@ class AnonymousUser(object):
 	def get_username(self):
 		return self.username
 
+class pk(object):
+	def value_to_string(self, user):
+		return user.uid
+
 class ModelBackend(object):
 	"""
 	Authenticates against settings.AUTH_USER_MODEL.
@@ -122,7 +126,7 @@ class ModelBackend(object):
 			username = kwargs.get('email')
 		try:
 			user = User.objects(email=username).first()
-			user._meta.pk = user.uid
+			user._meta.pk = pk()
 			if not user:
 				raise
 		except:
@@ -144,7 +148,7 @@ class ModelBackend(object):
 	def get_user(self, user_id):
 		try:
 			user = User.objects(email=user_id).first()
-			user._meta.pk = user.uid
+			user._meta.pk = pk()
 		except:
 			return None
 		return user if self.user_can_authenticate(user) else None
