@@ -111,6 +111,8 @@ def fetchPrice(request):
 			else:
 				res['price'] = '$0'
 			res['size'] = str(datapoints*34/1024)+' KB'
+			if request.user:
+				res['email'] = request.user.email
 	except Exception, e:
 		print e
 		res['status'] = False
