@@ -87,7 +87,7 @@ class SessionStore(SessionBase):
 			return self.create()
 		data = self._get_session(no_load=must_create)
 		obj = self.create_model_instance(data)
-		obj.email = data['_auth_user_id']
+		obj.email = self.get('_auth_user_id')
 
 		try:
 			obj.save()
