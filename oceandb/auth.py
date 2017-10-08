@@ -32,7 +32,7 @@ class User(Document):
 			raise ValueError('The given email must be set')
 		email = self.normalize_email(email)
 		user = User(email=email, **extra_fields)
-		user.uid = uuid.uuid4()
+		user.uid = str(uuid.uuid4())
 		user._meta.pk = user.uid
 		user.set_password(password)
 		user.save()
