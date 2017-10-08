@@ -3,9 +3,11 @@ from django.utils.crypto import get_random_string, salted_hmac
 from django.contrib.auth.hashers import make_password, check_password
 from mongoengine import *
 from datetime import datetime, timedelta
+import uuid
 connect('ocean')
 
 class User(Document):
+	uid = StringField(db_field='uid', max_length=40, required=True)
 	email = StringField(db_field='e', max_length=150, required=True, primary_key=True)
 	password = StringField(db_field='p', max_length=100)
 	first_name = StringField(db_field='fn', max_length=100)
@@ -30,6 +32,8 @@ class User(Document):
 			raise ValueError('The given email must be set')
 		email = self.normalize_email(email)
 		user = User(email=email, **extra_fields)
+		user.uid = uuid.uuid4()
+		user._meta.pk = user.uid
 		user.set_password(password)
 		user.save()
 		return user
