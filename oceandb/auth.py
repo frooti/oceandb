@@ -114,7 +114,7 @@ class AnonymousUser(object):
 
 class pk(object):
 	def value_to_string(self, user):
-		return user.uid
+		return int(user.email)
 
 class ModelBackend(object):
 	"""
