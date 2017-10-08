@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth import load_backend
 from django.utils.crypto import constant_time_compare
 from auth import User, AnonymousUser
 from django.utils.deprecation import MiddlewareMixin
