@@ -26,8 +26,8 @@ class User(Document):
 		"""
 		Creates and saves a User with the given username, email and password.
 		"""
-		if not username:
-			raise ValueError('The given username must be set')
+		if not email:
+			raise ValueError('The given email must be set')
 		email = self.normalize_email(email)
 		user = User(email=email, **extra_fields)
 		user.set_password(password)
