@@ -33,7 +33,8 @@ def get_user(request):
 						request.session.flush()
 						user = None
 				# check session expiry
-				if request.session.get_expiry_date()<datetime.now():
+				session_expiry = request.session.get_expiry_date()
+				if session_expiry<datetime.now(session.tzinfo):
 					user = None
 		request._cached_user = user
 	return request._cached_user
