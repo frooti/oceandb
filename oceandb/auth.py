@@ -122,6 +122,7 @@ class ModelBackend(object):
 			username = kwargs.get('email')
 		try:
 			user = User.objects(email=username).first()
+			user._meta.pk = user.uid
 			if not user:
 				raise
 		except:
