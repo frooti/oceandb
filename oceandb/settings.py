@@ -40,6 +40,7 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_SAVE_EVERY_REQUEST = False
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_ENGINE = 'oceandb.session_engine'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 ## AUTH ##
 AUTH_USER_MODEL = 'auth.User'
