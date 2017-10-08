@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth import load_backend
 from django.utils.crypto import constant_time_compare
 from auth import User, AnonymousUser
+from datetime import datetime
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.functional import SimpleLazyObject
 
@@ -31,7 +32,9 @@ def get_user(request):
 					if not session_hash_verified:
 						request.session.flush()
 						user = None
-
+				# check session expiry
+				if request.session.get_expiry_date()<datetime.now():
+					user = None
 		request._cached_user = user
 	return request._cached_user
 
