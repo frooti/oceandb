@@ -143,6 +143,7 @@ class ModelBackend(object):
 	def get_user(self, user_id):
 		try:
 			user = User.objects(email=user_id).first()
+			user._meta.pk = user.uid
 		except:
 			return None
 		return user if self.user_can_authenticate(user) else None
