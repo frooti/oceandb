@@ -49,6 +49,13 @@ LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/accounts/profile/'
 LOGOUT_REDIRECT_URL = None
 
+## SMTP ##
+EMAIL_HOST = 'smtp.zoho.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ravi@dataraft.in'
+EMAIL_HOST_PASSWORD = 'Fr##ti36'
+EMAIL_USE_TLS = True
+
 # Application definition
 
 INSTALLED_APPS = [
