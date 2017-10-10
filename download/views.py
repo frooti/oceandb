@@ -37,7 +37,7 @@ def login(request):
 		auth.login(request, user)
 		res['msg'] = 'login successful.'
 		res['status'] = True
-		res['data'] = {'email': email}
+		res['data'] = {'email': email, 'subscription_type': user.subscription_type, 'subscription_zones': user.subscription_zones}
 	else:
 		res['msg'] = 'email/password does not match.'
 		res['status'] = False
