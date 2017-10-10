@@ -28,6 +28,9 @@ WAVE_DATAPOINT_PRICE = 1
 BATHY_DATAPOINT_PRICE = 1
 
 def login(request):
+	## jugaad ##
+	request.session.pop('_auth_user_id')
+
 	res = json.loads(DEFAULT_RESPONSE)
 	email = request.GET.get('email', '')
 	password = request.GET.get('password', '')
