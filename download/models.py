@@ -10,6 +10,11 @@ from datetime import datetime
 
 connect('ocean')
 
+class zone(Document):
+	zid = StringField(db_field='zid', max_length=50, required=True)
+	name = StringField(db_field='name', max_length=100, required=True)
+	polygon = PolygonField(db_field='pl', auto_index=True, required=True)
+
 class order(Document):
 	oid = StringField(db_field='oid', max_length=50, required=True)
 	email = StringField(db_field='e', max_length=200, required=True)

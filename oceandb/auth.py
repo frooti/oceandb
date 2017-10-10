@@ -17,7 +17,11 @@ class User(Document):
 	is_staff = BooleanField(db_field='is', default=False)
 	is_active = BooleanField(db_field='ia', default=True)
 	is_superuser = BooleanField(db_field='isu', default=False)
-	date_joined = DateTimeField(db_field='dj', default=datetime.now())
+	subscription_type = StringField(db_field='subt', default='A')
+	subscription_date = DateTimeField(db_field='subd')
+	subscription_zones = ListField(StringField(max_length=100))
+	expiry_date = DateTimeField(db_field='expd', default=datetime.now())	
+	date_joined = DateTimeField(db_field='dj', default=datetime.now())	
 
 	def get_full_name(self):
 		"""
