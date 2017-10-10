@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^price/$', views.fetchPrice, name='fetchPrice'),
     url(r'^order/$', views.orderData, name='orderData'),
     url(r'^heatmap/$', views.heatMap, name='heatMap'),
+    url(r'^zone/$', views.getZone, name='getZone'),
 ]

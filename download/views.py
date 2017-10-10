@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from models import order, wave, bathymetry
+from models import zone, order, wave, bathymetry
 from oceandb.auth import User
 
 # Create your views here.
@@ -42,7 +42,7 @@ def login(request):
 		res['msg'] = 'email/password does not match.'
 		res['status'] = False
 	return HttpResponse(json.dumps(res, default=default))
- 
+
 def logout(request):
 	auth.logout(request)
 	return HttpResponseRedirect('/')
@@ -70,6 +70,24 @@ def signup(request):
 			res['msg'] = 'someting went wrong.'
 
 	return HttpResponse(json.dumps(res, default=default))
+
+def getZone(request):
+	res = json.loads(DEFAULT_RESPONSE)
+	try:
+		zones = []		
+		for z in zone.objects():
+			data.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon})
+		
+		res['zones'] = zones
+		res['status'] = True
+		res['msg'] = 'success' 
+	except Exception,e:
+		print e
+		res['status'] = False
+		res['msg'] = 'Someting went wrong.'
+
+	return HttpResponse(json.dumps(res, default=default))
+
 
 def getPrice(data, polygon, from_date, to_date):
 	datapoints = 0
