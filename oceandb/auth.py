@@ -15,7 +15,7 @@ class User(Document):
 	first_name = StringField(db_field='fn', max_length=100)
 	last_name = StringField(db_field='ln', max_length=100)
 	is_staff = BooleanField(db_field='is', default=False)
-	is_active = BooleanField(db_field='ia', default=True)
+	is_active = BooleanField(db_field='ia', default=False)
 	is_superuser = BooleanField(db_field='isu', default=False)
 	subscription_type = StringField(db_field='subt', default='A')
 	subscription_date = DateTimeField(db_field='subd')
