@@ -79,7 +79,7 @@ def getZone(request):
 	try:
 		zones = []		
 		for z in zone.objects():
-			data.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon})
+			zones.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon})
 		
 		res['zones'] = zones
 		res['status'] = True
