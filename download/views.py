@@ -28,18 +28,18 @@ WAVE_DATAPOINT_PRICE = 1
 BATHY_DATAPOINT_PRICE = 1
 
 def login(request):
+	res = json.loads(DEFAULT_RESPONSE)
 	## session check ##
 	if request.user:
 		res['msg'] = 'session active.'
 		res['status'] = True
 		res['data'] = {'email': request.user.email, 'subscription_type': request.user.subscription_type, 'subscription_zones': request.user.subscription_zones, 'is_active': request.user.is_active}
 		return HttpResponse(json.dumps(res, default=default))
-		
+
 	## jugaad ##
 	if '_auth_user_id' in request.session:
 		request.session.pop('_auth_user_id')
 
-	res = json.loads(DEFAULT_RESPONSE)
 	email = request.GET.get('email', '')
 	password = request.GET.get('password', '')
 
