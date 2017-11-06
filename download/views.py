@@ -28,6 +28,13 @@ WAVE_DATAPOINT_PRICE = 1
 BATHY_DATAPOINT_PRICE = 1
 
 def login(request):
+	## session check ##
+	if request.user:
+		res['msg'] = 'session active.'
+		res['status'] = True
+		res['data'] = {'email': request.user.email, 'subscription_type': request.user.subscription_type, 'subscription_zones': request.user.subscription_zones, 'is_active': request.user.is_active}
+		return HttpResponse(json.dumps(res, default=default))
+		
 	## jugaad ##
 	if '_auth_user_id' in request.session:
 		request.session.pop('_auth_user_id')
@@ -178,15 +185,15 @@ def orderData(request):
 	data =  request.GET.get('data', None)
 	from_date = request.GET.get('from_date', (datetime(day=1, month=9, year=2017)-timedelta(days=7)).isoformat())
 	to_date = request.GET.get('to_date', (datetime(day=1, month=9, year=2017)+timedelta(days=7)).isoformat())
-	email = request.GET.get('email', None)
-	organization = request.GET.get('organization', None)
+	#email = request.GET.get('email', None)
+	#organization = request.GET.get('organization', None)
 
 	try:
 		polygon = json.loads(polygon)
 		from_date = dateutil.parser.parse(from_date)
 		to_date = dateutil.parser.parse(to_date)
 
-		if data and data in ['wave', 'bathymetry'] and polygon and email and organization:
+		if data and data in ['wave', 'bathymetry'] and polygon:
 			o = order(oid=str(uuid.uuid4()))
 			o.data = data
 			o.polygon = polygon
