@@ -56,7 +56,9 @@ def login(request):
 
 def logout(request):
 	auth.logout(request)
-	return HttpResponseRedirect('/')
+	res = HttpResponseRedirect('/')
+	res['Access-Control-Allow-Origin'] = '*'
+	return res
 
 def signup(request):
 	res = json.loads(DEFAULT_RESPONSE)
