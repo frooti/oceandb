@@ -55,8 +55,11 @@ def login(request):
 	return HttpResponse(json.dumps(res, default=default))
 
 def logout(request):
+	res = json.loads(DEFAULT_RESPONSE)
 	auth.logout(request)
-	return HttpResponseRedirect('/')
+	res['msg'] = 'logout successful'
+	res['status'] = True
+	return HttpResponse(json.dumps(res, default=default))
 
 def signup(request):
 	res = json.loads(DEFAULT_RESPONSE)
