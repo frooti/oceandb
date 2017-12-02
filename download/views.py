@@ -84,8 +84,9 @@ def signup(request):
 				user = User().create_user(email=email, password=password, organization=organization, phone=phone, name=name, subscription_zones=subscription_zones, subscription_type=subscription_type, subscription_date=datetime.now())
 				res['status'] = True
 				res['msg'] = 'user registered.'
-		except:
-			res['status'] = True
+		except Exception, e:
+			print e
+			res['status'] = False
 			res['msg'] = 'someting went wrong.'
 
 	return HttpResponse(json.dumps(res, default=default))

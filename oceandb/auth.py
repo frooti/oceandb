@@ -12,7 +12,7 @@ class User(Document):
 	password = StringField(db_field='p', max_length=100)
 	organization = StringField(db_field='org', max_length=100)
 	phone = StringField(db_field='ph', max_length=20)
-	name = StringField(db_field='fn', max_length=100)
+	name = StringField(db_field='n', max_length=100)
 	is_staff = BooleanField(db_field='is', default=False)
 	is_active = BooleanField(db_field='ia', default=False)
 	is_superuser = BooleanField(db_field='isu', default=False)
