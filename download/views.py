@@ -188,7 +188,8 @@ def orderData(request):
 	data =  request.GET.get('data', None)
 	from_date = request.GET.get('from_date', (datetime(day=1, month=9, year=2017)-timedelta(days=7)).isoformat())
 	to_date = request.GET.get('to_date', (datetime(day=1, month=9, year=2017)+timedelta(days=7)).isoformat())
-	#email = request.GET.get('email', None)
+	user = request.user
+	email = user.email
 	#organization = request.GET.get('organization', None)
 
 	try:
@@ -196,8 +197,9 @@ def orderData(request):
 		from_date = dateutil.parser.parse(from_date)
 		to_date = dateutil.parser.parse(to_date)
 
-		if data and data in ['wave', 'bathymetry'] and polygon:
+		if email and data and data in ['wave', 'bathymetry'] and polygon:
 			o = order(oid=str(uuid.uuid4()))
+			o.email = user.email
 			o.data = data
 			o.polygon = polygon
 			o.from_date = from_date
