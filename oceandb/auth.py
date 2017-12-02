@@ -20,8 +20,8 @@ class User(Document):
 	subscription_type = StringField(db_field='subt', default='A')
 	subscription_date = DateTimeField(db_field='subd')
 	subscription_zones = ListField(StringField(max_length=100))
-	expiry_date = DateTimeField(db_field='expd', default=datetime.now())	
-	date_joined = DateTimeField(db_field='dj', default=datetime.now())	
+	expiry_date = DateTimeField(db_field='expd', default=datetime.now)
+	date_joined = DateTimeField(db_field='dj', default=datetime.now)
 
 	def get_full_name(self):
 		"""
