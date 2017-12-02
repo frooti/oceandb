@@ -67,12 +67,11 @@ def signup(request):
 	password = request.GET.get('password', None)
 	organization = request.GET.get('organization', None)
 	phone = request.GET.get('phone', None)
-	first_name = request.GET.get('first_name', None)
-	last_name = request.GET.get('last_name', None)
+	name = request.GET.get('name', None)
 	subscription_zones = request.GET.get('subscription_zones', '[]')
 	subscription_type = request.GET.get('subscription_type', None)
 
-	if email and password and organization and phone and first_name and last_name and subscription_type:
+	if email and password and organization and phone and name and subscription_type:
 		try:
 			if User.objects(email=email).first():
 				res['status'] = False
@@ -82,7 +81,7 @@ def signup(request):
 					subscription_zones = json.loads(subscription_zones)
 				if subscription_type not in ['A', 'B']:
 					subscription_type = 'A'
-				user = User().create_user(email=email, password=password, organization=organization, phone=phone, first_name=first_name, last_name=last_name, subscription_zones=subscription_zones, subscription_type=subscription_type, subscription_date=datetime.now())
+				user = User().create_user(email=email, password=password, organization=organization, phone=phone, name=name, subscription_zones=subscription_zones, subscription_type=subscription_type, subscription_date=datetime.now())
 				res['status'] = True
 				res['msg'] = 'user registered.'
 		except:
