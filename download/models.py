@@ -17,14 +17,14 @@ class zone(Document):
 
 class order(Document):
 	oid = StringField(db_field='oid', max_length=50, required=True)
-	email = StringField(db_field='e', max_length=200, required=True)
-	organization = StringField(db_field='o', max_length=200, required=True)
+	#email = StringField(db_field='e', max_length=200, required=True)
+	#organization = StringField(db_field='o', max_length=200, required=True)
 	polygon = PolygonField(db_field='pl', auto_index=True, required=True)
 	data = StringField(db_field='d', max_length=50, required=True)
 	from_date = DateTimeField(db_field='fd', default=None)
 	to_date = DateTimeField(db_field='td', default=None)
 	price = DecimalField(db_field='p', precision=2, rounding='ROUND_HALF_UP', required=True) 
-	payment_status = BooleanField(db_field='ps', default=False)
+	#payment_status = BooleanField(db_field='ps', default=False)
 	download_link = StringField(db_field='dl', default=None)
 	email_sent = BooleanField(db_field='em', default=False)
 	created_at = DateTimeField(db_field='ct', default=datetime.now())
