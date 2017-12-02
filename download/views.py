@@ -189,7 +189,7 @@ def orderData(request):
 	from_date = request.GET.get('from_date', (datetime(day=1, month=9, year=2017)-timedelta(days=7)).isoformat())
 	to_date = request.GET.get('to_date', (datetime(day=1, month=9, year=2017)+timedelta(days=7)).isoformat())
 	user = request.user
-	email = user.email
+	email = user.email if user else None
 	#organization = request.GET.get('organization', None)
 
 	try:
