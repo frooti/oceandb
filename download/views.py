@@ -202,7 +202,6 @@ def orderData(request):
 			o.polygon = polygon
 			o.from_date = from_date
 			o.to_date = to_date
-			o.organization = organization
 			o.email = email
 			price = getPrice(data, polygon, from_date, to_date)[0]
 			if price:
