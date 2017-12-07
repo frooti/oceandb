@@ -94,11 +94,17 @@ def signup(request):
 def getZone(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	try:
-		zones = []		
+		zones = []
+		bathymetry = []
+
 		for z in zone.objects():
-			zones.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
-		
+			if z.ztype == 'zone':
+				zones.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
+			elif z.ztype == 'zone':
+				bathymetry.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
+
 		res['zones'] = zones
+		res['bathymetry'] = bathymetry
 		res['status'] = True
 		res['msg'] = 'success' 
 	except Exception,e:
