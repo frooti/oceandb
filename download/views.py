@@ -100,7 +100,7 @@ def getZone(request):
 		for z in zone.objects():
 			if z.ztype == 'zone':
 				zones.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
-			elif z.ztype == 'zone':
+			elif z.ztype == 'bathymetry':
 				bathymetry.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
 
 		res['zones'] = zones
