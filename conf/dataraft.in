@@ -1,0 +1,16 @@
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        root /var/www/dataraft.in;
+
+        server_name dataraft.in ocean.dataraft.in;
+
+        location /download/ {
+                proxy_pass http://localhost:8080/download/;
+        }
+
+        location ~ \.(gif|jpg|png|js|css|html)$ {
+                try_files $uri $uri/ =404;
+        }
+}
