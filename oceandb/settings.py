@@ -28,7 +28,7 @@ DEBUG = True
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '13.229.95.21', 'ec2-13-229-95-21.ap-southeast-1.compute.amazonaws.com', 'ocean.dataraft.in']
+ALLOWED_HOSTS = ['10.21.139.212', 'localhost', '127.0.0.1', '13.229.95.21', 'ec2-13-229-95-21.ap-southeast-1.compute.amazonaws.com', 'ocean.dataraft.in']
 
 ## SESSION ##
 SESSION_COOKIE_NAME = 'sid'
