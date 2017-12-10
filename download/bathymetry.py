@@ -1,5 +1,6 @@
 import sys 
 sys.path.append('/home/dataraft/projects/oceandb')
+sys.stdout.flush()
 
 from datetime import datetime, timedelta
 from download.models import bathymetry 
@@ -12,15 +13,21 @@ file_path = '/tmp/bathy_data'
 ## CONFIG ##
 
 with open(file_path, 'r') as f:
+	data = []
 	for i, r in enumerate(f):
-		print i
-		values = r.split(',')
-		longitute = float(values[0])
-		latitude = float(values[1])
-		depth = float(values[2])
+		if 1%1000==0:
+			bathymetry.objects.insert(data)
+			data = []
+			print i
+		else:
+			values = r.split(',')
+			longitute = float(values[0])
+			latitude = float(values[1])
+			depth = float(values[2])
 
-		loc = {'type': 'Point', 'coordinates': [longitute, latitude]}
-		data = {}
-		data['set__depth'] = depth
-		data['upsert'] = True
-		bathymetry.objects(loc=loc).update_one(**data)
+			loc = {'type': 'Point', 'coordinates': [longitute, latitude]}
+			data.append(bathymetry(loc=loc, depth=depth))
+	else:
+		bathymetry.objects.insert(data)
+		data = []
+		print 'completed!'
