@@ -20,6 +20,7 @@ with open(file_path, 'r') as f:
 		depth = float(values[2])
 
 		loc = {'type': 'Point', 'coordinates': [longitute, latitude]}
+		data = {}
 		data['set_depth'] = depth
 		data['upsert'] = True
 		bathymetry.objects(loc=loc).update_one(**data)
