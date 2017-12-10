@@ -1,5 +1,8 @@
+import sys 
+sys.path.append('/home/dataraft/projects/oceandb')
+
 from datetime import datetime, timedelta
-from models import bathymetry 
+from oceandb.models import bathymetry 
 
 connect('ocean', host='mongodb://localhost:27017/ocean')
 
