@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from mongoengine import *
 from download.models import wave
 
-connect('ocean', host='mongodb://13.229.95.21:27017/ocean')
+connect('ocean', host='mongodb://localhost:27017/ocean')
 #connect('ocean', host='13.229.95.21', port=27017)
 
 ## CONFIG ##
