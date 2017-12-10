@@ -15,7 +15,7 @@ file_path = '/tmp/bathy_data'
 with open(file_path, 'r') as f:
 	data = []
 	for i, r in enumerate(f):
-		if i%1000==0:
+		if i and i%1000==0:
 			bathymetry.objects.insert(data)
 			data = []
 			print i
