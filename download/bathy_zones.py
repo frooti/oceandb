@@ -30,9 +30,10 @@ for file_path in FILES:
 				print i
 			else:
 				values = r.split('\t')
-				longitute = float(values[1].strip())
-				latitude = float(values[0].strip())
-				depth = float(values[2].strip())
+				if len(values)==3:
+					longitute = float(values[1].strip())
+					latitude = float(values[0].strip())
+					depth = float(values[2].strip())
 
 				loc = {'type': 'Point', 'coordinates': [longitute, latitude]}
 				data.append(bathymetry(loc=loc, depth=depth))
