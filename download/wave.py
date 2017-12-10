@@ -1,16 +1,18 @@
+import sys 
+sys.path.append('/home/dataraft/projects/oceandb')
+sys.stdout.flush()
+
 from datetime import datetime, timedelta
 from mongoengine import *
+from download.models import wave
 
 connect('ocean', host='mongodb://13.229.95.21:27017/ocean')
 #connect('ocean', host='13.229.95.21', port=27017)
 
-class wave(Document):
-	loc = PointField(db_field='l', auto_index=True, required=True)
-	values = DictField()
-
 ## CONFIG ##
-file_path = '../hs.txt'
-date = datetime(day=1, month=9, year=2017) #GMT
+file_path = '/tmp/hs.txt'
+now = datetime.now()
+date = datetime(day=now.day, month=now.month, year=now.year) #GMT
 timestep = timedelta(hours=24)
 grid = (361, 321)
 latitude1, longitude1 = (30.0, 30.0)
