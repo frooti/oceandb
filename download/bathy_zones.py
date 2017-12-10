@@ -1,4 +1,5 @@
 import sys
+import os
 from os import listdir
 from os.path import isfile, join
 sys.path.append('/home/dataraft/projects/oceandb')
@@ -12,12 +13,12 @@ connect('ocean', host='mongodb://localhost:27017/ocean')
 
 ## CONFIG ##
 directory = '/tmp/bathy_zones'
-FILES = [f for f in listdir(directory) if isfile(join(directory, f))]
+FILES = [os.path.join(directory, f) for f in listdir(directory) if isfile(join(directory, f))]
 ## CONFIG ##
 
 for file_path in FILES:
 	print file_path
-	
+
 	with open(file_path, 'r') as f:
 		data = []
 		for i, r in enumerate(f):
