@@ -5,6 +5,10 @@ sys.stdout.flush()
 from datetime import datetime, timedelta
 from mongoengine import *
 from download.models import wave
+import pymongo
+CONN = pymongo.MongoClient('localhost', 27017)
+DB = CONN['ocean']
+WAVE = DB.wave
 
 connect('ocean', host='mongodb://localhost:27017/ocean')
 #connect('ocean', host='13.229.95.21', port=27017)
@@ -14,7 +18,7 @@ file_path = '/tmp/hs.txt'
 now = datetime.now()
 date = datetime(day=now.day, month=now.month, year=now.year) #GMT
 timestep = timedelta(hours=24)
-grid = (361, 321)
+grid = (361, 321) # columns, rows
 latitude1, longitude1 = (30.0, 30.0)
 latitude2, longitude2 = (-50.0, 120.0)
 ## CONFIG ##
@@ -24,10 +28,13 @@ latitude_delta = (latitude2-latitude1)/(grid[1]-1)
 
 with open(file_path, 'r') as f:
 	i, j = (0, 0)
-	for r in f:
+	line = 0
+	for line, r in enumerate(f):
 		i += 1
-		print i
+		print line
+		bulk = WAVE.initialize_unordered_bulk_op()
 		r = r.split()
+
 		if len(r)==grid[0]: # process only if full row data is present
 			for v in r:
 				j += 1
@@ -39,12 +46,17 @@ with open(file_path, 'r') as f:
 					value = round(v, 3)
 					year = str(date.year)
 					day = str(date.timetuple().tm_yday)
-					data = {}
-					data['set__values__'+year+'__'+day] = value
-					data['upsert'] = True
-					wave.objects(loc=loc).update_one(**data)
+					bulk.find({'loc':loc}).upsert().update({'$set': {'values.'+year+'.'+day: value}})
+					# data = {}
+					# data['set__values__'+year+'__'+day] = value
+					# data['upsert'] = True
+					# wave.objects(loc=loc).update_one(**data)
 		if i==grid[1]:
 			i = 0
 			date += timestep
 		if j==grid[0]:
+			try:
+				bulk.execute() # batch update
+			except Exception, e:
+				print e
 			j = 0
