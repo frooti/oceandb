@@ -24,7 +24,7 @@ for file_path in FILES:
 		for i, r in enumerate(f):
 			if i==0:
 				continue
-			elif i and i%1==0:
+			elif i and i%3==0:
 				bathymetry.objects.insert(data)
 				data = []
 				print i
@@ -38,7 +38,8 @@ for file_path in FILES:
 				loc = {'type': 'Point', 'coordinates': [longitute, latitude]}
 				data.append(bathymetry(loc=loc, depth=depth))
 		else:
-			bathymetry.objects.insert(data)
+			if data:
+				bathymetry.objects.insert(data)
 			data = []
 			print 'completed!'
 

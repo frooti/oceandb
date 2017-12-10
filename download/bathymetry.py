@@ -28,6 +28,7 @@ with open(file_path, 'r') as f:
 			loc = {'type': 'Point', 'coordinates': [longitute, latitude]}
 			data.append(bathymetry(loc=loc, depth=depth))
 	else:
-		bathymetry.objects.insert(data)
+		if data:
+			bathymetry.objects.insert(data)
 		data = []
 		print 'completed!'
