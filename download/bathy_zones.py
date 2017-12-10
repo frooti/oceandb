@@ -24,15 +24,15 @@ for file_path in FILES:
 		for i, r in enumerate(f):
 			if i==0:
 				continue
-			elif i and i%1000==0:
+			elif i and i%1==0:
 				bathymetry.objects.insert(data)
 				data = []
 				print i
 			else:
 				values = r.split('\t')
-				longitute = float(values[1])
-				latitude = float(values[0])
-				depth = float(values[2])
+				longitute = float(values[1].strip())
+				latitude = float(values[0].strip())
+				depth = float(values[2].strip())
 
 				loc = {'type': 'Point', 'coordinates': [longitute, latitude]}
 				data.append(bathymetry(loc=loc, depth=depth))
