@@ -24,11 +24,12 @@ class order(Document):
 	data = StringField(db_field='d', max_length=50, required=True)
 	from_date = DateTimeField(db_field='fd', default=None)
 	to_date = DateTimeField(db_field='td', default=None)
-	price = DecimalField(db_field='p', precision=2, rounding='ROUND_HALF_UP', required=True) 
+	price = DecimalField(db_field='p', precision=2, rounding='ROUND_HALF_UP', required=True)
+	datpoints = IntField(db_field='dp', required=True)
 	#payment_status = BooleanField(db_field='ps', default=False)
 	download_link = StringField(db_field='dl', default=None)
 	email_sent = BooleanField(db_field='em', default=False)
-	created_at = DateTimeField(db_field='ct', default=datetime.now())
+	created_at = DateTimeField(db_field='ct', default=datetime.now)
 	processed_at = DateTimeField(db_field='pt', default=None)
 
 class wave(Document):
