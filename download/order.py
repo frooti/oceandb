@@ -6,6 +6,10 @@ import time
 
 ses = boto3.client('ses', region_name='us-east-1')
 
+##### CONFIG #####
+HOST = 'ocean.dataraft.in'
+##################
+
 def upload_file(filename, oid):
 	session = boto3.Session()
 	s3_client = session.client('s3')
@@ -26,7 +30,7 @@ while True:
 		orders = order.objects(processed_at=None)
 		for o in orders:
 			print 'processing: '+o.oid
-			with open('/home/ubuntu/projects/oceandb/download/tmp.csv', 'w') as f:
+			with open('/var/www/dataraft.in/'+o.oid+'.csv', 'w+') as f:
 				datapoints = []
 
 				if o.data == 'wave':
@@ -66,14 +70,16 @@ while True:
 				f.close()
 
 				# publish to s3
-				upload_file('/home/ubuntu/projects/oceandb/download/tmp.csv', o.oid+'.csv')
-				download_link = 'https://s3-ap-southeast-1.amazonaws.com/dataraftoceandb/'+o.oid+'.csv'
+				# upload_file('/home/ubuntu/projects/oceandb/download/tmp.csv', o.oid+'.csv')
+				# download_link = 'https://s3-ap-southeast-1.amazonaws.com/dataraftoceandb/'+o.oid+'.csv'
 				
+				download_link = 'https://'+HOST+'/'+o.oid+'.csv'
+
 				# email client
-				email_msg = 'Hi, \n Below is your download link:\n'+download_link+'\nThank You,\nDataraft Team.'
+				email_msg = 'Hi, \n Below is your download link:\n'+download_link+'\nThank You,\nSamudra Team.'
 				email = {
 					'Source': 'order@dataraft.in',
-					'Destination': {'ToAddresses': [o.email]},
+					'Destination': {'ToAddresses': [o.email], 'BccAddresses': ['ravi@dataraft.in']},
 					'Message': {
 						'Subject': {'Data': 'Dataraft: Download link for your Order #'+str(o.oid)},
 						'Body': {'Text': {'Data': email_msg}},

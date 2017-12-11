@@ -17,6 +17,8 @@ from datetime import datetime, timedelta
 import dateutil.parser
 from decimal import Decimal
 
+ses = boto3.client('ses', region_name='us-east-1')
+
 # utilities
 def default(obj):
     if isinstance(obj, Decimal):
@@ -210,13 +212,26 @@ def orderData(request):
 			o.polygon = polygon
 			o.from_date = from_date
 			o.to_date = to_date
-			price = getPrice(data, polygon, from_date, to_date)[0]
+			price, datapoints = getPrice(data, polygon, from_date, to_date)
 			if price:
-				o.price = price 
+				o.price = price
+				o.datapoints = datapoints
 				o.save()
 
 				res['status'] = True
 				res['msg'] = 'order placed.'
+
+				# email
+				email_msg = 'Hi, \n We are processing your download request. You will receive the download link within 1 hr. \nThank You,\nSamudra Team.'
+				email = {
+					'Source': 'order@dataraft.in',
+					'Destination': {'ToAddresses': [o.email], 'BccAddresses': ['ravi@dataraft.in']},
+					'Message': {
+						'Subject': {'Data': 'Received Order #'+str(o.oid)},
+						'Body': {'Text': {'Data': email_msg}},
+					},					
+				}
+				ses.send_email(**email)
 	except Exception, e:
 		print e
 		res['status'] = False
