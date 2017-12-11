@@ -46,7 +46,7 @@ with open(file_path, 'r') as f:
 					value = round(v, 3)
 					year = str(date.year)
 					day = str(date.timetuple().tm_yday)
-					bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().updateOne({'$set': {'l': loc, 'values.'+year+'.'+day: value}})
+					bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'values.'+year+'.'+day: value}})
 					# data = {}
 					# data['set__values__'+year+'__'+day] = value
 					# data['upsert'] = True
