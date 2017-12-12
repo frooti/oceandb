@@ -236,7 +236,7 @@ def orderData(request):
 				from_email = 'ravi@dataraft.in'
 				to_email = [o.email]
 				cc = ['ravi@dataraft.in']
-				msg = EmailMultiAlternatives(sub, email_msg, from_email, to_email, bcc=bcc)
+				msg = EmailMultiAlternatives(sub, email_msg, from_email, to_email, cc=cc)
 				msg.send()
 	except Exception, e:
 		print e
