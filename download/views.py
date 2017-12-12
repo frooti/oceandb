@@ -149,7 +149,7 @@ def getPrice(data, polygon, from_date, to_date):
 				else:
 					price = 0
 				return price, datapoints
-			elif dtype == 'bathymetry':
+			elif data == 'bathymetry':
 				datapoints = bathymetry.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
 				price = 0
 
