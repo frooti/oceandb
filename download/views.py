@@ -231,7 +231,7 @@ def orderData(request):
 				msg = 'Hi, \n We are processing your download request. You will receive the download link within 1 hr. \nThank You,\nSamudra Team.'
 				from_email = 'order@dataraft.in'
 				to_email = [o.email]
-				send_email(sub, msg, from_email, to_email, fail_silently=False)
+				send_mail(sub, msg, from_email, to_email, fail_silently=False)
 	except Exception, e:
 		print e
 		res['status'] = False
