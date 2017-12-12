@@ -113,7 +113,7 @@ while True:
 				send_cc = ['ravi.muppalaneni@gmail.com']
 				subject = 'Download link for your Order #'+str(o.oid)
 				message = 'Hi, \n Below is your download link:\n'+download_link+'\n\nThank You,\nSamudra Team.'
-				send_email(send_from, send_to, send_cc, [], subject, message, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_HOST+':'EMAIL_PORT)
+				send_email(send_from, send_to, send_cc, [], subject, message, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_HOST+':'+str(EMAIL_PORT))
 				print 'email sent.'
 
 				o.processed_at = datetime.now()
