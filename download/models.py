@@ -25,7 +25,7 @@ class order(Document):
 	from_date = DateTimeField(db_field='fd', default=None)
 	to_date = DateTimeField(db_field='td', default=None)
 	price = DecimalField(db_field='p', precision=2, rounding='ROUND_HALF_UP', required=True)
-	datpoints = IntField(db_field='dp', required=True)
+	datapoints = IntField(db_field='dp', required=True)
 	#payment_status = BooleanField(db_field='ps', default=False)
 	download_link = StringField(db_field='dl', default=None)
 	email_sent = BooleanField(db_field='em', default=False)
