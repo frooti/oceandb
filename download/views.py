@@ -218,7 +218,7 @@ def orderData(request):
 			o.from_date = from_date
 			o.to_date = to_date
 			price, datapoints = getPrice(data, polygon, from_date, to_date)
-			if price:
+			if datapoints>0:
 				o.price = price
 				o.datapoints = datapoints
 				o.save()
