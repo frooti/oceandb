@@ -229,7 +229,7 @@ def orderData(request):
 				# email
 				sub = 'Received Order #'+str(o.oid)
 				msg = 'Hi, \n We are processing your download request. You will receive the download link within 1 hr. \nThank You,\nSamudra Team.'
-				from_email = 'order@dataraft.in'
+				from_email = 'ravi@dataraft.in'
 				to_email = [o.email]
 				send_mail(sub, msg, from_email, to_email, fail_silently=False)
 	except Exception, e:
