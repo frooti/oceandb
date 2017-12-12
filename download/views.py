@@ -235,7 +235,7 @@ def orderData(request):
 				email_msg = 'Hi, \n We are processing your download request. You will receive the download link within 1 hr. \n\nThank You,\nSamudra Team.'
 				from_email = 'ravi@dataraft.in'
 				to_email = [o.email]
-				bcc = ['ravi.muppalaneni@gmail.com']
+				cc = ['ravi@dataraft.in']
 				msg = EmailMultiAlternatives(sub, email_msg, from_email, to_email, bcc=bcc)
 				msg.send()
 	except Exception, e:

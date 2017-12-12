@@ -16,6 +16,22 @@ EMAIL_HOST_PASSWORD = 'Fr##ti36'
 EMAIL_USE_TLS = True
 ##################
 
+def send_email(from_addr, to_addr_list, cc_addr_list, bcc_addr_list, subject, message, login, password, smtpserver='smtp.gmail.com:587'):
+    header  = 'From: %s\n' % from_addr
+    header += 'To: %s\n' % ','.join(to_addr_list)
+    header += 'Bcc: %s\n' % ','.join(bcc_addr_list)
+    header += 'Cc: %s\n' % ','.join(cc_addr_list)
+    header += 'Subject: %s\n\n' % subject
+    message = header + message
+ 
+    server = smtplib.SMTP(smtpserver)
+    server.starttls()
+    server.login(login,password)
+    problems = server.sendmail(from_addr, to_addr_list, message)
+    server.quit()
+    return problems
+
+
 def upload_file(filename, oid):
 	session = boto3.Session()
 	s3_client = session.client('s3')
@@ -79,7 +95,7 @@ while True:
 				# upload_file('/home/ubuntu/projects/oceandb/download/tmp.csv', o.oid+'.csv')
 				# download_link = 'https://s3-ap-southeast-1.amazonaws.com/dataraftoceandb/'+o.oid+'.csv'
 				
-				download_link = 'https://'+HOST+'/'+o.oid+'.csv'
+				download_link = 'http://'+HOST+'/'+o.oid+'.csv'
 
 				# email client
 				# email_msg = 'Hi, \n Below is your download link:\n'+download_link+'\nThank You,\nSamudra Team.'
@@ -92,14 +108,12 @@ while True:
 				# 	},					
 				# }
 				# ses.send_email(**email)
-				smtp = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
-				smtp.starttls()
-				smtp.login(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
 				send_from = 'ravi@dataraft.in'
 				send_to = [o.email]
-				send_bcc = ['ravi.muppalaneni@gmail.com']
+				send_cc = ['ravi.muppalaneni@gmail.com']
 				subject = 'Download link for your Order #'+str(o.oid)
 				message = 'Hi, \n Below is your download link:\n'+download_link+'\n\nThank You,\nSamudra Team.'
+				send_email(send_from, send_to, send_cc, [], subject, message, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_HOST+':'EMAIL_PORT)
 				print 'email sent.'
 
 				o.processed_at = datetime.now()
