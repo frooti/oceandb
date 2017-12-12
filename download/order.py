@@ -3,11 +3,17 @@ import csv
 from datetime import datetime, timedelta
 import boto3
 import time
+import smtplib
 
 ses = boto3.client('ses', region_name='us-east-1')
 
 ##### CONFIG #####
-HOST = 'ocean.dataraft.in'
+HOST = '10.24.1.151'
+EMAIL_HOST = 'smtp.zoho.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ravi@dataraft.in'
+EMAIL_HOST_PASSWORD = 'Fr##ti36'
+EMAIL_USE_TLS = True
 ##################
 
 def upload_file(filename, oid):
@@ -76,17 +82,26 @@ while True:
 				download_link = 'https://'+HOST+'/'+o.oid+'.csv'
 
 				# email client
-				email_msg = 'Hi, \n Below is your download link:\n'+download_link+'\nThank You,\nSamudra Team.'
-				email = {
-					'Source': 'order@dataraft.in',
-					'Destination': {'ToAddresses': [o.email], 'BccAddresses': ['ravi@dataraft.in']},
-					'Message': {
-						'Subject': {'Data': 'Dataraft: Download link for your Order #'+str(o.oid)},
-						'Body': {'Text': {'Data': email_msg}},
-					},					
-				}
-				ses.send_email(**email)
+				# email_msg = 'Hi, \n Below is your download link:\n'+download_link+'\nThank You,\nSamudra Team.'
+				# email = {
+				# 	'Source': 'order@dataraft.in',
+				# 	'Destination': {'ToAddresses': [o.email], 'BccAddresses': ['ravi@dataraft.in']},
+				# 	'Message': {
+				# 		'Subject': {'Data': 'Dataraft: Download link for your Order #'+str(o.oid)},
+				# 		'Body': {'Text': {'Data': email_msg}},
+				# 	},					
+				# }
+				# ses.send_email(**email)
+				smtp = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
+				smtp.starttls()
+				smtp.login(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
+				send_from = 'ravi@dataraft.in'
+				send_to = [o.email]
+				send_bcc = ['ravi.muppalaneni@gmail.com']
+				subject = 'Download link for your Order #'+str(o.oid)
+				message = 'Hi, \n Below is your download link:\n'+download_link+'\n\nThank You,\nSamudra Team.'
 				print 'email sent.'
+
 				o.processed_at = datetime.now()
 				o.download_link = download_link
 				o.save()
