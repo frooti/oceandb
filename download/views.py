@@ -90,6 +90,9 @@ def signup(request):
 			print e
 			res['status'] = False
 			res['msg'] = 'someting went wrong.'
+	else:
+		res['status'] = False
+		res['msg'] = 'Please fill all the form fields.'
 
 	return HttpResponse(json.dumps(res, default=default))
 
