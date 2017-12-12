@@ -166,13 +166,17 @@ def fetchPrice(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	polygon = request.GET.get('polygon', None)
 	data =  request.GET.get('data', None)
-	from_date = request.GET.get('from_date', (datetime(day=1, month=9, year=2017)-timedelta(days=7)).isoformat())
-	to_date = request.GET.get('to_date', (datetime(day=1, month=9, year=2017)+timedelta(days=7)).isoformat())
-	user = request.user
-	datapoints = 0
+	from_date = request.GET.get('from_date', None)
+	to_date = request.GET.get('to_date', None)
 	try:
 		from_date = dateutil.parser.parse(from_date)
 		to_date = dateutil.parser.parse(to_date)
+	except:
+		from_date = dateutil.parser.parse((datetime.now()-timedelta(days=7)).isoformat())
+		to_date = dateutil.parser.parse((datetime.now()+timedelta(days=7)).isoformat())
+	user = request.user
+	datapoints = 0
+	try:
 		polygon = json.loads(polygon)
 		
 		if data and polygon and data in ['wave', 'bathymetry']:
