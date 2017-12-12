@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from models import zone, order, wave, bathymetry
 import boto3
+from django.core.mail import send_mail
 from oceandb.auth import User
 
 # Create your views here.
@@ -226,16 +227,11 @@ def orderData(request):
 				res['msg'] = 'order placed.'
 
 				# email
-				email_msg = 'Hi, \n We are processing your download request. You will receive the download link within 1 hr. \nThank You,\nSamudra Team.'
-				email = {
-					'Source': 'order@dataraft.in',
-					'Destination': {'ToAddresses': [o.email], 'BccAddresses': ['ravi@dataraft.in']},
-					'Message': {
-						'Subject': {'Data': 'Received Order #'+str(o.oid)},
-						'Body': {'Text': {'Data': email_msg}},
-					},					
-				}
-				ses.send_email(**email)
+				sub = 'Received Order #'+str(o.oid)
+				msg = 'Hi, \n We are processing your download request. You will receive the download link within 1 hr. \nThank You,\nSamudra Team.'
+				from_email = 'order@dataraft.in'
+				to_email = [o.email]
+				send_email(sub, msg, from_email, to_email, fail_silently=False)
 	except Exception, e:
 		print e
 		res['status'] = False
