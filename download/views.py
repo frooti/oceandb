@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from models import zone, order, wave, bathymetry
+import boto3
 from oceandb.auth import User
 
 # Create your views here.
