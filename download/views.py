@@ -228,11 +228,12 @@ def orderData(request):
 
 				# email
 				sub = 'Received Order #'+str(o.oid)
-				msg = 'Hi, \n We are processing your download request. You will receive the download link within 1 hr. \n\nThank You,\nSamudra Team.'
+				email_msg = 'Hi, \n We are processing your download request. You will receive the download link within 1 hr. \n\nThank You,\nSamudra Team.'
 				from_email = 'ravi@dataraft.in'
 				to_email = [o.email]
 				bcc = ['ravi@dataraft.in']
-				EmailMultiAlternatives(sub, msg, from_email, to_email, bcc=bcc)
+				msg = EmailMultiAlternatives(sub, email_msg, from_email, to_email, bcc=bcc)
+				msg.send()
 	except Exception, e:
 		print e
 		res['status'] = False
