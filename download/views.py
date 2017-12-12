@@ -231,13 +231,14 @@ def orderData(request):
 				res['msg'] = 'order placed.'
 
 				# email
-				sub = 'Received Order #'+str(o.oid)
-				email_msg = 'Hi, \n We are processing your download request. You will receive the download link within 1 hr. \n\nThank You,\nSamudra Team.'
-				from_email = 'ravi@dataraft.in'
-				to_email = [o.email]
-				cc = ['ravi@dataraft.in']
-				msg = EmailMultiAlternatives(sub, email_msg, from_email, to_email, cc=cc)
-				msg.send()
+				if 'test' not in o.email:
+					sub = 'Received Order #'+str(o.oid)
+					email_msg = 'Hi, \n We are processing your download request. You will receive the download link within 1 hr. \n\nThank You,\nSamudra Team.'
+					from_email = 'ravi@dataraft.in'
+					to_email = [o.email]
+					cc = ['ravi@dataraft.in']
+					msg = EmailMultiAlternatives(sub, email_msg, from_email, to_email, cc=cc)
+					msg.send()
 	except Exception, e:
 		print e
 		res['status'] = False
