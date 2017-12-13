@@ -111,7 +111,7 @@ while True:
 				if 'test' not in o.email:
 					send_from = 'ravi@dataraft.in'
 					send_to = [o.email]
-					send_cc = ['ravi.muppalaneni@gmail.com']
+					send_cc = ['ravi@dataraft.in']
 					subject = 'Download link for your Order #'+str(o.oid)
 					message = 'Hi, \n Below is your download link:\n'+download_link+'\n\nThank You,\nSamudra Team.'
 					send_email(send_from, send_to, send_cc, [], subject, message, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_HOST+':'+str(EMAIL_PORT))
