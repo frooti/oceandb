@@ -55,14 +55,20 @@ while True:
 			with open('/var/www/dataraft.in/'+o.oid+'.csv', 'w+') as f:
 				datapoints = []
 
-				if o.data == 'wave':
+				if o.data in ['wave', 'wavedirection', 'waveperiod']:
 					from_date = o.from_date
 					to_date = o.to_date
 					fieldnames = ['long', 'lat', 'height', 'date']
 					writer = csv.DictWriter(f, fieldnames=fieldnames)
 					writer.writeheader()
+					if data=='wave':
+						model = wave
+					elif data=='wavedirection':
+						model = wavedirection
+					else:
+						model = waveperiod
 
-					spatialpoints = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry':o.polygon}}})
+					spatialpoints = model.objects(__raw__={'l':{'$geoWithin':{'$geometry':o.polygon}}})
 					for d in spatialpoints:
 						try:
 							values = d.values

@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from models import zone, order, wave, bathymetry
+from models import zone, order, wave, wavedirection, waveperiod, bathymetry
 import boto3
 from django.core.mail import EmailMultiAlternatives
 from oceandb.auth import User
@@ -126,10 +126,17 @@ def getPrice(data, polygon, from_date, to_date):
 	datapoints = 0
 	if data and polygon and from_date and to_date:
 		try:
-			if data=='wave':
-				spatialpoints = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
+			if data in ['wave', 'waveperiod', 'wavedirection']:
+				if data=='wave':
+					model = wave
+				elif data=='wavedirection':
+					model = wavedirection
+				else:
+					model = waveperiod
+
+				spatialpoints = model.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
 				available_days = 0
-				sample = wave.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}})[0]
+				sample = model.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}})[0]
 				
 				while from_date<=to_date:
 					day = str(from_date.timetuple().tm_yday)
@@ -179,7 +186,7 @@ def fetchPrice(request):
 	try:
 		polygon = json.loads(polygon)
 		
-		if data and polygon and data in ['wave', 'bathymetry']:
+		if polygon and data in ['wave', 'wavedirection', 'waveperiod', 'bathymetry']:
 			price, datapoints = getPrice(data, polygon, from_date, to_date)
 
 			res['status'] = True
@@ -214,7 +221,7 @@ def orderData(request):
 		from_date = dateutil.parser.parse(from_date)
 		to_date = dateutil.parser.parse(to_date)
 
-		if email and data and data in ['wave', 'bathymetry'] and polygon:
+		if email and polygon and data in ['wave', 'wavedirection', 'waveperiod', 'bathymetry']:
 			o = order(oid=str(uuid.uuid4()))
 			o.email = user.email
 			o.data = data
