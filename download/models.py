@@ -36,6 +36,14 @@ class wave(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
 
+class wavedirection(Document):
+	loc = PointField(db_field='l', auto_index=True, required=True)
+	values = DictField()
+
+class waveperiod(Document):
+	loc = PointField(db_field='l', auto_index=True, required=True)
+	values = DictField()
+
 class current(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
