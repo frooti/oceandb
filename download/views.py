@@ -5,6 +5,7 @@ from django.shortcuts import render
 from models import zone, order, wave, wavedirection, waveperiod, bathymetry
 import boto3
 from django.core.mail import EmailMultiAlternatives
+from django.views.decorators.csrf import csrf_exempt
 from oceandb.auth import User
 
 # Create your views here.
@@ -269,6 +270,7 @@ def heatMap(request):
 
 	return HttpResponse(json.dumps(res, default=default))
 
+@csrf_exempt
 def uploadData(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	if request.user:
