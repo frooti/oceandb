@@ -63,10 +63,13 @@ while True:
 					writer.writeheader()
 					if o.data=='wave':
 						model = wave
+						param = 'height'
 					elif o.data=='wavedirection':
 						model = wavedirection
+						param = 'direction'
 					else:
 						model = waveperiod
+						param = 'period'
 
 					spatialpoints = model.objects(__raw__={'l':{'$geoWithin':{'$geometry':o.polygon}}})
 					for d in spatialpoints:
@@ -78,7 +81,9 @@ while True:
 								day = str(from_date.timetuple().tm_yday)
 								year = str(from_date.year)
 								try:
-									writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'height': d.values[year][day], 'date':from_date.strftime('%Y-%m-%d %H:%M')})
+									row = {'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'date':from_date.strftime('%Y-%m-%d %H:%M')}
+									row[param] = d.values[year][day]
+									writer.writerow(row)
 								except Exception, e:
 									pass 
 								from_date += timedelta(days=1)
