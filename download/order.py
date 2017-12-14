@@ -81,7 +81,10 @@ while True:
 								day = str(from_date.timetuple().tm_yday)
 								year = str(from_date.year)
 								try:
-									row = {'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'date':from_date.strftime('%Y-%m-%d %H:%M')}
+									row = {}
+									row['long'] = d.loc['coordinates'][0]
+									row['lat'] = d.loc['coordinates'][1]
+									row['date'] = from_date.strftime('%Y-%m-%d %H:%M')
 									row[param] = d.values[year][day]
 									writer.writerow(row)
 								except Exception, e:
