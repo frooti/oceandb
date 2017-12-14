@@ -67,7 +67,7 @@ while True:
 					else:
 						model = waveperiod
 						param = 'period'
-					fieldnames = ['long', 'lat', 'height', 'date']
+					fieldnames = ['long', 'lat', param, 'date']
 					writer = csv.DictWriter(f, fieldnames=fieldnames)
 					writer.writeheader()
 					
