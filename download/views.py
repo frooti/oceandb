@@ -274,7 +274,7 @@ def heatMap(request):
 def uploadData(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	if request.user:
-		f = request.FILES['data.csv']
+		f = request.FILES.get('csv-file')
 		data = [row for row in csv.reader(f.read().splitlines())]
 		res['msg'] = json.dumps(row)
 		res['status'] = True
