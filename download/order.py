@@ -61,9 +61,9 @@ while True:
 					fieldnames = ['long', 'lat', 'height', 'date']
 					writer = csv.DictWriter(f, fieldnames=fieldnames)
 					writer.writeheader()
-					if data=='wave':
+					if o.data=='wave':
 						model = wave
-					elif data=='wavedirection':
+					elif o.data=='wavedirection':
 						model = wavedirection
 					else:
 						model = waveperiod
