@@ -349,6 +349,7 @@ def uploadData(request):
 				res['status'] = True
 				return HttpResponse(json.dumps(res, default=default))
 			except Exception, e:
+				print e
 				res['msg'] = 'Something went wrong.'
 				res['status'] = False
 	return HttpResponse(json.dumps(res, default=default))
