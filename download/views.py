@@ -288,23 +288,25 @@ def uploadData(request):
 			points_geojson = []
 			for row in csv.reader(f.read().splitlines()):
 				try:
-					for r in row:
-						if not r.strip():
-							row.remove(r)
+					# remove empty cells
+					for i, r in enumerate(row):
+						row[i] = r.strip()
+					for i in range(len(row)):
+						row.remove('')
 					if len(row)!=3:
 						continue
+					
 					longitude = float(row[1])
 					latitude = float(row[0])
 					value = float(row[2])
+					point = [longitude, latitude]
+					points.append(point)
+					points_geojson.append([{'type': 'Point', 'coordinates': point}, value])
 				except Exception, e:
 					print e
 					res['msg'] = 'There is problem with your data. Please correct it and try again.'
 					res['status'] = False
 					return HttpResponse(json.dumps(res, default=default))
-				
-				point = [longitude, latitude]
-				points.append(point)
-				points_geojson.append([{'type': 'Point', 'coordinates': point}, value])
 				
 			chull = []
 			try: # chull check
