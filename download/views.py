@@ -304,7 +304,6 @@ def uploadData(request):
 					points.append(point)
 					points_geojson.append([{'type': 'Point', 'coordinates': point}, value])
 				except Exception, e:
-					print e
 					res['msg'] = 'There is problem with your data. Please correct it and try again.'
 					res['status'] = False
 					return HttpResponse(json.dumps(res, default=default))
@@ -320,7 +319,6 @@ def uploadData(request):
 					res['status'] = False
 					return HttpResponse(json.dumps(res, default=default))
 			except Exception, e:
-				print e
 				res['msg'] = 'Your data does not have a polygon boundary. Please correct it and try again.'
 				res['status'] = False
 				return HttpResponse(json.dumps(res, default=default))
@@ -333,7 +331,20 @@ def uploadData(request):
 				res['status'] = False
 				return HttpResponse(json.dumps(res, default=default))
 
-			res['msg'] = json.dumps(points_geojson)
+			# add to database
+			uz = userzone(uzid=uuid.uuid4())
+			uz.email = request.user.email
+			uz.name = name
+			uz.ztype = 'bathymetry'
+			uz.polygon = {'type':'Polygon', 'coordinates': [chull]}
+			uz.save()
+
+			data = []
+			for p in points_geojson:
+				data.append(userbathymetry({'loc': p[0], 'depth': p[1], 'email': request.user.email, 'uzid': uz.uzid}))
+			userbathymetry.objects.insert(data)
+			
+			res['msg'] = 'Data uploaded successfully.'
 			res['status'] = True
 			return HttpResponse(json.dumps(res, default=default))
 	return HttpResponse(json.dumps(res, default=default))
