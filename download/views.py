@@ -326,7 +326,7 @@ def uploadData(request):
 				return HttpResponse(json.dumps(res, default=default))
 
 			# subscribed zone check
-			intersection_zones = [z.zid for z in zone.objects(polygon__geo_within=[chull])]
+			intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=[chull], ztype='zone')]
 			subscribed_zones = request.user.subscription_zones
 			if not intersection_zones or list(set(intersection_zones)-set(subscribed_zones)):
 				res['msg'] = 'Some of your data is outside your subscribed zone. Please correct it and try again.'
