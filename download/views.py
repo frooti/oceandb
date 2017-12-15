@@ -333,7 +333,7 @@ def uploadData(request):
 					return HttpResponse(json.dumps(res, default=default))
 
 				# add to database
-				uz = userzone(uzid=uuid.uuid4())
+				uz = userzone(uzid=str(uuid.uuid4()))
 				uz.email = request.user.email
 				uz.name = name
 				uz.ztype = 'bathymetry'
