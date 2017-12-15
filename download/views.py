@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from models import zone, order, wave, wavedirection, waveperiod, bathymetry
+from models import zone, userzone, order, wave, wavedirection, waveperiod, bathymetry
 import boto3
 from django.core.mail import EmailMultiAlternatives
 from django.views.decorators.csrf import csrf_exempt
@@ -19,6 +19,8 @@ import time
 from datetime import datetime, timedelta
 import dateutil.parser
 from decimal import Decimal
+import csv
+from scipy.spatial import ConvexHull
 
 ses = boto3.client('ses', region_name='us-east-1')
 
@@ -275,10 +277,57 @@ def uploadData(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	if request.user:
 		f = request.FILES.get('csv-file')
-		data = [row for row in csv.reader(f.read().splitlines())]
-		res['msg'] = json.dumps(row)
-		res['status'] = True
-		return HttpResponse(json.dumps(res, default=default))
+		name = request.GET.get('name', None)
+		if f and name:
+			if userzone.objects(email=request.user.email, name=name).first(): # unique name check
+				res['msg'] = name+' '+'already exists. Please provide a unique zone name.'
+				res['status'] = False
+				return HttpResponse(json.dumps(res, default=default))
+			
+			points = []
+			points_geojson = []
+			for row in csv.reader(f.read().splitlines())
+				try:
+					longitude = float(row[1])
+					latitude = float(row[0])
+					value = float(row[2])
+				except Exception, e:
+					print e
+					res['msg'] = 'There is problem with your data. Please correct it and try again.'
+					res['status'] = False
+					return HttpResponse(json.dumps(res, default=default))
+				
+				point = [longitude, latitude]
+				points.append(point)
+				points_geojson.append([{'type': 'Point', 'coordinates': point}, value])
+				
+			chull = []
+			try: # chull check
+				hull = ConvexHull(points)
+				for i in hull.vertices:
+					chull.append(points[i])
+				chull = chull+[chull[0]]
+				if not chull:
+					res['msg'] = 'Your data does not have a polygon boundary. Please correct it and try again.'
+					res['status'] = False
+					return HttpResponse(json.dumps(res, default=default))
+			except Exception, e:
+				print e
+				res['msg'] = 'Your data does not have a polygon boundary. Please correct it and try again.'
+				res['status'] = False
+				return HttpResponse(json.dumps(res, default=default))
+
+			# subscribed zone check
+			intersection_zones = [z.zid for z in zone.objects(loc__geo_within=chull)]
+			subscribed_zones = request.user.subscribed_zones
+			if intersection_zones-subscribed_zones:
+				res['msg'] = 'Some of your data is outside your subscribed zone. Please correct it and try again.'
+				res['status'] = False
+				return HttpResponse(json.dumps(res, default=default))
+
+			res['msg'] = json.dumps(points_geojson)
+			res['status'] = True
+			return HttpResponse(json.dumps(res, default=default))
 	return HttpResponse(json.dumps(res, default=default))
 
 
