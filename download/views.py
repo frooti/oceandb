@@ -292,10 +292,11 @@ def uploadData(request):
 					for i, r in enumerate(row):
 						row[i] = r.strip()
 					for i in range(len(row)):
-						row.remove('')
+						if '' in row:
+							row.remove('')
 					if len(row)!=3:
 						continue
-					
+
 					longitude = float(row[1])
 					latitude = float(row[0])
 					value = float(row[2])
