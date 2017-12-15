@@ -18,6 +18,7 @@ class zone(Document):
 
 class userzone(Document):
 	uzid = StringField(db_field='uzid', max_length=50, required=True)
+	email = StringField(db_field='e', max_length=200, required=True)
 	name = StringField(db_field='name', max_length=100, required=True)
 	ztype = StringField(db_field='zt', max_length=100, required= True)
 	polygon = PolygonField(db_field='pl', auto_index=True, required=True)
