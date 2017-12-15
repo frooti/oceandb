@@ -288,6 +288,11 @@ def uploadData(request):
 			points_geojson = []
 			for row in csv.reader(f.read().splitlines()):
 				try:
+					for i, r in enumerate(row):
+						if not r.strip():
+							row.pop(i)
+					if len(row)!=3:
+						continue
 					longitude = float(row[1])
 					latitude = float(row[0])
 					value = float(row[2])
