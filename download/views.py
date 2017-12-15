@@ -343,7 +343,8 @@ def uploadData(request):
 				data = []
 				for p in points_geojson:
 					data.append(userbathymetry({'loc': p[0], 'depth': p[1], 'email': request.user.email, 'uzid': uz.uzid}))
-				userbathymetry.objects.insert(data)
+				if data:
+					userbathymetry.objects.insert(data)
 				
 				res['msg'] = 'Data uploaded successfully.'
 				res['status'] = True
