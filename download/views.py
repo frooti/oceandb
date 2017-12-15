@@ -277,7 +277,7 @@ def uploadData(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	if request.user:
 		f = request.FILES.get('csv-file')
-		name = request.GET.get('name', None)
+		name = request.POST.get('name', None)
 		if f and name:
 			if userzone.objects(email=request.user.email, name=name).first(): # unique name check
 				res['msg'] = name+' '+'already exists. Please provide a unique zone name.'
