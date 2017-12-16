@@ -412,6 +412,9 @@ def pointData(request):
 					res['status'] = True
 					res['msg'] = 'success'
 					res['data'] = data
+			else:
+				res['status'] = False
+				res['msg'] = 'Please click inside your subscribed zone.'
 	except Exception, e:
 		print e
 		res['status'] = False
