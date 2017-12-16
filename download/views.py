@@ -370,7 +370,7 @@ def pointData(request):
 	try:
 		point = json.loads(point)
 
-		if request.zone and point and data in ['wave', 'bathymetry']:
+		if request.user and point and data in ['wave', 'bathymetry']:
 			intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=point, ztype='zone')]
 			subscribed_zones = request.user.subscription_zones
 			
