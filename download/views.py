@@ -359,4 +359,62 @@ def uploadData(request):
 				res['status'] = False
 	return HttpResponse(json.dumps(res, default=default))
 
+def pointData(request):
+	res = json.loads(DEFAULT_RESPONSE)
+	point = request.GET.get('point', None)
+	data =  request.GET.get('data', None)
+	user = request.user
+	from_date = datetime.now()
+	to_date = datetime.now()+timedelta(days=14)
 
+	try:
+		point = json.loads(point)
+
+		if request.zone and point and data in ['wave', 'bathymetry']:
+			intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=point, ztype='zone')]
+			subscribed_zones = request.user.subscription_zones
+			
+			if intersection_zones and not list(set(intersection_zones)-set(subscribed_zones)): # subscribed zone check
+				if data=='wave':
+					data = []
+					p = wave.objects(loc__near=point).first()
+					if p:
+						while from_date<=to_date:
+							p.values
+							day = str(from_date.timetuple().tm_yday)
+							year = str(from_date.year)
+							try:
+								row = {}
+								row['long'] = p.loc['coordinates'][0]
+								row['lat'] = p.loc['coordinates'][1]
+								row['date'] = from_date.strftime('%Y-%m-%d')
+								row['param'] = p.values[year][day]
+								data.append(row)
+							except:
+								pass
+							from_date += timedelta(days=1)
+					res['status'] = True
+					res['msg'] = 'success'
+					res['data'] = data
+
+				elif data=='bathymetry':
+					data = []
+					p = bathymetry.objects(loc__near=point).first()
+					if p:
+						try:
+							row = {}
+							row['long'] = p.loc['coordinates'][0]
+							row['lat'] = p.loc['coordinates'][1]
+							row['param'] = p.depth
+							data.append(row)
+						except:
+							pass
+					res['status'] = True
+					res['msg'] = 'success'
+					res['data'] = data
+	except Exception, e:
+		print e
+		res['status'] = False
+		res['msg'] = 'Someting went wrong.'
+
+	return HttpResponse(json.dumps(res, default=default))
