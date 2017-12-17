@@ -370,14 +370,20 @@ def pointData(request):
 	try:
 		point = json.loads(point)
 
-		if request.user and point and data in ['wave', 'bathymetry']:
+		if request.user and point and data in ['wave', 'wavedirection', 'waveperiod', 'bathymetry']:
 			intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=point, ztype='zone')]
 			subscribed_zones = request.user.subscription_zones
 			
 			if intersection_zones and not list(set(intersection_zones)-set(subscribed_zones)): # subscribed zone check
-				if data=='wave':
-					data = []
-					p = wave.objects(loc__near=point).first()
+				if data in ['wave', 'wavedirection', 'waveperiod']:
+					datapoints = []
+					model = wave
+					if data=='wavedirection':
+						model = wavedirection
+					elif data=='waveperiod':
+						model = waveperiod
+
+					p = model.objects(loc__near=point).first()
 					if p:
 						while from_date<=to_date:
 							p.values
@@ -389,13 +395,13 @@ def pointData(request):
 								row['lat'] = p.loc['coordinates'][1]
 								row['date'] = from_date.strftime('%Y-%m-%d')
 								row['param'] = p.values[year][day]
-								data.append(row)
+								datapoints.append(row)
 							except:
 								pass
 							from_date += timedelta(days=1)
 					res['status'] = True
 					res['msg'] = 'success'
-					res['data'] = data
+					res['data'] = datapoints
 
 				elif data=='bathymetry':
 					data = []
