@@ -245,14 +245,25 @@ def orderData(request):
 				res['msg'] = 'order placed.'
 
 				# email
+				# if 'test' not in o.email:
+				# 	sub = 'Received Order #'+str(o.oid)
+				# 	email_msg = 'Hi, \n We are processing your download request. You will receive the download link within 1 hr. \n\nThank You,\nSamudra Team.'
+				# 	from_email = 'ravi@dataraft.in'
+				# 	to_email = [o.email]
+				# 	cc = ['ravi@dataraft.in']
+				# 	msg = EmailMultiAlternatives(sub, email_msg, from_email, to_email, cc=cc)
+				# 	msg.send()
 				if 'test' not in o.email:
-					sub = 'Received Order #'+str(o.oid)
 					email_msg = 'Hi, \n We are processing your download request. You will receive the download link within 1 hr. \n\nThank You,\nSamudra Team.'
-					from_email = 'ravi@dataraft.in'
-					to_email = [o.email]
-					cc = ['ravi@dataraft.in']
-					msg = EmailMultiAlternatives(sub, email_msg, from_email, to_email, cc=cc)
-					msg.send()
+					email = {
+						'Source': 'order@dataraft.in',
+						'Destination': {'ToAddresses': [o.email], 'BccAddresses': ['ravi@dataraft.in']},
+						'Message': {
+							'Subject': {'Data': 'Received Order #'+str(o.oid)},
+							'Body': {'Text': {'Data': email_msg}},
+						},					
+					}
+					ses.send_email(**email)
 	except Exception, e:
 		print e
 		res['status'] = False

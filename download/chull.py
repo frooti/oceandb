@@ -1,7 +1,7 @@
 from scipy.spatial import ConvexHull
 import csv
 
-file_path = '/Users/ravi/Desktop/bathy_zones/Cochin_iocl.xyz'
+file_path = '/Users/ravi/Desktop/bathy_zones/cochin_port/thottapalli.xyz'
 
 points = []
 chull  = []

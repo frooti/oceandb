@@ -112,24 +112,26 @@ while True:
 				download_link = 'http://'+HOST+'/'+o.oid+'.csv'
 
 				# email client
-				# email_msg = 'Hi, \n Below is your download link:\n'+download_link+'\nThank You,\nSamudra Team.'
-				# email = {
-				# 	'Source': 'order@dataraft.in',
-				# 	'Destination': {'ToAddresses': [o.email], 'BccAddresses': ['ravi@dataraft.in']},
-				# 	'Message': {
-				# 		'Subject': {'Data': 'Dataraft: Download link for your Order #'+str(o.oid)},
-				# 		'Body': {'Text': {'Data': email_msg}},
-				# 	},					
-				# }
-				# ses.send_email(**email)
 				if 'test' not in o.email:
-					send_from = 'ravi@dataraft.in'
-					send_to = [o.email]
-					send_cc = ['ravi@dataraft.in']
-					subject = 'Download link for your Order #'+str(o.oid)
-					message = 'Hi, \n Below is your download link:\n'+download_link+'\n\nThank You,\nSamudra Team.'
-					send_email(send_from, send_to, send_cc, [], subject, message, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_HOST+':'+str(EMAIL_PORT))
-					print 'email sent.'
+					email_msg = 'Hi, \n Below is your download link:\n'+download_link+'\nThank You,\nSamudra Team.'
+					email = {
+						'Source': 'order@dataraft.in',
+						'Destination': {'ToAddresses': [o.email], 'BccAddresses': ['ravi@dataraft.in']},
+						'Message': {
+							'Subject': {'Data': 'Dataraft: Download link for your Order #'+str(o.oid)},
+							'Body': {'Text': {'Data': email_msg}},
+						},					
+					}
+					ses.send_email(**email)
+				
+				# if 'test' not in o.email:
+				# 	send_from = 'ravi@dataraft.in'
+				# 	send_to = [o.email]
+				# 	send_cc = ['ravi@dataraft.in']
+				# 	subject = 'Download link for your Order #'+str(o.oid)
+				# 	message = 'Hi, \n Below is your download link:\n'+download_link+'\n\nThank You,\nSamudra Team.'
+				# 	send_email(send_from, send_to, send_cc, [], subject, message, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_HOST+':'+str(EMAIL_PORT))
+				# 	print 'email sent.'
 
 				o.processed_at = datetime.now()
 				o.download_link = download_link
