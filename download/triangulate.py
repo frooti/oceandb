@@ -22,7 +22,7 @@ for uz in userzone.objects():
 			{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
 		]
 		value = 0
-		q = list(bathymetry.objects.aggregate(*pipeline)
+		q = list(bathymetry.objects.aggregate(*pipeline))
 		if q:
 			value = round(q[0].get('depth', 0), 2)
 
