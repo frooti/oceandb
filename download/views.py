@@ -59,7 +59,7 @@ def login(request):
 		res['status'] = True
 		res['data'] = {'email': email, 'subscription_type': user.subscription_type, 'subscription_zones': user.subscription_zones, 'is_active':user.is_active}
 		# userzones
-		res['data']['userzones'] = [[uz.uzid, uz.polygon] for uz in userzone.objects(email=request.user.email)]
+		res['data']['userzones'] = [[uz.uzid, uz.polygon, uz.triangles] for uz in userzone.objects(email=request.user.email)]
 	else:
 		res['msg'] = 'email/password does not match.'
 		res['status'] = False
@@ -113,10 +113,11 @@ def getZone(request):
 
 		for z in zone.objects():
 			if z.ztype == 'zone':
-				zones.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
+				#zones.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
+				zones.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon, 'triangles':z.triangles})
 			elif z.ztype == 'bathymetry':
-				bathymetry.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
-
+				#bathymetry.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
+				bathymetry.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon, 'triangles':z.triangles})
 		res['zones'] = zones
 		res['bathymetry'] = bathymetry
 		res['status'] = True
