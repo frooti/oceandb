@@ -67,10 +67,10 @@ def login(request):
 
 		w = wave.objects().first()
 		if w:
-			from_year = w.values.keys().sort()[0]
-			from_day = w.values[from_year].keys().sort()[0]
-			to_year = w.values.keys().sort()[-1]
-			to_day = w.values[to_year].keys().sort()[-1]
+			from_year = sorted(w.values.keys())[0]
+			from_day = sorted(w.values[from_year].keys())[0]
+			to_year = sorted(w.values.keys())[-1]
+			to_day = sorted(w.values[to_year].keys())[-1]
 			waveheight['from_date'] = (datetime(year=int(from_year))+timedelta(days=int(from_day)-1)).isoformat()
 			waveheight['to_date'] = (datetime(year=int(to_year))+timedelta(days=int(to_day)-1)).isoformat()
 
