@@ -169,7 +169,7 @@ def getZone(request):
 		res['status'] = False
 		res['msg'] = 'Someting went wrong.'
 
-	return HttpResponse(json.dumps(res, default=default))
+	return HttpResponse(json.dumps(res, separators=(',', ':'), default=default))
 
 
 def getPrice(data, polygon, from_date, to_date):

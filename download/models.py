@@ -74,3 +74,11 @@ class userbathymetry(Document):
 	depth = FloatField(db_field='d', required=True)
 	email = StringField(db_field='e', max_length=200, required=True)
 	uzid = StringField(db_field='uzid', max_length=50, required=True)
+
+class usershoreline(Document):
+	lid = StringField(db_field='uzid', max_length=50, required=True)
+	line = LineStringField(db_field='ln', auto_index=True, required=True)
+	email = StringField(db_field='e', max_length=200, required=True)
+	created_at = DateTimeField(db_field='ct', default=datetime.now)
+	
+
