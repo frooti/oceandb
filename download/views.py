@@ -36,6 +36,38 @@ BATHY_DATAPOINT_PRICE = 1
 
 def login(request):
 	res = json.loads(DEFAULT_RESPONSE)
+	## available dates ##
+	waveheight = {'from_date': None, 'to_date': None}
+	waveperiod = {'from_date': None, 'to_date': None}
+	wavedirection = {'from_date': None, 'to_date': None}
+
+	w = wave.objects().first()
+	if w:
+		from_year = sorted(w.values.keys())[0]
+		from_day = sorted(w.values[from_year].keys())[0]
+		to_year = sorted(w.values.keys())[-1]
+		to_day = sorted(w.values[to_year].keys())[-1]
+		waveheight['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
+		waveheight['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
+
+	wp = waveperiod.objects().first()
+	if wp:
+		from_year = sorted(wp.values.keys())[0]
+		from_day = sorted(wp.values[from_year].keys())[0]
+		to_year = sorted(wp.values.keys())[-1]
+		to_day = sorted(wp.values[to_year].keys())[-1]
+		waveperiod['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
+		waveperiod['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
+
+	wd = wavedirection.objects().first()
+	if wd:
+		from_year = sorted(wd.values.keys())[0]
+		from_day = sorted(wd.values[from_year].keys())[0]
+		to_year = sorted(wd.values.keys())[-1]
+		to_day = sorted(wd.values[to_year].keys())[-1]
+		wavedirection['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
+		wavedirection['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
+
 	## session check ##
 	if request.user:
 		res['msg'] = 'session active.'
@@ -43,6 +75,11 @@ def login(request):
 		res['data'] = {'email': request.user.email, 'subscription_type': request.user.subscription_type, 'subscription_zones': request.user.subscription_zones, 'is_active': request.user.is_active}
 		# userzones
 		res['data']['userzones'] = [[uz.uzid, uz.polygon] for uz in userzone.objects(email=request.user.email)]
+		# available dates
+		res['data']['dates'] = {}
+		res['data']['dates']['waveheight'] = waveheight
+		res['data']['dates']['waveperiod'] = waveperiod
+		res['data']['dates']['wavedirection'] = wavedirection
 		return HttpResponse(json.dumps(res, default=default))
 
 	## jugaad ##
@@ -61,37 +98,6 @@ def login(request):
 		# userzones
 		res['data']['userzones'] = [[uz.uzid, uz.polygon, uz.triangles] for uz in userzone.objects(email=request.user.email)]
 		# available dates
-		waveheight = {'from_date': None, 'to_date': None}
-		waveperiod = {'from_date': None, 'to_date': None}
-		wavedirection = {'from_date': None, 'to_date': None}
-
-		w = wave.objects().first()
-		if w:
-			from_year = sorted(w.values.keys())[0]
-			from_day = sorted(w.values[from_year].keys())[0]
-			to_year = sorted(w.values.keys())[-1]
-			to_day = sorted(w.values[to_year].keys())[-1]
-			waveheight['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
-			waveheight['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
-
-		wp = waveperiod.objects().first()
-		if wp:
-			from_year = sorted(wp.values.keys())[0]
-			from_day = sorted(wp.values[from_year].keys())[0]
-			to_year = sorted(wp.values.keys())[-1]
-			to_day = sorted(wp.values[to_year].keys())[-1]
-			waveperiod['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
-			waveperiod['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
-
-		wd = wavedirection.objects().first()
-		if wd:
-			from_year = sorted(wd.values.keys())[0]
-			from_day = sorted(wd.values[from_year].keys())[0]
-			to_year = sorted(wd.values.keys())[-1]
-			to_day = sorted(wd.values[to_year].keys())[-1]
-			wavedirection['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
-			wavedirection['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
-
 		res['data']['dates'] = {}
 		res['data']['dates']['waveheight'] = waveheight
 		res['data']['dates']['waveperiod'] = waveperiod
