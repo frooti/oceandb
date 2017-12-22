@@ -74,6 +74,24 @@ def login(request):
 			waveheight['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
 			waveheight['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
 
+		wp = waveperiod.objects().first()
+		if wp:
+			from_year = sorted(wp.values.keys())[0]
+			from_day = sorted(wp.values[from_year].keys())[0]
+			to_year = sorted(wp.values.keys())[-1]
+			to_day = sorted(wp.values[to_year].keys())[-1]
+			waveperiod['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
+			waveperiod['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
+
+		wd = wavedirection.objects().first()
+		if wd:
+			from_year = sorted(wd.values.keys())[0]
+			from_day = sorted(wd.values[from_year].keys())[0]
+			to_year = sorted(wd.values.keys())[-1]
+			to_day = sorted(wd.values[to_year].keys())[-1]
+			wavedirection['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
+			wavedirection['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
+
 		res['data']['dates'] = {}
 		res['data']['dates']['waveheight'] = waveheight
 		res['data']['dates']['waveperiod'] = waveperiod
