@@ -65,12 +65,12 @@ def login(request):
 		waveperiod = {'from_date': None, 'to_date': None}
 		wavedirection = {'from_date': None, 'to_date': None}
 
-		wave = wave.objects().first()
-		if wave:
-			from_year = wave.values.keys().sort()[0]
-			from_day = wave.values[from_year].keys().sort()[0]
-			to_year = wave.values.keys().sort()[-1]
-			to_day = wave.values[to_year].keys().sort()[-1]
+		w = wave.objects().first()
+		if w:
+			from_year = w.values.keys().sort()[0]
+			from_day = w.values[from_year].keys().sort()[0]
+			to_year = w.values.keys().sort()[-1]
+			to_day = w.values[to_year].keys().sort()[-1]
 			waveheight['from_date'] = (datetime(year=int(from_year))+timedelta(days=int(from_day)-1)).isoformat()
 			waveheight['to_date'] = (datetime(year=int(to_year))+timedelta(days=int(to_day)-1)).isoformat()
 
