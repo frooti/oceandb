@@ -37,9 +37,9 @@ BATHY_DATAPOINT_PRICE = 1
 def login(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	## available dates ##
-	waveheight = {'from_date': None, 'to_date': None}
-	waveperiod = {'from_date': None, 'to_date': None}
-	wavedirection = {'from_date': None, 'to_date': None}
+	height = {'from_date': None, 'to_date': None}
+	period = {'from_date': None, 'to_date': None}
+	direction = {'from_date': None, 'to_date': None}
 
 	w = wave.objects().first()
 	if w:
@@ -47,8 +47,8 @@ def login(request):
 		from_day = sorted(w.values[from_year].keys())[0]
 		to_year = sorted(w.values.keys())[-1]
 		to_day = sorted(w.values[to_year].keys())[-1]
-		waveheight['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
-		waveheight['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
+		height['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
+		height['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
 
 	wp = waveperiod.objects().first()
 	if wp:
@@ -56,8 +56,8 @@ def login(request):
 		from_day = sorted(wp.values[from_year].keys())[0]
 		to_year = sorted(wp.values.keys())[-1]
 		to_day = sorted(wp.values[to_year].keys())[-1]
-		waveperiod['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
-		waveperiod['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
+		period['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
+		period['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
 
 	wd = wavedirection.objects().first()
 	if wd:
@@ -65,8 +65,8 @@ def login(request):
 		from_day = sorted(wd.values[from_year].keys())[0]
 		to_year = sorted(wd.values.keys())[-1]
 		to_day = sorted(wd.values[to_year].keys())[-1]
-		wavedirection['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
-		wavedirection['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
+		direction['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
+		direction['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
 
 	## session check ##
 	if request.user:
@@ -77,9 +77,9 @@ def login(request):
 		res['data']['userzones'] = [[uz.uzid, uz.polygon] for uz in userzone.objects(email=request.user.email)]
 		# available dates
 		res['data']['dates'] = {}
-		res['data']['dates']['waveheight'] = waveheight
-		res['data']['dates']['waveperiod'] = waveperiod
-		res['data']['dates']['wavedirection'] = wavedirection
+		res['data']['dates']['waveheight'] = height
+		res['data']['dates']['waveperiod'] = period
+		res['data']['dates']['wavedirection'] = direction
 		return HttpResponse(json.dumps(res, default=default))
 
 	## jugaad ##
@@ -99,9 +99,9 @@ def login(request):
 		res['data']['userzones'] = [[uz.uzid, uz.polygon, uz.triangles] for uz in userzone.objects(email=request.user.email)]
 		# available dates
 		res['data']['dates'] = {}
-		res['data']['dates']['waveheight'] = waveheight
-		res['data']['dates']['waveperiod'] = waveperiod
-		res['data']['dates']['wavedirection'] = wavedirection
+		res['data']['dates']['waveheight'] = height
+		res['data']['dates']['waveperiod'] = period
+		res['data']['dates']['wavedirection'] = direction
 	else:
 		res['msg'] = 'email/password does not match.'
 		res['status'] = False
