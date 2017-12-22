@@ -71,8 +71,8 @@ def login(request):
 			from_day = sorted(w.values[from_year].keys())[0]
 			to_year = sorted(w.values.keys())[-1]
 			to_day = sorted(w.values[to_year].keys())[-1]
-			waveheight['from_date'] = (datetime(year=int(from_year))+timedelta(days=int(from_day)-1)).isoformat()
-			waveheight['to_date'] = (datetime(year=int(to_year))+timedelta(days=int(to_day)-1)).isoformat()
+			waveheight['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
+			waveheight['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
 
 		res['data']['dates'] = {}
 		res['data']['dates']['waveheight'] = waveheight
