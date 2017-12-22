@@ -60,6 +60,24 @@ def login(request):
 		res['data'] = {'email': email, 'subscription_type': user.subscription_type, 'subscription_zones': user.subscription_zones, 'is_active':user.is_active}
 		# userzones
 		res['data']['userzones'] = [[uz.uzid, uz.polygon, uz.triangles] for uz in userzone.objects(email=request.user.email)]
+		# available dates
+		waveheight = {'from_date': None, 'to_date': None}
+		waveperiod = {'from_date': None, 'to_date': None}
+		wavedirection = {'from_date': None, 'to_date': None}
+
+		wave = wave.objects().first()
+		if wave:
+			from_year = wave.values.keys().sort()[0]
+			from_day = wave.values[from_year].keys().sort()[0]
+			to_year = wave.values.keys().sort()[-1]
+			to_day = wave.values[to_year].keys().sort()[-1]
+			waveheight['from_date'] = (datetime(year=int(from_year))+timedelta(days=int(from_day)-1)).isoformat()
+			waveheight['to_date'] = (datetime(year=int(to_year))+timedelta(days=int(to_day)-1)).isoformat()
+
+		res['data']['dates'] = {}
+		res['data']['dates']['waveheight'] = waveheight
+		res['data']['dates']['waveperiod'] = waveperiod
+		res['data']['dates']['wavedirection'] = wavedirection
 	else:
 		res['msg'] = 'email/password does not match.'
 		res['status'] = False
