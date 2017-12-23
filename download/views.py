@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from models import zone, userzone, order, wave, wavedirection, waveperiod, bathymetry, userbathymetry
+from models import zone, userzone, order, wave, wavedirection, waveperiod, bathymetry, userbathymetry, usershoreline
 import boto3
 from django.core.mail import EmailMultiAlternatives
 from django.views.decorators.csrf import csrf_exempt
@@ -13,7 +13,7 @@ DEFAULT_RESPONSE = '{"status":false, "msg": "bad request."}'
 
 from django.http import HttpResponse, HttpResponseRedirect
 import django.contrib.auth as auth
-import json
+import json, geojson
 import uuid
 import time
 from datetime import datetime, timedelta
@@ -334,79 +334,136 @@ def heatMap(request):
 def uploadData(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	if request.user:
+		data = request.POST.get('data-type', None)
 		f = request.FILES.get('csv-file')
 		name = request.POST.get('name', None)
-		if f and name:
+		if datatype and f and name:
 			try:
-				if userzone.objects(email=request.user.email, name=name).first(): # unique name check
-					res['msg'] = name+' '+'already exists. Please provide a unique zone name.'
-					res['status'] = False
-					return HttpResponse(json.dumps(res, default=default))
-				
-				points = []
-				points_geojson = []
-				for row in csv.reader(f.read().splitlines()):
-					try:
-						# remove empty cells
-						for i, r in enumerate(row):
-							row[i] = r.strip()
-						for i in range(len(row)):
-							if '' in row:
-								row.remove('')
-						if len(row)!=3:
-							continue
-
-						longitude = float(row[1])
-						latitude = float(row[0])
-						value = float(row[2])
-						point = [longitude, latitude]
-						points.append(point)
-						points_geojson.append([{'type': 'Point', 'coordinates': point}, value])
-					except Exception, e:
-						res['msg'] = 'There is problem with your data. Please correct it and try again.'
+				if data == 'bathymetry':
+					if userzone.objects(email=request.user.email, name=name).first(): # unique name check
+						res['msg'] = name+' '+'already exists. Please provide a unique zone name.'
 						res['status'] = False
 						return HttpResponse(json.dumps(res, default=default))
 					
-				chull = []
-				try: # chull check
-					hull = ConvexHull(points)
-					for i in hull.vertices:
-						chull.append(points[i])
-					chull = chull+[chull[0]]
-					if not chull:
+					points = []
+					points_geojson = []
+					for row in csv.reader(f.read().splitlines()):
+						try:
+							# remove empty cells
+							for i, r in enumerate(row):
+								row[i] = r.strip()
+							for i in range(len(row)):
+								if '' in row:
+									row.remove('')
+							if len(row)!=3:
+								continue
+
+							longitude = float(row[1])
+							latitude = float(row[0])
+							value = float(row[2])
+							point = [longitude, latitude]
+							points.append(point)
+							points_geojson.append([{'type': 'Point', 'coordinates': point}, value])
+						except Exception, e:
+							res['msg'] = 'There is problem with your data. Please correct it and try again.'
+							res['status'] = False
+							return HttpResponse(json.dumps(res, default=default))
+						
+					chull = []
+					try: # chull check
+						hull = ConvexHull(points)
+						for i in hull.vertices:
+							chull.append(points[i])
+						chull = chull+[chull[0]]
+						if not chull:
+							res['msg'] = 'Your data does not have a polygon boundary. Please correct it and try again.'
+							res['status'] = False
+							return HttpResponse(json.dumps(res, default=default))
+					except Exception, e:
 						res['msg'] = 'Your data does not have a polygon boundary. Please correct it and try again.'
 						res['status'] = False
 						return HttpResponse(json.dumps(res, default=default))
-				except Exception, e:
-					res['msg'] = 'Your data does not have a polygon boundary. Please correct it and try again.'
-					res['status'] = False
+
+					# subscribed zone check
+					intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=[chull], ztype='zone')]
+					subscribed_zones = request.user.subscription_zones
+					if not intersection_zones or list(set(intersection_zones)-set(subscribed_zones)):
+						res['msg'] = 'Some of your data is outside your subscribed zone. Please correct it and try again.'
+						res['status'] = False
+						return HttpResponse(json.dumps(res, default=default))
+
+					# add to database
+					uz = userzone(uzid=str(uuid.uuid4()))
+					uz.email = request.user.email
+					uz.name = name
+					uz.ztype = 'bathymetry'
+					uz.polygon = {'type':'Polygon', 'coordinates': [chull]}
+					uz.save()
+
+					data = []
+					for p in points_geojson:
+						data.append(userbathymetry(loc=p[0], depth=p[1], email=request.user.email, uzid=uz.uzid))
+					if data:
+						userbathymetry.objects.insert(data)
+					
+					res['msg'] = 'Data uploaded successfully.'
+					res['status'] = True
 					return HttpResponse(json.dumps(res, default=default))
 
-				# subscribed zone check
-				intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=[chull], ztype='zone')]
-				subscribed_zones = request.user.subscription_zones
-				if not intersection_zones or list(set(intersection_zones)-set(subscribed_zones)):
-					res['msg'] = 'Some of your data is outside your subscribed zone. Please correct it and try again.'
-					res['status'] = False
-					return HttpResponse(json.dumps(res, default=default))
+				elif data == 'shoreline':
+					if usershoreline.objects(email=request.user.email, name=name).first(): # unique name check
+						res['msg'] = name+' '+'already exists. Please provide a unique shoreline name. eg: marina_beach_12/10/2017.'
+						res['status'] = False
+						return HttpResponse(json.dumps(res, default=default))
 
-				# add to database
-				uz = userzone(uzid=str(uuid.uuid4()))
-				uz.email = request.user.email
-				uz.name = name
-				uz.ztype = 'bathymetry'
-				uz.polygon = {'type':'Polygon', 'coordinates': [chull]}
-				uz.save()
+					points = []
+					for row in csv.reader(f.read().splitlines()):
+						try:
+							# remove empty cells
+							for i, r in enumerate(row):
+								row[i] = r.strip()
+							for i in range(len(row)):
+								if '' in row:
+									row.remove('')
+							if len(row)!=2:
+								continue
 
-				data = []
-				for p in points_geojson:
-					data.append(userbathymetry(loc=p[0], depth=p[1], email=request.user.email, uzid=uz.uzid))
-				if data:
-					userbathymetry.objects.insert(data)
-				
-				res['msg'] = 'Data uploaded successfully.'
-				res['status'] = True
-				return HttpResponse(json.dumps(res, default=default))
+							longitude = float(row[1])
+							latitude = float(row[0])
+							point = (longitude, latitude)
+							points.append(point)
+						except Exception, e:
+							res['msg'] = 'There is problem with your data. Please correct it and try again.'
+							res['status'] = False
+							return HttpResponse(json.dumps(res, default=default))
+
+					# validate linestring
+					try:
+						line = geojson.LineString(points)
+						if not line.is_valid:
+							res['msg'] = 'Your data does not form a line string. Please correct it and try again.'
+							res['status'] = False
+							return HttpResponse(json.dumps(res, default=default))
+					except Exception, e:
+						res['msg'] = 'Your data does not form a line string. Please correct it and try again.'
+						res['status'] = False
+						return HttpResponse(json.dumps(res, default=default))
+
+					# subscribed zone check
+					intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=json.loads(geojson.dumps(line)), ztype='zone')]
+					subscribed_zones = request.user.subscription_zones
+					if not intersection_zones or list(set(intersection_zones)-set(subscribed_zones)):
+						res['msg'] = 'Some of your data is outside your subscribed zone. Please correct it and try again.'
+						res['status'] = False
+						return HttpResponse(json.dumps(res, default=default))
+
+					# add to database
+					usl = usershoreline(lid=str(uuid.uuid4()))
+					usl.email = request.user.email
+					usl.name = name
+					usl.line = json.loads(geojson.dumps(line))
+					usl.save()
+
 			except Exception, e:
 				print e
 				res['msg'] = 'Something went wrong.'
