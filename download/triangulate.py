@@ -35,7 +35,7 @@ for z in zone.objects(ztype='bathymetry'):
 	polygon = {'vertices': z.polygon['coordinates'][0]}
 	polygon['vertices'] = np.array(polygon['vertices'])
 	
-	tri = triangle.triangulate(polygon, opts='qa0.01')
+	tri = triangle.triangulate(polygon, opts='a0.01')
 	 
 	for t in tri['triangles']:
 		t = [list(tri['vertices'][i]) for i in t]
