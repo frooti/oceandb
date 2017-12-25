@@ -12,7 +12,7 @@ for uz in userzone.objects():
 	polygon = {'vertices': uz.polygon['coordinates'][0]}
 	polygon['vertices'] = np.array(polygon['vertices'])
 	
-	tri = triangle.triangulate(polygon, opts='q25')
+	tri = triangle.triangulate(polygon, opts='q25D')
 	 
 	for t in tri['triangles']:
 		t = [list(tri['vertices'][i]) for i in t]
@@ -35,7 +35,7 @@ for z in zone.objects(ztype='bathymetry'):
 	polygon = {'vertices': z.polygon['coordinates'][0]}
 	polygon['vertices'] = np.array(polygon['vertices'])
 	
-	tri = triangle.triangulate(polygon, opts='q25')
+	tri = triangle.triangulate(polygon, opts='q25D')
 	 
 	for t in tri['triangles']:
 		t = [list(tri['vertices'][i]) for i in t]
