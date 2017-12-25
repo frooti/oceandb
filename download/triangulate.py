@@ -39,7 +39,7 @@ for z in zone.objects(ztype='bathymetry'):
 	 
 	for t in tri['triangles']:
 		t = [list(tri['vertices'][i]) for i in t]
-		t = [int([i[0]*10000.0)/10000.0, int([i[1]*10000.0)/10000.0] for i in t]
+		t = [[int(i[0]*10000.0)/10000.0, int(i[1]*10000.0)/10000.0] for i in t]
 		t = t+[t[0]]
 		pipeline = [
 			{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [t]}}}} },
