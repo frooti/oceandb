@@ -12,7 +12,7 @@ for uz in userzone.objects():
 	polygon = {'vertices': uz.polygon['coordinates'][0]}
 	polygon['vertices'] = np.array(polygon['vertices'])
 	
-	tri = triangle.triangulate(polygon, opts='a0.01')
+	tri = triangle.triangulate(polygon, opts='q25')
 	 
 	for t in tri['triangles']:
 		t = [list(tri['vertices'][i]) for i in t]
@@ -35,10 +35,11 @@ for z in zone.objects(ztype='bathymetry'):
 	polygon = {'vertices': z.polygon['coordinates'][0]}
 	polygon['vertices'] = np.array(polygon['vertices'])
 	
-	tri = triangle.triangulate(polygon, opts='a0.01')
+	tri = triangle.triangulate(polygon, opts='q25')
 	 
 	for t in tri['triangles']:
 		t = [list(tri['vertices'][i]) for i in t]
+		t = [[round(i[0], 4), round(i[1], 4)] for i in t]
 		t = t+[t[0]]
 		pipeline = [
 			{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [t]}}}} },
