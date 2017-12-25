@@ -174,6 +174,21 @@ def getZone(request):
 
 	return HttpResponse(json.dumps(res, separators=(',', ':'), default=default))
 
+def getShoreLine(request):
+	res = json.loads(DEFAULT_RESPONSE)
+	try:
+		if request.user:
+			data = []
+			for usl in usershoreline.objects(email=request.user.email):
+				data.append({'lid': usl.lid, 'line': usl.line, 'name': usl.name, 'created_at': usl.created_at.strftime('%Y-%m-%d')})
+			res['data'] = data
+			res['status'] = True
+			res['msg'] = 'success'
+	except Exception, e:
+		res['status'] = False
+		res['msg'] = 'Someting went wrong.'
+
+	return HttpResponse(json.dumps(res, default=default))
 
 def getPrice(data, polygon, from_date, to_date):
 	datapoints = 0
