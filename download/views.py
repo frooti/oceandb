@@ -155,11 +155,11 @@ def getZone(request):
 
 		for z in zone.objects():
 			if z.ztype == 'zone':
-				#zones.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
-				zones.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon, 'triangles':z.triangles})
+				zones.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
+				#zones.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon, 'triangles':z.triangles})
 			elif z.ztype == 'bathymetry':
-				#bathymetry.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
-				bathymetry.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon, 'triangles':z.triangles})
+				bathymetry.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
+				#bathymetry.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon, 'triangles':z.triangles})
 		res['zones'] = zones
 		res['bathymetry'] = bathymetry
 		res['status'] = True
