@@ -40,20 +40,22 @@ for z in zone.objects(ztype='bathymetry'):
 	for t in tri['triangles']:
 		t = [list(tri['vertices'][i]) for i in t]
 		rt = [[round(i[0], 5), round(i[1], 5)] for i in t]
+		rt = rt+[rt[0]]
 		try:
 			pipeline = [
-				{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt+[rt[0]]]}}}} },
+				{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
 				{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
 			]
 			value = 0
 			q = list(bathymetry.objects.aggregate(*pipeline))
 			if q:
 				value = round(q[0].get('depth', 0), 2)
-			data.append([t, value])
+			data.append([rt, value])
 		except Exception, e:
 			print e
+			t = t+[t[0]]
 			pipeline = [
-				{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [t+[t[0]]]}}}} },
+				{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [t]}}}} },
 				{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
 			]
 			value = 0
