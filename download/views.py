@@ -176,10 +176,13 @@ def getZone(request):
 
 def getShoreLine(request):
 	res = json.loads(DEFAULT_RESPONSE)
+	year = request.GET.get('year', datetime.now().year)
 	try:
-		if request.user:
+		if request.user and year:
 			data = []
-			for usl in usershoreline.objects(email=request.user.email):
+			from_date = datetime(year=year, month=1, day=1)
+			to_date = datetime(year=year, month=12, day=31)
+			for usl in usershoreline.objects(email=request.user.email, created_at__gte=from_date, created_at__lte=to_date):
 				data.append({'lid': usl.lid, 'line': usl.line, 'name': usl.name, 'created_at': usl.created_at.strftime('%Y-%m-%d')})
 			res['data'] = data
 			res['status'] = True
