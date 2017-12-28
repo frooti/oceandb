@@ -13,11 +13,11 @@ from download.models import zone, userzone, bathymetry, userbathymetry
 # user zones
 for uz in userzone.objects():
 	data = []
-	points = [shape(p.loc) for p in userbathymetry.objects(uzid=uz.uzid)]
-	triangles = triangulate(points)
+	points = [(p.loc[0], p.loc[1]) for p in userbathymetry.objects(uzid=uz.uzid)]
+	triangles = triangulate(MultiPoint(points))
 
 	for t in triangles:
-		t = mapping(t.wkt)
+		t = mapping(t)
 		
 		pipeline = [
 			{ "$match": {'l': {'$geoIntersects': t}} },
