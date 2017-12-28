@@ -4,9 +4,10 @@ sys.stdout.flush()
 
 import triangle # mesh generator
 from shapely.ops import triangulate # Delauny
-from shapely.geometry import Point, MultiPoint
+from shapely.geometry import Point, MultiPoint, Polygon, MultiPolygon
 from shapely.geometry import shape
 from shapely.geometry import mapping
+from shapely.ops import cascaded_union
 import numpy as np
 from download.models import zone, userzone, bathymetry, userbathymetry
 
@@ -15,6 +16,8 @@ for uz in userzone.objects():
 	data = []
 	points = [(p.loc['coordinates'][0], p.loc['coordinates'][1]) for p in userbathymetry.objects(uzid=uz.uzid)]
 	triangles = triangulate(MultiPoint(points))
+	concave_hull = MultiPolygon(triangles)
+	print concave_hull 
 
 	for t in triangles:
 		t = mapping(t)
