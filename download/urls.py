@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^order/$', views.orderData, name='orderData'),
     url(r'^heatmap/$', views.heatMap, name='heatMap'),
     url(r'^zone/$', views.getZone, name='getZone'),
+    url(r'^zonedata/$', views.getZone, name='getZoneData'),
     url(r'^shoreline/$', views.getShoreLine, name='getShoreLine'),
     url(r'^upload/$', views.uploadData, name='uploadData'),
     url(r'^point/$', views.pointData, name='pointData'),

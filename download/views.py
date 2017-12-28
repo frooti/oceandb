@@ -174,6 +174,23 @@ def getZone(request):
 
 	return HttpResponse(json.dumps(res, separators=(',', ':'), default=default))
 
+def getZoneData(request):
+	res = json.loads(DEFAULT_RESPONSE)
+	zid = request.GET.get('zid', None)
+	try:
+		if zid:
+			zone = zone.objects(ztype='bathymetry', zid=zid)
+			res['triangles'] = zone.triangles
+			res['status'] = True
+			res['msg'] = 'success' 
+	except Exception,e:
+		print e
+		res['status'] = False
+		res['msg'] = 'Someting went wrong.'
+
+	return HttpResponse(json.dumps(res, separators=(',', ':'), default=default))
+
+
 def getShoreLine(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	year = request.GET.get('year', datetime.now().year)
