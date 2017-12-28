@@ -16,8 +16,8 @@ for uz in userzone.objects():
 	data = []
 	points = [(p.loc['coordinates'][0], p.loc['coordinates'][1]) for p in userbathymetry.objects(uzid=uz.uzid)]
 	triangles = triangulate(MultiPoint(points))
-	concave_hull = MultiPolygon(triangles)
-	print concave_hull 
+	concave_hull = cascaded_union(triangles)
+	print mapping(concave_hull)
 
 	for t in triangles:
 		t = mapping(t)
