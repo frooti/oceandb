@@ -23,11 +23,11 @@ def alpha_shape(points, alpha):
         Add a line between the i-th and j-th points,
         if not in the list already
         """
-            if (i, j) in edges or (j, i) in edges:
-                # already added
-                return
-            edges.add( (i, j) )
-            edge_points.append(coords[ [i, j] ])
+        if (i, j) in edges or (j, i) in edges:
+            # already added
+            return
+        edges.add( (i, j) )
+        edge_points.append(coords[ [i, j] ])
     coords = np.array([point.coords[0] for point in points])
     tri = Delaunay(coords)
     edges = set()
