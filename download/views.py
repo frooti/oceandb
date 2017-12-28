@@ -159,10 +159,7 @@ def getZone(request):
 				zones.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon})
 			elif z.ztype == 'bathymetry':
 				#bathymetry.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
-				if z.name=='Ennore':
-					bathymetry.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon, 'triangles': z.triangles})
-				else:
-					bathymetry.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon})
+				bathymetry.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon})
 		res['zones'] = zones
 		res['bathymetry'] = bathymetry
 		res['status'] = True
