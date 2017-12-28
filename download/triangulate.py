@@ -20,7 +20,7 @@ for uz in userzone.objects():
 		t = mapping(t)
 		
 		pipeline = [
-			{ "$match": {'l': {'$geoIntersects': t}} },
+			{ "$match": {'l': {'$geoIntersects': {'$geometry':t}}} },
 			{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
 		]
 		value = 0
