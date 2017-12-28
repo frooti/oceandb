@@ -28,8 +28,7 @@ def alpha_shape(points, alpha):
                 return
             edges.add( (i, j) )
             edge_points.append(coords[ [i, j] ])
-    coords = np.array([point.coords[0]
-                       for point in points])
+    coords = np.array([point.coords[0] for point in points])
     tri = Delaunay(coords)
     edges = set()
     edge_points = []
