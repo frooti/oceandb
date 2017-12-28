@@ -31,6 +31,7 @@ pytz==2017.2
 s3transfer==0.1.11
 scandir==1.6
 scipy==1.0.0
+Shapely==1.6.3
 simplegeneric==0.8.1
 six==1.11.0
 supervisor==3.3.2
