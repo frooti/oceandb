@@ -201,8 +201,13 @@ def getShoreLine(request):
 			from_date = datetime(year=year, month=1, day=1)
 			to_date = datetime(year=year, month=12, day=31)
 			for usl in usershoreline.objects(email=request.user.email, created_at__gte=from_date, created_at__lte=to_date):
-				data.append({'lid': usl.lid, 'line': usl.line, 'name': usl.name, 'created_at': usl.created_at.strftime('%Y-%m-%d')})
-			res['data'] = data
+				line = json.loads(json.dumps(usl.line))
+				line['properties'] = {}
+				line['properties']['lid'] = usl.lid
+				line['properties']['name'] = usl.name
+				line['properties']['created_at'] = usl.created_at.strftime('%Y-%m-%d')
+				data.append(line)
+			res['shoreline'] = data
 			res['status'] = True
 			res['msg'] = 'success'
 	except Exception, e:
