@@ -13,7 +13,7 @@ from download.models import zone, userzone, bathymetry, userbathymetry
 # user zones
 for uz in userzone.objects():
 	data = []
-	points = [shape(p) for p in userbathymetry.objects(uzid=uz.uzid)]
+	points = [shape(p.loc) for p in userbathymetry.objects(uzid=uz.uzid)]
 	triangles = triangulate(points)
 
 	for t in triangles:
