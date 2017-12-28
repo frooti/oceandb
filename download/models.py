@@ -23,6 +23,7 @@ class userzone(Document):
 	name = StringField(db_field='name', max_length=100, required=True)
 	ztype = StringField(db_field='zt', max_length=100, required= True)
 	polygon = PolygonField(db_field='pl', auto_index=True, required=True)
+	concave_polygon = PolygonField(db_field='cpl', auto_index=True)
 	triangles = ListField(db_field='tr', default=[])
 
 class order(Document):

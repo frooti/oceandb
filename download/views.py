@@ -74,7 +74,7 @@ def login(request):
 		res['status'] = True
 		res['data'] = {'email': request.user.email, 'subscription_type': request.user.subscription_type, 'subscription_zones': request.user.subscription_zones, 'is_active': request.user.is_active}
 		# userzones
-		res['data']['userzones'] = [[uz.uzid, uz.polygon] for uz in userzone.objects(email=request.user.email)]
+		res['data']['userzones'] = [[uz.uzid, uz.concave_polygon] for uz in userzone.objects(email=request.user.email)]
 		# available dates
 		res['data']['dates'] = {}
 		res['data']['dates']['waveheight'] = height
@@ -96,7 +96,7 @@ def login(request):
 		res['status'] = True
 		res['data'] = {'email': email, 'subscription_type': user.subscription_type, 'subscription_zones': user.subscription_zones, 'is_active':user.is_active}
 		# userzones
-		res['data']['userzones'] = [[uz.uzid, uz.polygon, uz.triangles] for uz in userzone.objects(email=request.user.email)]
+		res['data']['userzones'] = [[uz.uzid, uz.concave_polygon] for uz in userzone.objects(email=request.user.email)]
 		# available dates
 		res['data']['dates'] = {}
 		res['data']['dates']['waveheight'] = height
