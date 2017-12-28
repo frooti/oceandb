@@ -376,7 +376,7 @@ def uploadData(request):
 		data = request.POST.get('data-type', None)
 		f = request.FILES.get('csv-file')
 		name = request.POST.get('name', None)
-		if datatype and f and name:
+		if data and f and name:
 			try:
 				if data == 'bathymetry':
 					if userzone.objects(email=request.user.email, name=name).first(): # unique name check
