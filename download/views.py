@@ -503,6 +503,10 @@ def uploadData(request):
 					usl.line = json.loads(geojson.dumps(line))
 					usl.save()
 
+					res['msg'] = 'Data uploaded successfully.'
+					res['status'] = True
+					return HttpResponse(json.dumps(res, default=default))
+
 			except Exception, e:
 				print e
 				res['msg'] = 'Something went wrong.'
