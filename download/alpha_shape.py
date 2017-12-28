@@ -47,7 +47,7 @@ def alpha_shape(points, alpha):
         # Semiperimeter of triangle
         s = (a + b + c)/2.0
         # Area of triangle by Heron's formula (numerically stable)
-        area = 0.25*math.sqrt((a+(b+c))(c-(a-b))(c+(a-b))(a+(b-c)))
+        area = 0.25*math.sqrt((a+(b+c))*(c-(a-b))*(c+(a-b))*(a+(b-c)))
         circum_r = a*b*c/(4.0*area)
         # Here's the radius filter.
         #print circum_r
