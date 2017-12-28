@@ -2,6 +2,7 @@ import sys
 sys.path.append('/home/dataraft/projects/oceandb')
 sys.stdout.flush()
 
+from alpha_shape import alpha_shape
 import triangle # mesh generator
 from shapely.ops import triangulate # Delauny
 from shapely.geometry import Point, MultiPoint, Polygon, MultiPolygon
@@ -15,10 +16,10 @@ from download.models import zone, userzone, bathymetry, userbathymetry
 for uz in userzone.objects():
 	data = []
 	points = [(p.loc['coordinates'][0], p.loc['coordinates'][1]) for p in userbathymetry.objects(uzid=uz.uzid)]
-	# Dealuny triangles
-	triangles = triangulate(MultiPoint(points))
-	# union
-	concave_polygon = mapping(cascaded_union(triangles))
+	# alpha shape
+	concave_polygon = alpha_shape(points, 0.4)
+	uz.concave_polygon = concave_polygon
+	uz.save()
 	polygon = {'vertices': concave_polygon['coordinates'][0]}
  	polygon['vertices'] = np.array(polygon['vertices'])
 	# meshing
