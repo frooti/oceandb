@@ -15,24 +15,42 @@ from download.models import zone, userzone, bathymetry, userbathymetry
 for uz in userzone.objects():
 	data = []
 	points = [(p.loc['coordinates'][0], p.loc['coordinates'][1]) for p in userbathymetry.objects(uzid=uz.uzid)]
+	# Dealuny triangles
 	triangles = triangulate(MultiPoint(points))
+	# union
 	concave_hull = cascaded_union(triangles)
-	print mapping(concave_hull)
+	# meshing
+	tri = triangle.triangulate(polygon, opts='q50')
 
-	for t in triangles:
-		t = mapping(t)
+	for t in tri['triangles']:
+		t = [list(tri['vertices'][i]) for i in t]
+ 		rt = [[round(i[0], 5), round(i[1], 5)] for i in t]
+ 		rt = rt+[rt[0]]
 		
-		pipeline = [
-			{ "$match": {'l': {'$geoIntersects': {'$geometry':t}}} },
-			{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
-		]
-		value = 0
-		q = list(userbathymetry.objects.aggregate(*pipeline))
-		if q:
-			value = round(q[0].get('depth', 0), 1)
-		print [t['coordinates'], value]
+		try:
+			pipeline = [
+				{ "$match": {'l': {'$geoIntersects': {'$geometry':t}}} },
+				{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
+			]
+			value = 0
+			q = list(userbathymetry.objects.aggregate(*pipeline))
+			if q:
+				value = round(q[0].get('depth', 0), 1)
+			data.append([rt, value])
+		except Exception, e:
+ 			print e
+ 			t = t+[t[0]]
+ 			pipeline = [
+ 				{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [t]}}}} },
+ 				{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
+ 			]
+ 			value = 0
+ 			q = list(bathymetry.objects.aggregate(*pipeline))
+ 			if q:
+ 				value = round(q[0].get('depth', 0), 2)
+ 			data.append([t, value])
 
-
+ 	print len(data)
 	#uz.triangles = data
 	#uz.save()
 
