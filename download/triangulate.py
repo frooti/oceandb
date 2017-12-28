@@ -18,9 +18,11 @@ for uz in userzone.objects():
 	# Dealuny triangles
 	triangles = triangulate(MultiPoint(points))
 	# union
-	concave_hull = mapping(cascaded_union(triangles))
+	concave_polygon = mapping(cascaded_union(triangles))
+	polygon = {'vertices': concave_polygon['coordinates'][0]}
+ 	polygon['vertices'] = np.array(polygon['vertices'])
 	# meshing
-	tri = triangle.triangulate(concave_hull, opts='q50')
+	tri = triangle.triangulate(polygon, opts='q50')
 
 	for t in tri['triangles']:
 		t = [list(tri['vertices'][i]) for i in t]
