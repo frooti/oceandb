@@ -17,7 +17,7 @@ for uz in userzone.objects():
 	data = []
 	points = [shape(p.loc) for p in userbathymetry.objects(uzid=uz.uzid)]
 	# alpha shape
-	concave_polygon = alpha_shape(points, 0.4)
+	concave_polygon = mapping(alpha_shape(points, 0.4)[0])
 	uz.concave_polygon = concave_polygon
 	uz.save()
 	polygon = {'vertices': concave_polygon['coordinates'][0]}
