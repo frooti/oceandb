@@ -2,7 +2,7 @@ import sys
 sys.path.append('/home/dataraft/projects/oceandb')
 sys.stdout.flush()
 
-from alpha_shape import alpha_shape
+from download.alpha_shape import alpha_shape
 import triangle # mesh generator
 from shapely.ops import triangulate # Delauny
 from shapely.geometry import Point, MultiPoint, Polygon, MultiPolygon
