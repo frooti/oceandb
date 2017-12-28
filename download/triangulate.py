@@ -4,7 +4,7 @@ sys.stdout.flush()
 
 import triangle # mesh generator
 from shapely.ops import triangulate # Delauny
-from shapely.geometry import Point
+from shapely.geometry import Point, MultiPoint
 from shapely.geometry import shape
 from shapely.geometry import mapping
 import numpy as np
