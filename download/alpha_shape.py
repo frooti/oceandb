@@ -43,11 +43,10 @@ def alpha_shape(points, alpha):
         a = math.sqrt((pa[0]-pb[0])**2 + (pa[1]-pb[1])**2)
         b = math.sqrt((pb[0]-pc[0])**2 + (pb[1]-pc[1])**2)
         c = math.sqrt((pc[0]-pa[0])**2 + (pc[1]-pa[1])**2)
-        c, b, a = sorted([a, b, c])
         # Semiperimeter of triangle
         s = (a + b + c)/2.0
-        # Area of triangle by Heron's formula (numerically stable)
-        area = 0.25*math.sqrt((a+(b+c))*(c-(a-b))*(c+(a-b))*(a+(b-c)))
+        # Area of triangle by Heron's formula
+        area = math.sqrt(s*(s-a)*(s-b)*(s-c))
         if area>0:
             circum_r = a*b*c/(4.0*area)
             # Here's the radius filter.
