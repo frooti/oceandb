@@ -176,9 +176,9 @@ def getZoneData(request):
 	zid = request.GET.get('zid', None)
 	try:
 		if zid:
-			zone = zone.objects(ztype='bathymetry', zid=zid).first()
-			if zone:
-				res['triangles'] = zone.triangles
+			z = zone.objects(ztype='bathymetry', zid=zid).first()
+			if z:
+				res['triangles'] = z.triangles
 				res['status'] = True
 				res['msg'] = 'success' 
 	except Exception,e:
