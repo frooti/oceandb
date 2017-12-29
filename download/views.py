@@ -191,6 +191,7 @@ def getZoneData(request):
 
 def getShoreLine(request):
 	res = json.loads(DEFAULT_RESPONSE)
+	res['shoreline'] = []
 	year = int(request.GET.get('year', datetime.now().year))
 	try:
 		if request.user and year:
