@@ -25,6 +25,8 @@ class userzone(Document):
 	polygon = PolygonField(db_field='pl', auto_index=True, required=True)
 	concave_polygon = PolygonField(db_field='cpl', auto_index=True)
 	triangles = ListField(db_field='tr', default=[])
+	date = DateTimeField(db_field='dt', default=datetime.now)
+	created_at = DateTimeField(db_field='ct', default=datetime.now)
 
 class order(Document):
 	oid = StringField(db_field='oid', max_length=50, required=True)
@@ -81,6 +83,7 @@ class usershoreline(Document):
 	line = LineStringField(db_field='ln', auto_index=True, required=True)
 	name = StringField(db_field='name', max_length=100, required=True)
 	email = StringField(db_field='e', max_length=200, required=True)
+	date = DateTimeField(db_field='dt', default=datetime.now)
 	created_at = DateTimeField(db_field='ct', default=datetime.now)
 	
 
