@@ -379,9 +379,11 @@ def uploadData(request):
 		data = request.POST.get('data-type', None)
 		f = request.FILES.get('csv-file')
 		name = request.POST.get('name', None)
-		if data and f and name:
+		date = request.POST.get('date', None) # iso format
+		if data and f and name and date:
 			try:
 				if data == 'bathymetry':
+					date = dateutil.parser.parse(date)
 					if userzone.objects(email=request.user.email, name=name).first(): # unique name check
 						res['msg'] = name+' '+'already exists. Please provide a unique zone name.'
 						res['status'] = False
@@ -440,6 +442,7 @@ def uploadData(request):
 					uz.name = name
 					uz.ztype = 'bathymetry'
 					uz.polygon = {'type':'Polygon', 'coordinates': [chull]}
+					uz.date = date
 					uz.save()
 
 					data = []
@@ -453,6 +456,7 @@ def uploadData(request):
 					return HttpResponse(json.dumps(res, default=default))
 
 				elif data == 'shoreline':
+					date = dateutil.parser.parse(from_date)
 					if usershoreline.objects(email=request.user.email, name=name).first(): # unique name check
 						res['msg'] = name+' '+'already exists. Please provide a unique shoreline name. eg: marina_beach_12/10/2017.'
 						res['status'] = False
@@ -504,6 +508,7 @@ def uploadData(request):
 					usl.email = request.user.email
 					usl.name = name
 					usl.line = json.loads(geojson.dumps(line))
+					usl.date = date 
 					usl.save()
 
 					res['msg'] = 'Data uploaded successfully.'
