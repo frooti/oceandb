@@ -75,7 +75,7 @@ for z in zone.objects(ztype='bathymetry'):
 	interpolated_chull = interpolate_polygon(z.polygon)
 
 	mesh_info = MeshInfo()
-	mesh_info.set_points(interpolated_chull['coordinates'][0])
+	mesh_info.set_points(interpolated_chull)
 	facets = [(i, i+1) for i in range(0, len(interpolated_chull)-1)]
 	mesh_info.set_facets(facets)
 	mesh = build(mesh_info)
