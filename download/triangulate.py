@@ -32,7 +32,8 @@ def interpolate_polygon(polygon): # geojson
 for uz in userzone.objects():
 	print uz.uzid
 	data = []
-	interpolated_chull = uz.polygon['coordinates'][0][:]
+	interpolated_chull = interpolate_polygon(uz.polygon)
+	interpolated_chull = [[int(v[0]*1e8), int(v[1]*1e8)] for v in interpolated_chull]
 	polygon = {'vertices': interpolated_chull}
 	polygon['vertices'] = np.array(polygon['vertices'])
 	
