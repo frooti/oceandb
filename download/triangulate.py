@@ -72,7 +72,7 @@ for z in zone.objects(ztype='bathymetry'):
 	print z.zid
 	data = []
 	mesh_info = MeshInfo()
-	interpolated_chull = interpolate_polygon(z.polygon)
+	interpolated_chull = z.polygon['coordinates'][0] #interpolate_polygon(z.polygon)
 
 	mesh_info = MeshInfo()
 	mesh_info.set_points(interpolated_chull)
