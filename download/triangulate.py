@@ -41,6 +41,7 @@ for uz in userzone.objects():
 	 
 	for t in tri['triangles']:
 		t = [list(tri['vertices'][i]) for i in t]
+		t = [[i[0]/1.0e8, i[1]/1.0e8] for i in t]
 		rt = [[round(i[0], 5), round(i[1], 5)] for i in t]
 		rt = rt+[rt[0]]
 		try:
