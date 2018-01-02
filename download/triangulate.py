@@ -32,10 +32,11 @@ def interpolate_polygon(polygon): # geojson
 for uz in userzone.objects():
 	print uz.uzid
 	data = []
-	polygon = {'vertices': uz.polygon['coordinates'][0]}
+	interpolated_chull = uz.polygon['coordinates'][0][:]
+	polygon = {'vertices': interpolated_chull}
 	polygon['vertices'] = np.array(polygon['vertices'])
 	
-	tri = triangle.triangulate(polygon, opts='a.0125')
+	tri = triangle.triangulate(polygon, opts='q32')
 	 
 	for t in tri['triangles']:
 		t = [list(tri['vertices'][i]) for i in t]
