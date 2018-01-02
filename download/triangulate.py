@@ -42,7 +42,7 @@ for uz in userzone.objects():
 	for t in tri['triangles']:
 		t = [list(tri['vertices'][i]) for i in t]
 		t = [[i[0]/1.0e8, i[1]/1.0e8] for i in t]
-		rt = [[round(i[0], 5), round(i[1], 5)] for i in t]
+		rt = [[round(i[0], 8), round(i[1], 8)] for i in t]
 		rt = rt+[rt[0]]
 		try:
 			pipeline = [
@@ -78,12 +78,6 @@ for z in zone.objects(ztype='bathymetry'):
 	interpolated_chull = [[int(v[0]*1e8), int(v[1]*1e8)] for v in interpolated_chull]
 	polygon = {'vertices': interpolated_chull}
 	polygon['vertices'] = np.array(polygon['vertices'])
-
-	mesh_info = MeshInfo()
-	mesh_info.set_points(interpolated_chull)
-	facets = [(i, i+1) for i in range(0, len(interpolated_chull)-1)]
-	mesh_info.set_facets(facets)
-	mesh = build(mesh_info)
 
 	tri = triangle.triangulate(polygon, opts='q')
 	
