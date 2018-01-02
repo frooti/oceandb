@@ -72,7 +72,9 @@ for z in zone.objects(ztype='bathymetry'):
 	print z.zid
 	data = []
 	mesh_info = MeshInfo()
-	interpolated_chull = z.polygon['coordinates'][0] #interpolate_polygon(z.polygon)
+	interpolated_chull = z.polygon['coordinates'][0][:] #interpolate_polygon(z.polygon)
+	# to_int
+	interpolated_chull = [[int(v[0]*1e8), int(v[1]*1e8)] for v in interpolated_chull]
 
 	mesh_info = MeshInfo()
 	mesh_info.set_points(interpolated_chull)
@@ -81,7 +83,7 @@ for z in zone.objects(ztype='bathymetry'):
 	mesh = build(mesh_info)
 	
 	for t in mesh.elements:
-		t = [mesh.points[i] for i in t]
+		t = [[mesh.points[i][0]/1.0e8, mesh.points[i][1]/1.0e8]  for i in t]
 		rt = [[round(i[0], 5), round(i[1], 5)] for i in t]
 		rt = rt+[rt[0]]
 		try:
