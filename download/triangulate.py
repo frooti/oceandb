@@ -37,7 +37,7 @@ for uz in userzone.objects():
 	polygon = {'vertices': interpolated_chull}
 	polygon['vertices'] = np.array(polygon['vertices'])
 	
-	tri = triangle.triangulate(polygon, opts='q32')
+	tri = triangle.triangulate(polygon, opts='q')
 	 
 	for t in tri['triangles']:
 		t = [list(tri['vertices'][i]) for i in t]
@@ -55,7 +55,7 @@ for uz in userzone.objects():
 				value = round(q[0].get('depth', 0), 2)
 			data.append([rt, value])
 		except Exception, e:
-			print e
+			#print e
 			t = t+[t[0]]
 			pipeline = [
 				{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [t]}}}} },
@@ -85,7 +85,7 @@ for z in zone.objects(ztype='bathymetry'):
 	mesh_info.set_facets(facets)
 	mesh = build(mesh_info)
 
-	tri = triangle.triangulate(polygon, opts='q32')
+	tri = triangle.triangulate(polygon, opts='q')
 	
 	for t in tri['triangles']:
 		t = [list(tri['vertices'][i]) for i in t]
@@ -103,7 +103,7 @@ for z in zone.objects(ztype='bathymetry'):
 				value = round(q[0].get('depth', 0), 2)
 			data.append([rt, value])
 		except Exception, e:
-			print e
+			#print e
 			t = t+[t[0]]
 			pipeline = [
 				{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [t]}}}} },
