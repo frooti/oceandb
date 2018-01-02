@@ -26,7 +26,7 @@ def interpolate_polygon(polygon): # geojson
 		else:
 			vertices.append(v1)
 		
-	return = vertices+[vertices[0]]
+	return vertices+[vertices[0]]
 
 # user zones
 for uz in userzone.objects():
