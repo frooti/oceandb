@@ -81,7 +81,7 @@ for z in zone.objects(ztype='bathymetry'):
 	mesh = build(mesh_info)
 
 	for t in mesh.elements:
-		t = [list(tri['vertices'][i]) for i in t]
+		t = [mesh.points[i] for i in t]
 		rt = [[round(i[0], 8), round(i[1], 8)] for i in t]
 		rt = rt+[rt[0]]
 		try:
