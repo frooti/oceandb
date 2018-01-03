@@ -74,7 +74,7 @@ for uz in userzone.objects():
 for z in zone.objects(ztype='bathymetry'):
 	print z.zid
 	data = []
-	interpolated_chull = interpolate_polygon(uz.polygon)
+	interpolated_chull = interpolate_polygon(z.polygon)
 	interpolated_chull = [[int(v[0]*1e8), int(v[1]*1e8)] for v in interpolated_chull]
 	polygon = {'vertices': interpolated_chull}
 	polygon['vertices'] = np.array(polygon['vertices'])
