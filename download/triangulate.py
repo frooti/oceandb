@@ -2,6 +2,7 @@ import sys
 sys.path.append('/home/dataraft/projects/oceandb')
 sys.stdout.flush()
 
+from shapely.geometry import Polygon
 from meshpy.triangle import MeshInfo, build
 import triangle
 import math
@@ -85,7 +86,8 @@ for z in zone.objects(ztype='bathymetry'):
 	mesh_info.set_points(p)
 	facets = [(i, i+1) for i in range(0, len(p)-1)]
 	mesh_info.set_facets(facets)
-	mesh = build(mesh_info)
+	max_volume = Polygon(p).area/100 
+	mesh = build(mesh_info, max_volume=max_volume)
 
 	for t in mesh.elements:
 		t = transform_polygon([mesh.points[i] for i in t], origin=origin, reverse=True)
