@@ -28,6 +28,11 @@ def interpolate_polygon(polygon): # geojson
 		
 	return vertices+[vertices[0]]
 
+def transform_polygon(polygon, origin, reverse=False):
+	if reverse:
+		return [[round(((v[0]/1.0e6)+origin[0][0]), 6), round(((v[1]/1.0e6)+origin[0][1]), 6)] for v in polygon]
+	return [[round((v[0]-polygon[0][0])*1.0e6, 0), round((v[1]-polygon[0][1])*1.0e6, 0)] for v in polygon]
+
 # user zones
 # for uz in userzone.objects():
 # 	print uz.uzid
@@ -75,13 +80,15 @@ for z in zone.objects(ztype='bathymetry'):
 	print z.zid
 	data = []
 	mesh_info = MeshInfo()
-	mesh_info.set_points(z.polygon['coordinates'][0])
-	facets = [(i, i+1) for i in range(0, len(z.polygon['coordinates'][0])-1)]
+	origin = z.polygon['coordinates'][0][0]
+	p = transform_polygon(z.polygon['coordinates'][0], origin=origin)
+	mesh_info.set_points(p)
+	facets = [(i, i+1) for i in range(0, len(p)-1)]
 	mesh_info.set_facets(facets)
 	mesh = build(mesh_info)
 
 	for t in mesh.elements:
-		t = [mesh.points[i] for i in t]
+		t = transform_polygon([mesh.points[i] for i in t], origin=origin, reverse=True)
 		rt = [[round(i[0], 8), round(i[1], 8)] for i in t]
 		rt = rt+[rt[0]]
 		try:
