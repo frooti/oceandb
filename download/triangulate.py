@@ -39,12 +39,12 @@ for uz in userzone.objects():
 	print uz.uzid
 	data = []
 	mesh_info = MeshInfo()
-	origin = z.polygon['coordinates'][0][0]
-	p = transform_polygon(z.polygon['coordinates'][0], origin=origin)
+	origin = uz.polygon['coordinates'][0][0]
+	p = transform_polygon(uz.polygon['coordinates'][0], origin=origin)
 	mesh_info.set_points(p)
 	facets = [(i, i+1) for i in range(0, len(p)-1)]
 	mesh_info.set_facets(facets)
-	max_volume = Polygon(p).area/100 
+	max_volume = int(Polygon(p).area/200)
 	mesh = build(mesh_info, max_volume=max_volume)
 	
 	for t in mesh.elements:
@@ -87,7 +87,7 @@ for z in zone.objects(ztype='bathymetry'):
 	mesh_info.set_points(p)
 	facets = [(i, i+1) for i in range(0, len(p)-1)]
 	mesh_info.set_facets(facets)
-	max_volume = Polygon(p).area/100 
+	max_volume = int(Polygon(p).area/200)
 	mesh = build(mesh_info, max_volume=max_volume)
 
 	for t in mesh.elements:
