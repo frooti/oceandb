@@ -178,7 +178,10 @@ def getZoneData(request):
 		if zid:
 			z = zone.objects(ztype='bathymetry', zid=zid).first()
 			if z:
+				uz = userzone.objects(email='ravi@dataraft.in').first()
+				points = [[p.loc['coordinates'], p.depth] for p in userbathymetry.objects(uzid=uz.uzid)]
 				res['triangles'] = z.triangles
+				res['pounts'] = points
 				res['status'] = True
 				res['msg'] = 'success' 
 	except Exception,e:
