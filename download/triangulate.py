@@ -35,46 +35,47 @@ def transform_polygon(polygon, origin, reverse=False):
 	return [[round((v[0]-origin[0])*1.0e6, 0), round((v[1]-origin[1])*1.0e6, 0)] for v in polygon]
 
 # user zones
-# for uz in userzone.objects():
-# 	print uz.uzid
-# 	data = []
-# 	interpolated_chull = interpolate_polygon(uz.polygon)
-# 	interpolated_chull = [[int(v[0]*1e8), int(v[1]*1e8)] for v in interpolated_chull]
-# 	polygon = {'vertices': interpolated_chull}
-# 	polygon['vertices'] = np.array(polygon['vertices'])
+for uz in userzone.objects():
+	print uz.uzid
+	data = []
+	mesh_info = MeshInfo()
+	origin = z.polygon['coordinates'][0][0]
+	p = transform_polygon(z.polygon['coordinates'][0], origin=origin)
+	mesh_info.set_points(p)
+	facets = [(i, i+1) for i in range(0, len(p)-1)]
+	mesh_info.set_facets(facets)
+	max_volume = Polygon(p).area/100 
+	mesh = build(mesh_info, max_volume=max_volume)
 	
-# 	tri = triangle.triangulate(polygon, opts='q')
-	 
-# 	for t in tri['triangles']:
-# 		t = [list(tri['vertices'][i]) for i in t]
-# 		t = [[i[0]/1.0e8, i[1]/1.0e8] for i in t]
-# 		rt = [[round(i[0], 8), round(i[1], 8)] for i in t]
-# 		rt = rt+[rt[0]]
-# 		try:
-# 			pipeline = [
-# 				{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
-# 				{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
-# 			]
-# 			value = 0
-# 			q = list(bathymetry.objects.aggregate(*pipeline))
-# 			if q:
-# 				value = round(q[0].get('depth', 0), 2)
-# 			data.append([rt, value])
-# 		except Exception, e:
-# 			#print e
-# 			t = t+[t[0]]
-# 			pipeline = [
-# 				{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [t]}}}} },
-# 				{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
-# 			]
-# 			value = 0
-# 			q = list(bathymetry.objects.aggregate(*pipeline))
-# 			if q:
-# 				value = round(q[0].get('depth', 0), 2)
-# 			data.append([t, value])
+	for t in mesh.elements:
+		t = transform_polygon([mesh.points[i] for i in t], origin=origin, reverse=True)
+		rt = [[round(i[0], 6), round(i[1], 6)] for i in t]
+		rt = rt+[rt[0]]
+		try:
+			pipeline = [
+				{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
+				{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
+			]
+			value = 0
+			q = list(userbathymetry.objects.aggregate(*pipeline))
+			if q:
+				value = round(q[0].get('depth', 0), 2)
+			data.append([rt, value])
+		except Exception, e:
+			#print e
+			t = t+[t[0]]
+			pipeline = [
+				{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [t]}}}} },
+				{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
+			]
+			value = 0
+			q = list(userbathymetry.objects.aggregate(*pipeline))
+			if q:
+				value = round(q[0].get('depth', 0), 2)
+			data.append([t, value])
 
-# 	uz.triangles = data
-# 	uz.save()
+	uz.triangles = data
+	uz.save()
 
 # public zones
 for z in zone.objects(ztype='bathymetry'):
