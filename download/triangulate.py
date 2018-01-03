@@ -31,8 +31,8 @@ def interpolate_polygon(polygon): # geojson
 
 def transform_polygon(polygon, origin, reverse=False):
 	if reverse:
-		return [[round(((v[0]/1.0e6)+origin[0][0]), 6), round(((v[1]/1.0e6)+origin[0][1]), 6)] for v in polygon]
-	return [[round((v[0]-polygon[0][0])*1.0e6, 0), round((v[1]-polygon[0][1])*1.0e6, 0)] for v in polygon]
+		return [[round(((v[0]/1.0e6)+origin[0]), 6), round(((v[1]/1.0e6)+origin[1]), 6)] for v in polygon]
+	return [[round((v[0]-origin[0])*1.0e6, 0), round((v[1]-origin[1])*1.0e6, 0)] for v in polygon]
 
 # user zones
 # for uz in userzone.objects():
@@ -91,7 +91,7 @@ for z in zone.objects(ztype='bathymetry'):
 
 	for t in mesh.elements:
 		t = transform_polygon([mesh.points[i] for i in t], origin=origin, reverse=True)
-		rt = [[round(i[0], 8), round(i[1], 8)] for i in t]
+		rt = [[round(i[0], 6), round(i[1], 6)] for i in t]
 		rt = rt+[rt[0]]
 		try:
 			pipeline = [
