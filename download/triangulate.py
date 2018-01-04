@@ -130,8 +130,8 @@ for z in zone.objects(ztype='bathymetry'):
 	output = out_bytes.decode('utf-8')
 
 	if 'Writing '+str(z.zid)+'.1.node' and 'Writing '+str(z.zid)+'.1.ele':
-		vertices = tri_get_vertices(str(z.zid)+'.1.node')
-		triangles = tri_get_triangles(str(z.zid)+'.1.ele')
+		vertices = tri_get_vertices('/tmp/triangle/'+str(z.zid)+'.1.node')
+		triangles = tri_get_triangles('/tmp/triangle/'+str(z.zid)+'.1.ele')
 
 		print 'vertices: '+str(vertices)
 		print 'triangles: '+str(triangles)
