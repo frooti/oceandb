@@ -134,7 +134,7 @@ for z in zone.objects(ztype='bathymetry'):
 		triangles = tri_get_triangles('/tmp/triangle/'+str(z.zid)+'.1.ele')
 
 		for t in triangles:
-			t = transform_polygon([vertices[i] for i in t], origin=origin, reverse=True)
+			t = transform_polygon([vertices[i-1] for i in t], origin=origin, reverse=True)
 			rt = [[round(i[0], 6), round(i[1], 6)] for i in t]
 			rt = rt+[rt[0]]
 			try:
