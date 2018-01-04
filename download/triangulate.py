@@ -8,6 +8,12 @@ import math
 import numpy as np
 from download.models import zone, userzone, bathymetry, userbathymetry
 
+try:
+    os.makedirs('/tmp/triangle')
+except OSError as e:
+    if e.errno != errno.EEXIST:
+        raise
+
 dmax = 10.0e-04
 def interpolate_polygon(polygon): # geojson
 	vertices = []
@@ -114,10 +120,9 @@ for z in zone.objects(ztype='bathymetry'):
 	p = transform_polygon(z.polygon['coordinates'][0], origin=origin)
 	tri_input = tri_input(p)
 	
-	f = open('/tmp/triangle/'+z.zid+'.node', 'w')
-	f.write(tri_input)
-	f.close()
-	
+	with open('/tmp/triangle/'+z.zid+'.node', 'w') as f:
+		f.write(tri_input)
+		
 	max_area = int(Polygon(p).area/200)
 	out_bytes = subprocess.check_output(['triangle', '-a'+str(max_area), '/var/triangle/'+str(z.zid)+'.node'])
 	output = out_bytes.decode('utf-8')
