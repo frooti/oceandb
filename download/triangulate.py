@@ -120,10 +120,10 @@ for z in zone.objects(ztype='bathymetry'):
 	data = []
 	origin = z.polygon['coordinates'][0][0]
 	p = transform_polygon(z.polygon['coordinates'][0], origin=origin)
-	tri_input = tri_input(p)
+	tri_data = tri_input(p)
 	
 	with open('/tmp/triangle/'+z.zid+'.node', 'w') as f:
-		f.write(tri_input)
+		f.write(tri_data)
 		
 	max_area = int(Polygon(p).area/200)
 	out_bytes = subprocess.check_output(['triangle', '-a'+str(max_area), '/tmp/triangle/'+str(z.zid)+'.node'])
