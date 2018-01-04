@@ -63,7 +63,7 @@ def tri_get_triangles(file):
 		else:
 			v = l.split()
 			if v[0]!='#':
-				triangles.append([float(v[1]), float(v[2]), float(v[3])])
+				triangles.append([int(v[1]), int(v[2]), int(v[3])])
 	return triangles
 
 def transform_polygon(polygon, origin, reverse=False):
