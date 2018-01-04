@@ -126,7 +126,7 @@ for z in zone.objects(ztype='bathymetry'):
 		f.write(tri_input)
 		
 	max_area = int(Polygon(p).area/200)
-	out_bytes = subprocess.check_output(['triangle', '-a'+str(max_area), '/var/triangle/'+str(z.zid)+'.node'])
+	out_bytes = subprocess.check_output(['triangle', '-a'+str(max_area), '/tmp/triangle/'+str(z.zid)+'.node'])
 	output = out_bytes.decode('utf-8')
 
 	if 'Writing '+str(z.zid)+'.1.node' and 'Writing '+str(z.zid)+'.1.ele':
