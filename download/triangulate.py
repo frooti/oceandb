@@ -133,36 +133,33 @@ for z in zone.objects(ztype='bathymetry'):
 		vertices = tri_get_vertices('/tmp/triangle/'+str(z.zid)+'.1.node')
 		triangles = tri_get_triangles('/tmp/triangle/'+str(z.zid)+'.1.ele')
 
-		print 'vertices: '+str(vertices)
-		print 'triangles: '+str(triangles)
+		for t in triangles:
+			t = transform_polygon([vertices[i] for i in t], origin=origin, reverse=True)
+			rt = [[round(i[0], 6), round(i[1], 6)] for i in t]
+			rt = rt+[rt[0]]
+			try:
+				pipeline = [
+					{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
+					{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
+				]
+				value = 0
+				q = list(bathymetry.objects.aggregate(*pipeline))
+				if q:
+					value = round(q[0].get('depth', 0), 2)
+				data.append([rt, value])
+			except Exception, e:
+				#print e
+				t = t+[t[0]]
+				pipeline = [
+					{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [t]}}}} },
+					{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
+				]
+				value = 0
+				q = list(bathymetry.objects.aggregate(*pipeline))
+				if q:
+					value = round(q[0].get('depth', 0), 2)
+				data.append([t, value])
 
-	# for t in mesh.elements:
-	# 	t = transform_polygon([mesh.points[i] for i in t], origin=origin, reverse=True)
-	# 	rt = [[round(i[0], 6), round(i[1], 6)] for i in t]
-	# 	rt = rt+[rt[0]]
-	# 	try:
-	# 		pipeline = [
-	# 			{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
-	# 			{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
-	# 		]
-	# 		value = 0
-	# 		q = list(bathymetry.objects.aggregate(*pipeline))
-	# 		if q:
-	# 			value = round(q[0].get('depth', 0), 2)
-	# 		data.append([rt, value])
-	# 	except Exception, e:
-	# 		#print e
-	# 		t = t+[t[0]]
-	# 		pipeline = [
-	# 			{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [t]}}}} },
-	# 			{ "$group": {"_id": None, "depth": { "$avg": "$d" }} },
-	# 		]
-	# 		value = 0
-	# 		q = list(bathymetry.objects.aggregate(*pipeline))
-	# 		if q:
-	# 			value = round(q[0].get('depth', 0), 2)
-	# 		data.append([t, value])
-
-	
-	# z.triangles = data
-	# z.save()
+		
+		z.triangles = data
+		z.save()
