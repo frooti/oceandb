@@ -28,7 +28,7 @@ for file_path in FILES:
 		points = []
 		chull  = []
 
-		spamreader = csv.reader(file_path, delimiter='\t', quotechar='|')
+		spamreader = csv.reader(csvfile, delimiter='\t', quotechar='|')
 		for i, row in enumerate(spamreader):
 			if i==0:
 				continue
@@ -42,7 +42,7 @@ for file_path in FILES:
 		# create zone
 		z = zone(zid=uuid.uuid4())
 		z.type = 'bathymetry'
-		z.name = file_path.split('/')[-1]
+		z.name = file_path.split('/')[-1].split('.')[0]
 		z.polygon = {'type': 'Polygon', 'coordinates': chull}
 		z.save()
 
