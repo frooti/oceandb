@@ -16,6 +16,8 @@ class zone(Document):
 	ztype = StringField(db_field='zt', max_length=100, required= True)
 	polygon = PolygonField(db_field='pl', auto_index=True, required=True)
 	triangles = ListField(db_field='tr', default=[])
+	date = DateTimeField(db_field='dt', default=datetime.now)
+	created_at = DateTimeField(db_field='ct', default=datetime.now)
 
 class userzone(Document):
 	uzid = StringField(db_field='uzid', max_length=50, required=True)
@@ -23,7 +25,6 @@ class userzone(Document):
 	name = StringField(db_field='name', max_length=100, required=True)
 	ztype = StringField(db_field='zt', max_length=100, required= True)
 	polygon = PolygonField(db_field='pl', auto_index=True, required=True)
-	concave_polygon = PolygonField(db_field='cpl', auto_index=True)
 	triangles = ListField(db_field='tr', default=[])
 	date = DateTimeField(db_field='dt', default=datetime.now)
 	created_at = DateTimeField(db_field='ct', default=datetime.now)
