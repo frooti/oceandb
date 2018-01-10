@@ -81,7 +81,7 @@ def transform_polygon(polygon, origin, reverse=False):
 # 	mesh_info.set_points(p)
 # 	facets = [(i, i+1) for i in range(0, len(p)-1)]
 # 	mesh_info.set_facets(facets)
-# 	max_volume = int(Polygon(p).area/200)
+# 	max_volume = int(Polygon(p).area/400)
 # 	mesh = build(mesh_info, max_volume=max_volume)
 	
 # 	for t in mesh.elements:
@@ -109,8 +109,9 @@ def transform_polygon(polygon, origin, reverse=False):
 # 			q = list(userbathymetry.objects.aggregate(*pipeline))
 # 			if q:
 # 				value = round(q[0].get('depth', 0), 2)
-# 			data.append([t, value])
-
+# 			if value<0:
+#				data.append([t, value])
+#
 # 	uz.triangles = data
 # 	uz.save()
 
@@ -125,7 +126,7 @@ for z in zone.objects(ztype='bathymetry'):
 	with open('/tmp/triangle/'+z.zid+'.node', 'w') as f:
 		f.write(tri_data)
 		
-	max_area = int(Polygon(p).area/200)
+	max_area = int(Polygon(p).area/400)
 	out_bytes = subprocess.check_output(['triangle', '-a'+str(max_area), '/tmp/triangle/'+str(z.zid)+'.node'])
 	output = out_bytes.decode('utf-8')
 
@@ -158,7 +159,8 @@ for z in zone.objects(ztype='bathymetry'):
 				q = list(bathymetry.objects.aggregate(*pipeline))
 				if q:
 					value = round(q[0].get('depth', 0), 2)
-				data.append([t, value])
+				if value<0:
+					data.append([t, value])
 
 		
 		z.triangles = data
