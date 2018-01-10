@@ -24,9 +24,9 @@ with open(file_path, 'r') as f:
 			longitute = float(values[0])
 			latitude = float(values[1])
 			depth = float(values[2])
-
-			loc = {'type': 'Point', 'coordinates': [longitute, latitude]}
-			data.append(bathymetry(loc=loc, depth=depth))
+			if depth<0:
+				loc = {'type': 'Point', 'coordinates': [longitute, latitude]}
+				data.append(bathymetry(loc=loc, depth=depth))
 	else:
 		if data:
 			bathymetry.objects.insert(data)
