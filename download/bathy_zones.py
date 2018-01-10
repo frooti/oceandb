@@ -11,6 +11,7 @@ from mongoengine import *
 from download.models import zone, bathymetry
 
 from scipy.spatial import ConvexHull
+import csv
 
 connect('ocean', host='mongodb://localhost:27017/ocean')
 
