@@ -43,7 +43,7 @@ for file_path in FILES:
 		# create zone
 		z = zone(zid=str(uuid.uuid4()))
 		z.ztype = 'bathymetry'
-		z.name = file_path.split('/')[-1].split('.')[0]
+		z.name = file_path.split('/')[-1].split('.')[0].lower()
 		z.polygon = {'type': 'Polygon', 'coordinates': [chull]}
 		z.save()
 
