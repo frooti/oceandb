@@ -17,7 +17,7 @@ connect('ocean', host='mongodb://localhost:27017/ocean')
 file_path = '/tmp/hs.txt'
 now = datetime.now()
 date = datetime(day=now.day, month=now.month, year=now.year) #GMT
-timestep = timedelta(hours=24)
+timestep = timedelta(hours=6)
 grid = (361, 321) # columns, rows
 latitude1, longitude1 = (30.0, 30.0)
 latitude2, longitude2 = (-50.0, 120.0)
@@ -46,7 +46,8 @@ with open(file_path, 'r') as f:
 					value = round(v, 3)
 					year = str(date.year)
 					day = str(date.timetuple().tm_yday)
-					bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'values.'+year+'.'+day: value}})
+					hour = str(date.hour)
+					bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'values.'+year+'.'+day+'.'+hour: value}})
 					# data = {}
 					# data['set__values__'+year+'__'+day] = value
 					# data['upsert'] = True
