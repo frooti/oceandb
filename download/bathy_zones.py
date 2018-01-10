@@ -5,9 +5,12 @@ from os.path import isfile, join
 sys.path.append('/home/dataraft/projects/oceandb')
 sys.stdout.flush()
 
+import uuid
 from datetime import datetime, timedelta
 from mongoengine import *
-from download.models import bathymetry
+from download.models import zone, bathymetry
+
+from scipy.spatial import ConvexHull
 
 connect('ocean', host='mongodb://localhost:27017/ocean')
 
@@ -18,6 +21,29 @@ FILES = [os.path.join(directory, f) for f in listdir(directory) if isfile(join(d
 
 for file_path in FILES:
 	print file_path
+	
+	with open(file_path, 'rb') as csvfile:
+		# chull
+		points = []
+		chull  = []
+
+		spamreader = csv.reader(file_path, delimiter='\t', quotechar='|')
+		for i, row in enumerate(spamreader):
+			if i==0:
+				continue
+			elif row:
+				points.append([float(row[1]), float(row[0])])
+		hull = ConvexHull(points)
+		for i in hull.vertices:
+			chull.append(points[i])
+
+		chull = chull+[chull[0]]
+		# create zone
+		z = zone(zid=uuid.uuid4())
+		z.type = 'bathymetry'
+		z.name = file_path.split('/')[-1]
+		z.polygon = {'type': 'Polygon', 'coordinates': chull}
+		z.save()
 
 	with open(file_path, 'r') as f:
 		data = []
@@ -36,7 +62,7 @@ for file_path in FILES:
 					depth = float(values[2].strip())*-1
 
 				loc = {'type': 'Point', 'coordinates': [longitute, latitude]}
-				data.append(bathymetry(loc=loc, depth=depth))
+				data.append(bathymetry(loc=loc, depth=depth, zid=z.zid))
 		else:
 			if data:
 				bathymetry.objects.insert(data)
