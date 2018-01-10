@@ -33,7 +33,7 @@ for file_path in FILES:
 				if len(values)==3:
 					longitute = float(values[1].strip())
 					latitude = float(values[0].strip())
-					depth = float(values[2].strip())
+					depth = float(values[2].strip())*-1
 
 				loc = {'type': 'Point', 'coordinates': [longitute, latitude]}
 				data.append(bathymetry(loc=loc, depth=depth))
