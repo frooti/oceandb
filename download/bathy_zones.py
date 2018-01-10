@@ -44,7 +44,7 @@ for file_path in FILES:
 		z = zone(zid=str(uuid.uuid4()))
 		z.ztype = 'bathymetry'
 		z.name = file_path.split('/')[-1].split('.')[0]
-		z.polygon = {'type': 'Polygon', 'coordinates': chull}
+		z.polygon = {'type': 'Polygon', 'coordinates': [chull]}
 		z.save()
 
 	with open(file_path, 'r') as f:
