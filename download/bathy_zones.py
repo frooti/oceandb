@@ -39,9 +39,10 @@ for file_path in FILES:
 			chull.append(points[i])
 
 		chull = chull+[chull[0]]
+		print chull
 		# create zone
 		z = zone(zid=str(uuid.uuid4()))
-		z.type = 'bathymetry'
+		z.ztype = 'bathymetry'
 		z.name = file_path.split('/')[-1].split('.')[0]
 		z.polygon = {'type': 'Polygon', 'coordinates': chull}
 		z.save()
