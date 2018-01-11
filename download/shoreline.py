@@ -33,5 +33,5 @@ def openKML(filename):
 
 xml = openKML(filename)
 linestring = xml.getElementsByTagName('LineString')[0]
-coordinates = linestring.getElementsByTagName('coordinates')[0].InnerText
+coordinates = linestring.getElementsByTagName('coordinates')[0].innerHTML
 coordinates = coordinates.strip().split(' ')
