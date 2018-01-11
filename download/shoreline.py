@@ -10,6 +10,10 @@ from xml.dom.minidom import parseString
 from zipfile import ZipFile
 import math
 
+## CONFIG ##
+filename = '/tmp/test.kmz'
+## CONFIG ##
+
 def openKMZ(filename):
     zip=ZipFile(filename)
     for z in zip.filelist:
@@ -28,6 +32,6 @@ def openKML(filename):
     return parseString(fstring)
 
 xml = openKML(filename)
-linestring = xml.getElementsByTagName('Linestring')[0]
-coordinates = linestring.getElementsByTagName('coordinates')[0]
+linestring = xml.getElementsByTagName('LineString')[0]
+coordinates = linestring.getElementsByTagName('coordinates')[0].InnerText
 coordinates = coordinates.strip().split(' ')
