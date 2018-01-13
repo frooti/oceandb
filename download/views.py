@@ -590,3 +590,18 @@ def pointData(request):
 		res['msg'] = 'Someting went wrong.'
 
 	return HttpResponse(json.dumps(res, default=default))
+
+def visualisation(request):
+	res = json.loads(DEFAULT_RESPONSE)
+	data = request.GET.get('data', 'waveheight')
+
+	try:
+		pass
+	except Exception,e:
+		print e
+		res['status'] = False
+		res['msg'] = 'Someting went wrong.'
+
+	return HttpResponse(json.dumps(res, default=default))
+
+
