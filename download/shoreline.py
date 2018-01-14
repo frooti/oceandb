@@ -11,6 +11,7 @@ from zipfile import ZipFile
 import math
 import geojson
 
+import json
 from datetime import datetime
 from download.models import shoreline
 import uuid
@@ -48,7 +49,7 @@ for p in coordinates:
 print len(points)
 
 name = ''
-date = xml.getElementsByTagName('Placemark')[0].getElementsByTagName('name')[0]
+date = xml.getElementsByTagName('Placemark')[0].getElementsByTagName('name')[0].childNodes[0].data
 date = datetime.strptime(date, "%d/%m/%Y")
 
 print date
