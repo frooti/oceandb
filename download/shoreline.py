@@ -52,11 +52,10 @@ name = ''
 date = xml.getElementsByTagName('Placemark')[0].getElementsByTagName('name')[0].childNodes[0].data
 date = datetime.strptime(date, "%d/%m/%Y")
 
-print date
-print json.loads(geojson.dumps(points))
-# s = shoreline(lid=str(uuid.uuid4()))
-# s.line = json.loads(geojson.dumps(points))
-# s.name = name
-# s.date = date
-# s.save()
+s = shoreline(lid=str(uuid.uuid4()))
+s.line = json.loads(geojson.dumps(points))
+s.name = name
+s.date = date
+s.save()
+print s.lid
 print 'completed!'
