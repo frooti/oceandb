@@ -163,7 +163,7 @@ def getZone(request):
 				bathymetry.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon})
 
 		for s in shoreline.objects():
-			shoreline.append({'lid':s.lid, 'name':s.name, 'line':s.line, 'date':s.date})
+			shoreline.append({'lid':s.lid, 'name':s.name, 'line':s.line, 'date':s.date.strftime('%Y-%m-%d')})
 
 		res['zones'] = zones
 		res['bathymetry'] = bathymetry
