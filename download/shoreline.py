@@ -44,7 +44,7 @@ coordinates = coordinates.strip().split(' ')
 points = []
 
 for p in coordinates:
-    p = p.strip(',')
+    p = p.split(',')
     points.append((round(float(p[0]), 5), round(float(p[1]), 5)))
 print len(points)
 
