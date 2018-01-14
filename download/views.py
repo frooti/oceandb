@@ -152,7 +152,7 @@ def getZone(request):
 	try:
 		zones = []
 		bathymetry = []
-		shoreline = []
+		shorelines = []
 
 		for z in zone.objects():
 			if z.ztype == 'zone':
@@ -163,11 +163,11 @@ def getZone(request):
 				bathymetry.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon})
 
 		for s in shoreline.objects():
-			shoreline.append({'lid':s.lid, 'name':s.name, 'line':s.line, 'date':s.date.strftime('%Y-%m-%d')})
+			shorelines.append({'lid':s.lid, 'name':s.name, 'line':s.line, 'date':s.date.strftime('%Y-%m-%d')})
 
 		res['zones'] = zones
 		res['bathymetry'] = bathymetry
-		res['shoreline'] = shoreline
+		res['shoreline'] = shorelines
 		res['status'] = True
 		res['msg'] = 'success' 
 	except Exception,e:
