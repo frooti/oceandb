@@ -74,6 +74,13 @@ class bathymetry(Document):
 	depth = FloatField(db_field='d', required=True)
 	zid = StringField(db_field='zid', max_length=50, required=True)
 
+class shoreline(Document):
+	lid = StringField(db_field='uzid', max_length=50, required=True)
+	line = LineStringField(db_field='ln', auto_index=True, required=True)
+	name = StringField(db_field='name', max_length=100, required=True)
+	date = DateTimeField(db_field='dt', default=datetime.now)
+	created_at = DateTimeField(db_field='ct', default=datetime.now)
+
 class userbathymetry(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	depth = FloatField(db_field='d', required=True)

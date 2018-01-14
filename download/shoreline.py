@@ -9,6 +9,11 @@ from cStringIO import StringIO
 from xml.dom.minidom import parseString
 from zipfile import ZipFile
 import math
+import geojson
+
+from datetime import datetime
+from download.models import shoreline
+import uuid
 
 ## CONFIG ##
 filename = '/tmp/test.kmz'
@@ -35,4 +40,22 @@ xml = openKML(filename)
 linestring = xml.getElementsByTagName('LineString')[0]
 coordinates = linestring.getElementsByTagName('coordinates')[0].childNodes[0].data
 coordinates = coordinates.strip().split(' ')
-print coordinates[0]
+points = []
+
+for p in coordinates:
+    p = p.strip(',')
+    points.append((round(float(p[0]), 5), round(float(p[1]), 5)))
+print len(points)
+
+name = ''
+date = xml.getElementsByTagName('Placemark')[0].getElementsByTagName('name')[0]
+date = datetime.strptime(date, "%d/%m/%Y")
+
+print date
+print json.loads(geojson.dumps(points))
+# s = shoreline(lid=str(uuid.uuid4()))
+# s.line = json.loads(geojson.dumps(points))
+# s.name = name
+# s.date = date
+# s.save()
+print 'completed!'
