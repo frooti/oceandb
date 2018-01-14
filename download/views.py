@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from models import zone, userzone, order, wave, wavedirection, waveperiod, bathymetry, userbathymetry, usershoreline
+from models import zone, userzone, order, wave, wavedirection, waveperiod, bathymetry, userbathymetry, shoreline, usershoreline
 import boto3
 from django.core.mail import EmailMultiAlternatives
 from django.views.decorators.csrf import csrf_exempt
@@ -152,6 +152,7 @@ def getZone(request):
 	try:
 		zones = []
 		bathymetry = []
+		shoreline = []
 
 		for z in zone.objects():
 			if z.ztype == 'zone':
@@ -160,8 +161,13 @@ def getZone(request):
 			elif z.ztype == 'bathymetry':
 				#bathymetry.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
 				bathymetry.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon})
+
+		for s in shoreline.objects():
+			shoreline.append({'lid':s.lid, 'name':s.name, 'line':s.line, 'date':s.date})
+
 		res['zones'] = zones
 		res['bathymetry'] = bathymetry
+		res['shoreline'] = shoreline
 		res['status'] = True
 		res['msg'] = 'success' 
 	except Exception,e:
