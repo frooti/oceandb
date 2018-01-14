@@ -167,7 +167,7 @@ def getZone(request):
 
 		res['zones'] = zones
 		res['bathymetry'] = bathymetry
-		res['shoreline'] = shorelines[0]
+		res['shoreline'] = []
 		res['status'] = True
 		res['msg'] = 'success' 
 	except Exception,e:
