@@ -8,7 +8,8 @@ from django.db import models
 from mongoengine import *
 from datetime import datetime
 
-connect('ocean', host='mongodb://localhost:27017/ocean', username='ocean', password='@cean99')
+db = connect('ocean', host='mongodb://localhost:27017/ocean', username='ocean', password='@cean99')
+db["ocean"].authenticate("ocean", password="@cean99")
 
 class zone(Document):
 	zid = StringField(db_field='zid', max_length=50, required=True)
