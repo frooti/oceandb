@@ -4,7 +4,8 @@ from django.contrib.auth.hashers import make_password, check_password
 from mongoengine import *
 from datetime import datetime, timedelta
 import uuid
-connect('ocean')
+db = connect('ocean', host='mongodb://localhost:27017/ocean', username='ocean', password='@cean99')
+db["ocean"].authenticate("ocean", password="@cean99")
 
 class User(Document):
 	uid = StringField(db_field='uid', max_length=40, required=True)

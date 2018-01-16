@@ -6,7 +6,8 @@ from datetime import datetime, timedelta
 from download.models import bathymetry 
 from mongoengine import *
 
-connect('ocean', host='mongodb://localhost:27017/ocean')
+db = connect('ocean', host='mongodb://localhost:27017/ocean', username='ocean', password='@cean99')
+db["ocean"].authenticate("ocean", password="@cean99")
 
 ## CONFIG ##
 file_path = '/tmp/bathy_data'

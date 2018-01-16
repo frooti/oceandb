@@ -13,7 +13,8 @@ from download.models import zone, bathymetry
 from scipy.spatial import ConvexHull
 import csv
 
-connect('ocean', host='mongodb://localhost:27017/ocean')
+db = connect('ocean', host='mongodb://localhost:27017/ocean', username='ocean', password='@cean99')
+db["ocean"].authenticate("ocean", password="@cean99")
 
 ## CONFIG ##
 directory = '/tmp/bathy_zones'

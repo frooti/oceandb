@@ -9,7 +9,8 @@ from django.utils.functional import cached_property
 
 from mongoengine import *
 from datetime import datetime, timedelta
-connect('ocean')
+db = connect('ocean', host='mongodb://localhost:27017/ocean', username='ocean', password='@cean99')
+db["ocean"].authenticate("ocean", password="@cean99")
 
 class Session(Document):
 	email = StringField(db_field='e', max_length=150)
