@@ -10,7 +10,7 @@ CONN = pymongo.MongoClient('localhost', 27017)
 DB = CONN['ocean']
 WAVE = DB.wave
 
-connect('ocean', host='mongodb://localhost:27017/ocean')
+connect('ocean', host='mongodb://localhost:27017/ocean', username='dataraft', password='D@t@raft99')
 #connect('ocean', host='13.229.95.21', port=27017)
 
 ## CONFIG ##
