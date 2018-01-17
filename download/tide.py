@@ -21,9 +21,11 @@ lat = mat['data']['Y'][0][0]
 val = mat['data']['Val'][0][0]
 
 i, j = 0, 0
+points = []
 
 while i<grid[0]:
 	while j<grid[1]:
-		print lng[i][j], lat[i][j]
+		points.append(lng[i][j], lat[i][j])
 		j = j+1
 	i = i+1
+print len(points)
