@@ -28,4 +28,5 @@ while i<grid[0]:
 		points.append([lng[i][j], lat[i][j]])
 		j = j+1
 	i = i+1
+	j = 0
 print len(points)
