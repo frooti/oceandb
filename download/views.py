@@ -225,8 +225,8 @@ def getPrice(data, polygon, from_date, to_date):
 	datapoints = 0
 	if data and polygon and from_date and to_date:
 		try:
-			if data in ['wave', 'waveperiod', 'wavedirection']:
-				if data=='wave':
+			if data in ['waveheight', 'waveperiod', 'wavedirection']:
+				if data=='waveheight':
 					model = wave
 				elif data=='wavedirection':
 					model = wavedirection
@@ -285,7 +285,7 @@ def fetchPrice(request):
 	try:
 		polygon = json.loads(polygon)
 		
-		if polygon and data in ['wave', 'wavedirection', 'waveperiod', 'bathymetry']:
+		if polygon and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry']:
 			price, datapoints = getPrice(data, polygon, from_date, to_date)
 
 			res['status'] = True
@@ -320,7 +320,7 @@ def orderData(request):
 		from_date = dateutil.parser.parse(from_date)
 		to_date = dateutil.parser.parse(to_date)
 
-		if email and polygon and data in ['wave', 'wavedirection', 'waveperiod', 'bathymetry']:
+		if email and polygon and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry']:
 			o = order(oid=str(uuid.uuid4()))
 			o.email = user.email
 			o.data = data
@@ -539,12 +539,12 @@ def pointData(request):
 	try:
 		point = json.loads(point)
 
-		if request.user and point and data in ['wave', 'wavedirection', 'waveperiod', 'bathymetry']:
+		if request.user and point and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry']:
 			intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=point, ztype='zone')]
 			subscribed_zones = request.user.subscription_zones
 			
 			if intersection_zones and not list(set(intersection_zones)-set(subscribed_zones)): # subscribed zone check
-				if data in ['wave', 'wavedirection', 'waveperiod']:
+				if data in ['waveheight', 'wavedirection', 'waveperiod']:
 					datapoints = []
 					model = wave
 					if data=='wavedirection':
