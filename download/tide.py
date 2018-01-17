@@ -6,7 +6,7 @@ import scipy.io
 
 from datetime import datetime, timedelta
 import pymongo
-CONN = pymongo.MongoClient('10.24.1.151', 27017, username='ocean', password='@cean99', authMechanism='MONGODB-CR')
+CONN = pymongo.MongoClient("mongodb://ocean:%40cean99@10.24.1.151/ocean?authSource=ocean")
 DB = CONN['ocean']
 TIDE = DB.tide
 
