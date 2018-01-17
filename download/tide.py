@@ -6,7 +6,7 @@ import scipy.io
 
 from datetime import datetime, timedelta
 import pymongo
-CONN = pymongo.MongoClient('localhost', 27017, username='ocean', password='@cean99', authMechanism='MONGODB-CR')
+CONN = pymongo.MongoClient('10.24.1.151', 27017, username='ocean', password='@cean99', authMechanism='MONGODB-CR')
 DB = CONN['ocean']
 TIDE = DB.tide
 
@@ -28,7 +28,7 @@ while i<grid[0]:
 	
 	while j<grid[1]:
 		try:
-			loc = {'type': 'Point', 'coordinates': [round(float(lng[i][j]), 3), round(float(lat[i][j]]), 3)}
+			loc = {'type': 'Point', 'coordinates': [round(float(lng[i][j]), 3), round(float(lat[i][j]), 3)}
 			height = float('1.0')
 			bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'height': height}})
 			j = j+1
