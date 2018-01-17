@@ -16,9 +16,9 @@ grid = (720, 1046)
 ## CONFIG ##
 
 mat = scipy.io.loadmat(file_path)
-lng = mat['data'][0][0]
-lat = mat['data'][0][1]
-val = mat['data'][0][4]
+lng = mat['data']['X'][0][0]
+lat = mat['data']['Y'][0][0]
+val = mat['data']['Val'][0][0]
 
 i, j = 0
 
