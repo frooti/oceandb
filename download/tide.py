@@ -2,7 +2,7 @@ import sys
 sys.stdout.flush()
 
 import scipy.io
-
+from math import isnan
 
 from datetime import datetime, timedelta
 import pymongo
@@ -11,7 +11,7 @@ DB = CONN['ocean']
 TIDE = DB.tide
 
 ## CONFIG ##
-file_path = '/tmp/tide.mat'
+file_path = '/Users/ravi/Desktop/dataraft.in/data/tide.mat'
 grid = (720, 1046)
 ## CONFIG ##
 
@@ -22,18 +22,21 @@ val = mat['data']['Val'][0][0]
 
 i, j = 0, 0
 
-while i<grid[0]:
+for i in range(0, grid[0]):
 	print i
 	bulk = TIDE.initialize_unordered_bulk_op()
 	
-	while j<grid[1]:
+	for j in range(0, grid[1]):
 		try:
-			loc = {'type': 'Point', 'coordinates': [round(float(lng[i][j]), 3), round(float(lat[i][j]), 3)]}
-			height = float('1.0')
-			bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'height': height}})
-			j = j+1
-		except:
-			pass
-	bulk.execute() # batch update
-	i = i+1
-	j = 0
+			longitude = round(float(lng[i][j]), 3)
+			latitude = round(float(lat[i][j]), 3)
+			value = float('1.0')
+			if not isnan(longitude) and  not isnan(latitude) and not isnan(value):
+				loc = {'type': 'Point', 'coordinates': [longitude, latitude]}
+				bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'h': value}})
+		except Exception, e:
+			print e
+	try:
+		bulk.execute() # batch update
+	except Exception, e:
+		print e
