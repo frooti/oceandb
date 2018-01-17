@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from mongoengine import *
 from download.models import wave
 import pymongo
-CONN = pymongo.MongoClient('localhost', 27017)
+CONN = pymongo.MongoClient("mongodb://ocean:%40cean99@10.24.1.151/ocean?authSource=ocean")
 DB = CONN['ocean']
 WAVE = DB.wave
 

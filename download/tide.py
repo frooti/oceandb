@@ -11,7 +11,7 @@ DB = CONN['ocean']
 TIDE = DB.tide
 
 ## CONFIG ##
-file_path = '/Users/ravi/Desktop/dataraft.in/data/tide.mat'
+file_path = '/tmp/tide.mat'
 grid = (720, 1046)
 ## CONFIG ##
 
