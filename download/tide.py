@@ -11,7 +11,7 @@ DB = CONN['ocean']
 TIDE = DB.tide
 
 ## CONFIG ##
-file_path = 'tide.mat'
+file_path = '/tmp/tide.mat'
 grid = (720, 1046)
 ## CONFIG ##
 
@@ -20,7 +20,7 @@ lng = mat['data']['X'][0][0]
 lat = mat['data']['Y'][0][0]
 val = mat['data']['Val'][0][0]
 
-i, j = 0
+i, j = 0, 0
 
 while i<grid[0]:
 	while j<grid[1]:
