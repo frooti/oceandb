@@ -28,7 +28,7 @@ while i<grid[0]:
 	
 	while j<grid[1]:
 		try:
-			loc = {'type': 'Point', 'coordinates': [round(float(lng[i][j]), 3), round(float(lat[i][j]), 3)}
+			loc = {'type': 'Point', 'coordinates': [round(float(lng[i][j]), 3), round(float(lat[i][j]), 3)]}
 			height = float('1.0')
 			bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'height': height}})
 			j = j+1
