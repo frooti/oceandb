@@ -23,7 +23,7 @@ LNG = MAT['data']['X'][0][0]
 LAT = MAT['data']['Y'][0][0]
 XVAL = MAT['data']['XComp'][0][0]
 YVAL = MAT['data']['YComp'][0][0]
-TIMESTEPS = len(VAL)
+TIMESTEPS = len(XVAL)
 
 for t in range(0, TIMESTEPS):
 	print 'TIMESTEP: '+str(t)
