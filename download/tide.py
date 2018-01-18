@@ -29,11 +29,11 @@ for t in range(0, TIMESTEPS):
 	hour = str(int(date.hour))
 	date += timestep
 
-	for i in range(0, grid[0]):
+	for i in range(0, grid[0]-1):
 		print i
 		bulk = TIDE.initialize_unordered_bulk_op()
 		
-		for j in range(0, grid[1]):
+		for j in range(0, grid[1]-1):
 			try:
 				longitude = round(float(LNG[i][j]), 3)
 				latitude = round(float(LAT[i][j]), 3)
