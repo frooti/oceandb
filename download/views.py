@@ -602,7 +602,12 @@ def visualisation(request):
 	data = request.GET.get('data', 'waveheight')
 
 	try:
-		pass
+		data = []
+		for z in zone.objects():
+			data.append([z.zid, z.triangles])
+		res['data'] = data
+		res['status'] = True
+		res['msg'] = 'success'
 	except Exception,e:
 		print e
 		res['status'] = False

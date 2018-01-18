@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^shoreline/$', views.getShoreLine, name='getShoreLine'),
     url(r'^upload/$', views.uploadData, name='uploadData'),
     url(r'^point/$', views.pointData, name='pointData'),
+    url(r'^visualisation/$', views.visualisation, name='visualisation'),
 ]
