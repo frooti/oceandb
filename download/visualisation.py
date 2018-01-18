@@ -61,7 +61,7 @@ for z in zone.objects(ztype='zone'):
 	with open('/tmp/visualisation/'+z.zid+'.node', 'w') as f:
 		f.write(tri_data)
 
-	out_bytes = subprocess.check_output(['triangle', '-25', '/tmp/visualisation/'+str(z.zid)+'.node'])
+	out_bytes = subprocess.check_output(['triangle', '-q25', '/tmp/visualisation/'+str(z.zid)+'.node'])
 	output = out_bytes.decode('utf-8')
 
 	if 'Writing '+str(z.zid)+'.1.node' and 'Writing '+str(z.zid)+'.1.ele':
