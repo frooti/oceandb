@@ -24,9 +24,9 @@ VAL = MAT['data']['Val'][0][0]
 TIMESTEPS = len(VAL)
 
 for t in range(0, TIMESTEPS):
-	print 'TIMESTEP: '+t
+	print 'TIMESTEP: '+str(t)
 	day = str(date.timetuple().tm_yday)
-	hour = int(date.hour)
+	hour = str(int(date.hour))
 	date += timestep
 
 	for i in range(0, grid[0]):
