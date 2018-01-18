@@ -562,9 +562,9 @@ def pointData(request):
 							p.values
 							day = str(from_date.timetuple().tm_yday)
 							try:
-								row = {}
-								row['date'] = from_date.strftime('%Y-%m-%d')
-								row['param'] = p.values[day]
+								row = []
+								row.append(from_date.strftime('%Y-%m-%d'))
+								row.append(p.values[day])
 								datapoints.append(row)
 							except:
 								pass
