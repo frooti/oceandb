@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import pymongo
 CONN = pymongo.MongoClient("mongodb://ocean:%40cean99@10.24.1.151/ocean?authSource=ocean")
 DB = CONN['ocean']
-TIDE = DB.tide
+CURRENT = DB.current
 
 ## CONFIG ##
 file_path = '/tmp/current.mat'
@@ -33,7 +33,7 @@ for t in range(0, TIMESTEPS):
 
 	for i in range(0, grid[0]-1):
 		print i
-		bulk = TIDE.initialize_unordered_bulk_op()
+		bulk = CURRENT.initialize_unordered_bulk_op()
 		
 		for j in range(0, grid[1]-1):
 			try:
