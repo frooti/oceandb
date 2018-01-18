@@ -72,6 +72,7 @@ for z in zone.objects(ztype='zone'):
 			t = transform_polygon([vertices[i-1] for i in t], origin=origin, reverse=True)
 			rt = [[round(i[0], 6), round(i[1], 6)] for i in t]
 			rt = rt+[rt[0]]
+			centroid = [float(sum(col))/len(col) for col in zip(*rt)]
 
 			# bathymetry
 			bathy_value = None
@@ -92,7 +93,41 @@ for z in zone.objects(ztype='zone'):
 			q = list(wave.objects.aggregate(*pipeline))
 			if q:
 				waveheight_value = round(q[0].get('height', 0), 2)
-			data.append([rt, waveheight_value, bathy_value])
+
+			# waveperiod
+			waveperiod_value = None
+			pipeline = [
+					{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
+					{ "$group": {"_id": None, "height": { "$avg": "$values.1.0" }} },
+				]
+			q = list(waveperiod.objects.aggregate(*pipeline))
+			if q:
+				waveperiod_value = round(q[0].get('height', 0), 2)
+
+			# wavedirection
+			wavedirection_value = None
+			wd = wavedirection.objects(loc__near=centroid).first()
+			if wd:
+				wavedirection_value = wd.values['1']['0'] 
+
+			# tide
+			tide_value = None
+			pipeline = [
+					{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
+					{ "$group": {"_id": None, "height": { "$avg": "$values.121.12" }} },
+				]
+			q = list(tide.objects.aggregate(*pipeline))
+			if q:
+				tide_value = round(q[0].get('height', 0), 2)
+
+			# current
+			current_value = None
+			c = current.objects(loc__near=centroid).first()
+			if c:
+				current_value = c.values['121']['12']
+
+
+			data.append([waveheight_value, bathy_value, tide_value])
 	print data
 
 
