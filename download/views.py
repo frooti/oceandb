@@ -563,8 +563,6 @@ def pointData(request):
 							day = str(from_date.timetuple().tm_yday)
 							try:
 								row = {}
-								row['long'] = p.loc['coordinates'][0]
-								row['lat'] = p.loc['coordinates'][1]
 								row['date'] = from_date.strftime('%Y-%m-%d')
 								row['param'] = p.values[day]
 								datapoints.append(row)
@@ -574,22 +572,21 @@ def pointData(request):
 					res['status'] = True
 					res['msg'] = 'success'
 					res['data'] = datapoints
-
+					res['lat'] = p.loc['coordinates'][1]
+					res['lng'] = p.loc['coordinates'][0]
 				elif data=='bathymetry':
 					data = []
 					p = bathymetry.objects(loc__near=point).first()
 					if p:
 						try:
-							row = {}
-							row['long'] = p.loc['coordinates'][0]
-							row['lat'] = p.loc['coordinates'][1]
-							row['param'] = p.depth
-							data.append(row)
+							data = p.depth
 						except:
 							pass
 					res['status'] = True
 					res['msg'] = 'success'
-					res['data'] = data
+					row['data'] = data
+					res['lat'] = p.loc['coordinates'][1]
+					res['lng'] = p.loc['coordinates'][0]
 			else:
 				res['status'] = False
 				res['msg'] = 'Please click inside your subscribed zone.'
