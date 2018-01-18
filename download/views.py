@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from models import zone, userzone, order, wave, wavedirection, waveperiod, bathymetry, userbathymetry, shoreline, usershoreline
+from models import zone, userzone, order, wave, wavedirection, waveperiod, bathymetry, userbathymetry, shoreline, usershoreline, tide, current
 import boto3
 from django.core.mail import EmailMultiAlternatives
 from django.views.decorators.csrf import csrf_exempt
