@@ -35,8 +35,8 @@ for t in range(0, TIMESTEPS):
 		
 		for j in range(0, grid[1]):
 			try:
-				longitude = round(float(lng[i][j]), 3)
-				latitude = round(float(lat[i][j]), 3)
+				longitude = round(float(LNG[i][j]), 3)
+				latitude = round(float(LAT[i][j]), 3)
 				value = float(VAL[t][i][j])
 				if not isnan(longitude) and  not isnan(latitude) and not isnan(value):
 					loc = {'type': 'Point', 'coordinates': [longitude, latitude]}
