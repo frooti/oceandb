@@ -127,7 +127,7 @@ for z in zone.objects(ztype='zone'):
 				current_value = c.values['121']['12']
 
 
-			data.append([waveheight_value, bathy_value, tide_value])
+			data.append([waveheight_value, wavedirection_value, waveperiod_value, bathy_value, tide_value, current_value])
 	print data
 
 
