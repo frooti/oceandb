@@ -40,10 +40,10 @@ for t in range(0, TIMESTEPS):
 				longitude = round(float(LNG[i][j]), 3)
 				latitude = round(float(LAT[i][j]), 3)
 				value = math.sqrt((XVAL[t][i][j]**2)+(YVAL[t][i][j]**2))
-				direction = math.degrees(math.arctan2(YVAL[t][i][j], XVAL[t][i][j]))
-				if direction<0:
+				direction = math.degrees(math.atan2(YVAL[t][i][j], XVAL[t][i][j]))
+				if not isnan(direction) and direction<0:
 					direction += 360
-				if not isnan(longitude) and  not isnan(latitude) and not isnan(value):
+				if not isnan(longitude) and  not isnan(latitude) and not isnan(value) and not isnan(direction):
 					loc = {'type': 'Point', 'coordinates': [longitude, latitude]}
 					bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'values.'+day+'.'+hour: [value, direction]}})
 			except Exception, e:
