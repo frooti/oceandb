@@ -17,7 +17,7 @@ db["ocean"].authenticate("ocean", password="@cean99")
 ## CONFIG ##
 file_path = '/tmp/hs.txt'
 now = datetime.now()
-date = datetime(day=now.day, month=now.month, year=now.year) #GMT
+date = datetime(day=1, month=1, year=2015) #GMT
 timestep = timedelta(hours=6)
 grid = (361, 321) # columns, rows
 latitude1, longitude1 = (30.0, 30.0)

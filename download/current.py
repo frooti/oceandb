@@ -1,6 +1,7 @@
 import sys 
 sys.stdout.flush()
 
+import math
 import scipy.io
 from math import isnan
 
@@ -11,7 +12,7 @@ DB = CONN['ocean']
 TIDE = DB.tide
 
 ## CONFIG ##
-file_path = '/tmp/tide.mat'
+file_path = '/tmp/current.mat'
 grid = (720, 1046)
 date = datetime(day=1, month=5, year=2017) #GMT
 timestep = timedelta(hours=12)
@@ -20,7 +21,8 @@ timestep = timedelta(hours=12)
 MAT = scipy.io.loadmat(file_path)
 LNG = MAT['data']['X'][0][0]
 LAT = MAT['data']['Y'][0][0]
-VAL = MAT['data']['Val'][0][0]
+XVAL = MAT['data']['XComp'][0][0]
+YVAL = MAT['data']['YComp'][0][0]
 TIMESTEPS = len(VAL)
 
 for t in range(0, TIMESTEPS):
@@ -37,10 +39,13 @@ for t in range(0, TIMESTEPS):
 			try:
 				longitude = round(float(LNG[i][j]), 3)
 				latitude = round(float(LAT[i][j]), 3)
-				value = float(VAL[t][i][j])
+				value = math.sqrt((XVAL[t][i][j]**2)+(YVAL[t][i][j]**2))
+				direction = math.degrees(math.arctan2(YVAL[t][i][j], XVAL[t][i][j]))
+				if direction<0:
+					direction += 360
 				if not isnan(longitude) and  not isnan(latitude) and not isnan(value):
 					loc = {'type': 'Point', 'coordinates': [longitude, latitude]}
-					bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'values.'+day+'.'+hour: value}})
+					bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'values.'+day+'.'+hour: [value, direction]}})
 			except Exception, e:
 				print e
 		try:
