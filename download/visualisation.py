@@ -127,7 +127,8 @@ for z in zone.objects(ztype='zone'):
 				current_value = [round(c.values['121']['12'][0], 3), round(c.values['121']['12'][1], 0)]
 
 
-			data.append([waveheight_value, wavedirection_value, waveperiod_value, bathy_value, tide_value, current_value])
-	print data
-
+			data.append([rt, waveheight_value, wavedirection_value, waveperiod_value, bathy_value, tide_value, current_value])
+	
+	z.triangles = data
+	z.save()
 
