@@ -45,10 +45,9 @@ with open(file_path, 'r') as f:
 				if v>=0.0:
 					loc = {'type': 'Point', 'coordinates': [round(longitude1+(longitude_delta*(j-1)), 3), round(latitude1+(latitude_delta*(i-1)), 3)]}
 					value = round(v, 3)
-					year = str(date.year)
 					day = str(date.timetuple().tm_yday)
 					hour = str(date.hour)
-					bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'values.'+year+'.'+day+'.'+hour: value}})
+					bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'values.'+day+'.'+hour: value}})
 					# data = {}
 					# data['set__values__'+year+'__'+day] = value
 					# data['upsert'] = True
