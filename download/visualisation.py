@@ -108,7 +108,7 @@ for z in zone.objects(ztype='zone'):
 			wavedirection_value = None
 			wd = wavedirection.objects(loc__near=centroid).first()
 			if wd:
-				wavedirection_value = wd.values['1']['0'] 
+				wavedirection_value = round(wd.values['1']['0'], 2) 
 
 			# tide
 			tide_value = None
@@ -124,7 +124,7 @@ for z in zone.objects(ztype='zone'):
 			current_value = None
 			c = current.objects(loc__near=centroid).first()
 			if c:
-				current_value = c.values['121']['12']
+				current_value = [round(c.values['121']['12'][0], 3), round(c.values['121']['12'][1], 0)]
 
 
 			data.append([waveheight_value, wavedirection_value, waveperiod_value, bathy_value, tide_value, current_value])
