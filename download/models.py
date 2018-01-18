@@ -64,7 +64,7 @@ class current(Document):
 
 class tide(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
-	height = FloatField(db_field='h', required=True)
+	values = DictField()
 
 class wind(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
