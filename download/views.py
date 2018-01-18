@@ -584,7 +584,7 @@ def pointData(request):
 							pass
 					res['status'] = True
 					res['msg'] = 'success'
-					row['data'] = data
+					res['data'] = data
 					res['lat'] = p.loc['coordinates'][1]
 					res['lng'] = p.loc['coordinates'][0]
 			else:
