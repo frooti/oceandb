@@ -176,9 +176,8 @@ def getZoneData(request):
 	zid = request.GET.get('zid', None)
 	try:
 		if zid:
-			z = zone.objects(ztype='bathymetry', zid=zid).first()
+			z = zone.objects(zid=zid).first()
 			if z:
-				uz = userzone.objects(email='ravi@dataraft.in').first()
 				res['triangles'] = z.triangles
 				res['status'] = True
 				res['msg'] = 'success' 
