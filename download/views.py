@@ -43,30 +43,24 @@ def login(request):
 
 	w = wave.objects().first()
 	if w:
-		from_year = sorted(w.values.keys())[0]
-		from_day = sorted(w.values[from_year].keys())[0]
-		to_year = sorted(w.values.keys())[-1]
-		to_day = sorted(w.values[to_year].keys())[-1]
-		height['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
-		height['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
+		from_day = sorted(w.values.keys())[0]
+		to_day = sorted(w.values.keys())[-1]
+		height['from_date'] = (datetime(year=2015, month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
+		height['to_date'] = (datetime(year=2015, month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
 
 	wp = waveperiod.objects().first()
 	if wp:
-		from_year = sorted(wp.values.keys())[0]
-		from_day = sorted(wp.values[from_year].keys())[0]
-		to_year = sorted(wp.values.keys())[-1]
-		to_day = sorted(wp.values[to_year].keys())[-1]
-		period['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
-		period['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
+		from_day = sorted(wp.values.keys())[0]
+		to_day = sorted(wp.values.keys())[-1]
+		height['from_date'] = (datetime(year=2015, month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
+		height['to_date'] = (datetime(year=2015, month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
 
 	wd = wavedirection.objects().first()
 	if wd:
-		from_year = sorted(wd.values.keys())[0]
-		from_day = sorted(wd.values[from_year].keys())[0]
-		to_year = sorted(wd.values.keys())[-1]
-		to_day = sorted(wd.values[to_year].keys())[-1]
-		direction['from_date'] = (datetime(year=int(from_year), month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
-		direction['to_date'] = (datetime(year=int(to_year), month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
+		from_day = sorted(wd.values.keys())[0]
+		to_day = sorted(wd.values.keys())[-1]
+		height['from_date'] = (datetime(year=2015, month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
+		height['to_date'] = (datetime(year=2015, month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
 
 	## session check ##
 	if request.user:
