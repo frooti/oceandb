@@ -176,7 +176,7 @@ def getZoneData(request):
 	zid = request.GET.get('zid', None)
 	try:
 		if zid:
-			z = zone.objects(zid=zid).first()
+			z = zone.objects(zid='b3913413-5b23-4021-a41b-182166e9fd2f').first()
 			if z:
 				res['triangles'] = z.triangles
 				res['status'] = True
