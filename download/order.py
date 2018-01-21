@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import boto3
 import time
 import smtplib
+import calendar
 
 ses = boto3.client('ses', region_name='us-east-1')
 
@@ -47,6 +48,11 @@ def upload_file(filename, oid):
 	except Exception as e:
 		print "Error uploading: %s" % ( e )
 
+def monthToDate(month):
+	from_date = datetime(day=1, month=int(month), year=2015)
+	to_date = datetime(day=calendar.monthrange(2015, int(month))[1], month=int(month), year=2015)
+	return from_date, to_date
+
 while True:
 	try:
 		orders = order.objects(processed_at=None)
@@ -55,10 +61,10 @@ while True:
 			with open('/var/www/dataraft.in/'+o.oid+'.csv', 'w+') as f:
 				datapoints = []
 
-				if o.data in ['wave', 'wavedirection', 'waveperiod']:
-					from_date = o.from_date
-					to_date = o.to_date
-					if o.data=='wave':
+				if o.data in ['waveheight', 'wavedirection', 'waveperiod']:
+					from_date, to_date = monthToDate(o.month)
+
+					if o.data=='waveheight':
 						model = wave
 						param = 'height'
 					elif o.data=='wavedirection':
@@ -75,21 +81,19 @@ while True:
 					for d in spatialpoints:
 						try:
 							values = d.values
-							from_date = o.from_date
-
 							while from_date<=to_date:
 								day = str(from_date.timetuple().tm_yday)
-								year = str(from_date.year)
+								hour = str(int(from_date.hour))
 								try:
 									row = {}
 									row['long'] = d.loc['coordinates'][0]
 									row['lat'] = d.loc['coordinates'][1]
 									row['date'] = from_date.strftime('%Y-%m-%d %H:%M')
-									row[param] = d.values[year][day]
+									row[param] = d.values[day][hour]
 									writer.writerow(row)
 								except Exception, e:
 									pass 
-								from_date += timedelta(days=1)
+								from_date += timedelta(hours=6)
 						except Exception, e:
 							print e
 				elif o.data == 'bathymetry':
@@ -103,6 +107,40 @@ while True:
 							writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'depth': d.depth})
 						except Exception, e:
 							pass
+				elif o.data in ['tide', 'current']:
+					from_date, to_date = monthToDate(o.month)
+					if o.data=='tide':
+						model = tide
+						param = 'tide'
+					elif o.data=='current':
+						model = current
+						param = 'current'
+					
+					fieldnames = ['long', 'lat', param, 'date']
+					writer = csv.DictWriter(f, fieldnames=fieldnames)
+					writer.writeheader()
+					
+					spatialpoints = model.objects(__raw__={'l':{'$geoWithin':{'$geometry':o.polygon}}})
+					for d in spatialpoints:
+						try:
+							values = d.values
+							from_date, to_date = monthToDate(o.month)
+
+							while from_date<=to_date:
+								day = str(from_date.timetuple().tm_yday)
+								hour = str(int(from_date.hour))
+								try:
+									row = {}
+									row['long'] = d.loc['coordinates'][0]
+									row['lat'] = d.loc['coordinates'][1]
+									row['date'] = from_date.strftime('%Y-%m-%d %H:%M')
+									row[param] = d.values[day][hour]
+									writer.writerow(row)
+								except Exception, e:
+									pass 
+								from_date += timedelta(hours=12)
+						except Exception, e:
+							print e
 				f.close()
 
 				# publish to s3
