@@ -17,6 +17,7 @@ import json, geojson
 import uuid
 import time
 from datetime import datetime, timedelta
+import calendar
 import dateutil.parser
 from decimal import Decimal
 import csv
@@ -214,33 +215,38 @@ def getShoreLine(request):
 
 	return HttpResponse(json.dumps(res, default=default))
 
-def getPrice(data, polygon, from_date, to_date):
+def monthToDate(month):
+	from_date = datetime(day=1, month=int(month), year=2015)
+	to_date = datetime(day=calendar.monthrange(2015, int(month))[1], month=int(month), year=2015)
+	return from_date, to_date
+
+def getPrice(data, polygon, month):
 	datapoints = 0
-	if data and polygon and from_date and to_date:
+	if data and polygon and month:
+		from_date, to_date = monthToDate(month)
 		try:
 			if data in ['waveheight', 'waveperiod', 'wavedirection']:
 				if data=='waveheight':
 					model = wave
 				elif data=='wavedirection':
 					model = wavedirection
-				else:
+				elif data=='waveperiod':
 					model = waveperiod
-
+				
 				spatialpoints = model.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
 				available_days = 0
 				sample = model.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}})[0]
 				
 				while from_date<=to_date:
 					day = str(from_date.timetuple().tm_yday)
-					year = str(from_date.year)
 					try:
-						sample.values[year][day]
+						sample.values[day]
 						available_days += 1
 					except:
 						pass
 					from_date += timedelta(days=1)
 
-				datapoints = spatialpoints*available_days
+				datapoints = spatialpoints*available_days*4
 				price = 0
 
 				if datapoints:
@@ -257,6 +263,33 @@ def getPrice(data, polygon, from_date, to_date):
 				else:
 					price = 0
 				return price, datapoints
+			elif data in ['tide', 'current']:
+				if data=='tide':
+					model = tide
+				elif data=='current':
+					model = current
+
+				spatialpoints = model.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
+				available_days = 0
+				sample = model.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}})[0]
+
+				while from_date<=to_date:
+					day = str(from_date.timetuple().tm_yday)
+					try:
+						sample.values[day]
+						available_days += 1
+					except:
+						pass
+					from_date += timedelta(days=1)
+
+				datapoints = spatialpoints*available_days*2
+				price = 0
+
+				if datapoints:
+					price = round(MIN_PRICE+(datapoints*WAVE_DATAPOINT_PRICE), 0)
+				else:
+					price = 0
+				return price, datapoints			
 		except:
 			pass
 	return -1, 0
@@ -265,21 +298,23 @@ def fetchPrice(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	polygon = request.GET.get('polygon', None)
 	data =  request.GET.get('data', None)
-	from_date = request.GET.get('from_date', None)
-	to_date = request.GET.get('to_date', None)
-	try:
-		from_date = dateutil.parser.parse(from_date)
-		to_date = dateutil.parser.parse(to_date)
-	except:
-		from_date = dateutil.parser.parse((datetime.now()-timedelta(days=7)).isoformat())
-		to_date = dateutil.parser.parse((datetime.now()+timedelta(days=7)).isoformat())
+	month = request.GET.get('month', None)
+	from_date, to_date = monthToDate(month)
+	# from_date = request.GET.get('from_date', None)
+	# to_date = request.GET.get('to_date', None)
+	# try:
+	# 	from_date = dateutil.parser.parse(from_date)
+	# 	to_date = dateutil.parser.parse(to_date)
+	# except:
+	# 	from_date = dateutil.parser.parse((datetime.now()-timedelta(days=7)).isoformat())
+	# 	to_date = dateutil.parser.parse((datetime.now()+timedelta(days=7)).isoformat())
 	user = request.user
 	datapoints = 0
 	try:
 		polygon = json.loads(polygon)
 		
-		if polygon and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry']:
-			price, datapoints = getPrice(data, polygon, from_date, to_date)
+		if polygon and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry', 'tide', 'current']:
+			price, datapoints = getPrice(data, polygon, month)
 
 			res['status'] = True
 			res['msg'] = 'success'
@@ -302,25 +337,28 @@ def orderData(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	polygon = request.GET.get('polygon', None)
 	data =  request.GET.get('data', None)
-	from_date = request.GET.get('from_date', (datetime(day=1, month=9, year=2017)-timedelta(days=7)).isoformat())
-	to_date = request.GET.get('to_date', (datetime(day=1, month=9, year=2017)+timedelta(days=7)).isoformat())
+	month = request.GET.get('month', None)
+	# from_date = request.GET.get('from_date', (datetime(day=1, month=9, year=2017)-timedelta(days=7)).isoformat())
+	# to_date = request.GET.get('to_date', (datetime(day=1, month=9, year=2017)+timedelta(days=7)).isoformat())
+	
 	user = request.user
 	email = user.email if user else None
 	#organization = request.GET.get('organization', None)
 
 	try:
 		polygon = json.loads(polygon)
-		from_date = dateutil.parser.parse(from_date)
-		to_date = dateutil.parser.parse(to_date)
+		# from_date = dateutil.parser.parse(from_date)
+		# to_date = dateutil.parser.parse(to_date)
 
-		if email and polygon and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry']:
+		if email and polygon and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry', 'tide', 'current']:
 			o = order(oid=str(uuid.uuid4()))
 			o.email = user.email
 			o.data = data
 			o.polygon = polygon
-			o.from_date = from_date
-			o.to_date = to_date
-			price, datapoints = getPrice(data, polygon, from_date, to_date)
+			o.month = month
+			# o.from_date = from_date
+			# o.to_date = to_date
+			price, datapoints = getPrice(data, polygon, month)
 			if datapoints>0:
 				o.price = price
 				o.datapoints = datapoints
