@@ -593,7 +593,7 @@ def pointData(request):
 							p.values
 							day = str(from_date.timetuple().tm_yday)
 							try:
-								for h in sorted(p.values[day].keys()):
+								for h in p.values[day].keys():
 									datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+h, 'v': p.values[day][h]})
 							except:
 								pass
