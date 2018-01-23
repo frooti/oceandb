@@ -29,6 +29,9 @@ def tri_input(polygon):
 			text += str(i+1)+' '+str(i+1)+' '+str(1)+' 1'+'\n'
 		else:
 			text += str(i+1)+' '+str(i+1)+' '+str(i+2)+' 1'+'\n'
+	# holes
+	text += '\n'
+	text += '0 \n\n' # header
 	return text
 
 def tri_get_vertices(file):
