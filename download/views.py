@@ -593,10 +593,8 @@ def pointData(request):
 							p.values
 							day = str(from_date.timetuple().tm_yday)
 							try:
-								row = []
-								row.append(from_date.strftime('%Y-%m-%d'))
-								row.append(p.values[day])
-								datapoints.append(row)
+								for h in sorted(p.values[day].keys()):
+									datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+int(h), 'v': p.values[day][h]})
 							except:
 								pass
 							from_date += timedelta(days=1)
