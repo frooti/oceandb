@@ -17,9 +17,18 @@ except OSError as e:
         raise 
 
 def tri_input(polygon):
-	text = str(len(polygon))+' 2 0 0\n\n' # header
+	# The outer polyhedron.
+	text = str(len(polygon))+' 2 0 1\n\n' # header
 	for i, v in enumerate(polygon):
-		text += str(i+1)+' '+str(v[0])+' '+str(v[1])+'\n'
+		text += str(i+1)+' '+str(v[0])+' '+str(v[1])+' 1'+'\n'
+	# segments, each with a boundary marker.
+	text += '\n'
+	text += str(len(polygon))+' 1\n\n' # header
+	for i in range(0, len(polygon)):
+		if i==len(polygon)-1:
+			text += str(i+1)+' '+str(i+1)+' '+str(1)+' 1'+'\n'
+		else:
+			text += str(i+1)+' '+str(i+1)+' '+str(i+2)+' 1'+'\n'
 	return text
 
 def tri_get_vertices(file):
@@ -58,10 +67,10 @@ for z in zone.objects(ztype='zone'):
 	p = transform_polygon(z.polygon['coordinates'][0], origin=origin)
 	tri_data = tri_input(p)
 	
-	with open('/tmp/visualisation/'+z.zid+'.node', 'w') as f:
+	with open('/tmp/visualisation/'+z.zid+'.poly', 'w') as f:
 		f.write(tri_data)
 
-	out_bytes = subprocess.check_output(['triangle', '-q25', '/tmp/visualisation/'+str(z.zid)+'.node'])
+	out_bytes = subprocess.check_output(['triangle', '-pq25', '/tmp/visualisation/'+str(z.zid)+'.poly'])
 	output = out_bytes.decode('utf-8')
 
 	if 'Writing '+str(z.zid)+'.1.node' and 'Writing '+str(z.zid)+'.1.ele':
