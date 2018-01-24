@@ -74,7 +74,7 @@ for z in zone.objects(ztype='zone'):
 		f.write(tri_data)
 
 	max_area = int(Polygon(p).area/400)
-	out_bytes = subprocess.check_output(['triangle', '-pq20', '/tmp/visualisation/'+str(z.zid)+'.poly'])
+	out_bytes = subprocess.check_output(['triangle', '-pq25a'+str(max_area), '/tmp/visualisation/'+str(z.zid)+'.poly'])
 	output = out_bytes.decode('utf-8')
 
 	if 'Writing '+str(z.zid)+'.1.node' and 'Writing '+str(z.zid)+'.1.ele':
@@ -99,23 +99,29 @@ for z in zone.objects(ztype='zone'):
 
 			# waveheight
 			waveheight_value = None
-			pipeline = [
-					{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
-					{ "$group": {"_id": None, "height": { "$avg": "$values.1.0" }} },
-				]
-			q = list(wave.objects.aggregate(*pipeline))
-			if q:
-				waveheight_value = round(q[0].get('height', 0), 2)
+			w = wave.objects(loc__near=centroid).first()
+			if w:
+				waveheight_value = round(w.values['1']['0'], 2) 
+			# pipeline = [
+			# 		{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
+			# 		{ "$group": {"_id": None, "height": { "$avg": "$values.1.0" }} },
+			# 	]
+			# q = list(wave.objects.aggregate(*pipeline))
+			# if q:
+			# 	waveheight_value = round(q[0].get('height', 0), 2)
 
 			# waveperiod
 			waveperiod_value = None
-			pipeline = [
-					{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
-					{ "$group": {"_id": None, "height": { "$avg": "$values.1.0" }} },
-				]
-			q = list(waveperiod.objects.aggregate(*pipeline))
-			if q:
-				waveperiod_value = round(q[0].get('height', 0), 2)
+			wp = waveperiod.objects(loc__near=centroid).first()
+			if wp:
+				waveperiod_value = round(wp.values['1']['0'], 2)
+			# pipeline = [
+			# 		{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
+			# 		{ "$group": {"_id": None, "height": { "$avg": "$values.1.0" }} },
+			# 	]
+			# q = list(waveperiod.objects.aggregate(*pipeline))
+			# if q:
+			# 	waveperiod_value = round(q[0].get('height', 0), 2)
 
 			# wavedirection
 			wavedirection_value = None
