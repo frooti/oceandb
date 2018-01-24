@@ -74,7 +74,7 @@ for z in zone.objects(ztype='zone'):
 		f.write(tri_data)
 
 	max_area = int(Polygon(p).area/400)
-	out_bytes = subprocess.check_output(['triangle', '-pq'+str(max_area), '/tmp/visualisation/'+str(z.zid)+'.poly'])
+	out_bytes = subprocess.check_output(['triangle', '-pq', '/tmp/visualisation/'+str(z.zid)+'.poly'])
 	output = out_bytes.decode('utf-8')
 
 	if 'Writing '+str(z.zid)+'.1.node' and 'Writing '+str(z.zid)+'.1.ele':
