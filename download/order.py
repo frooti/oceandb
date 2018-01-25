@@ -62,17 +62,15 @@ while True:
 				datapoints = []
 
 				if o.data in ['waveheight', 'wavedirection', 'waveperiod']:
-					from_date, to_date = monthToDate(o.month)
-
 					if o.data=='waveheight':
 						model = wave
-						param = 'height'
+						param = 'waveheight'
 					elif o.data=='wavedirection':
 						model = wavedirection
-						param = 'direction'
+						param = 'wavedirection'
 					else:
 						model = waveperiod
-						param = 'period'
+						param = 'waveperiod'
 					fieldnames = ['long', 'lat', param, 'date']
 					writer = csv.DictWriter(f, fieldnames=fieldnames)
 					writer.writeheader()
@@ -80,6 +78,7 @@ while True:
 					spatialpoints = model.objects(__raw__={'l':{'$geoWithin':{'$geometry':o.polygon}}})
 					for d in spatialpoints:
 						try:
+							from_date, to_date = monthToDate(o.month)
 							values = d.values
 							while from_date<=to_date:
 								day = str(from_date.timetuple().tm_yday)
