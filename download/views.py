@@ -220,8 +220,10 @@ def monthToDate(month):
 	to_date = datetime(day=calendar.monthrange(2015, int(month))[1], month=int(month), year=2015)
 	return from_date, to_date
 
-def getPrice(data, polygon, month):
+def getPrice(data, polygon, month=None):
 	datapoints = 0
+	if data=='bathymetry':
+		month = 1
 	if data and polygon and month:
 		from_date, to_date = monthToDate(month)
 		try:
