@@ -31,6 +31,11 @@ def default(obj):
         return float(obj)
     raise TypeError
 
+def monthToDate(month):
+	from_date = datetime(day=1, month=int(month), year=2015)
+	to_date = datetime(day=calendar.monthrange(2015, int(month))[1], month=int(month), year=2015)
+	return from_date, to_date
+
 MIN_PRICE = 1000
 WAVE_DATAPOINT_PRICE = 1
 BATHY_DATAPOINT_PRICE = 1
@@ -566,8 +571,8 @@ def pointData(request):
 	point = request.GET.get('point', None)
 	data =  request.GET.get('data', None)
 	user = request.user
-	from_date = datetime(day=1, month=5, year=2015)
-	to_date = from_date+timedelta(days=14)
+	month = request.GET.get('month', '5')
+	from_date, to_date = monthToDate(month)
 
 	try:
 		point = json.loads(point)
