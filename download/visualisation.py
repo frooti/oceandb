@@ -101,7 +101,7 @@ for z in zone.objects(ztype='zone'):
 			waveheight_value = None
 			w = wave.objects(loc__near=centroid).first()
 			if w:
-				waveheight_value = round(w.values['1']['0'], 2) 
+				waveheight_value = round(w.values['3']['0'], 2) 
 			# pipeline = [
 			# 		{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
 			# 		{ "$group": {"_id": None, "height": { "$avg": "$values.1.0" }} },
@@ -114,7 +114,7 @@ for z in zone.objects(ztype='zone'):
 			waveperiod_value = None
 			wp = waveperiod.objects(loc__near=centroid).first()
 			if wp:
-				waveperiod_value = round(wp.values['1']['0'], 2)
+				waveperiod_value = round(wp.values['3']['0'], 2)
 			# pipeline = [
 			# 		{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
 			# 		{ "$group": {"_id": None, "height": { "$avg": "$values.1.0" }} },
@@ -127,7 +127,7 @@ for z in zone.objects(ztype='zone'):
 			wavedirection_value = None
 			wd = wavedirection.objects(loc__near=centroid).first()
 			if wd:
-				wavedirection_value = round(wd.values['1']['0'], 2) 
+				wavedirection_value = round(wd.values['3']['0'], 2) 
 
 			# tide
 			tide_value = None
