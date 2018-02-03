@@ -154,7 +154,7 @@ def getZone(request):
 		bathymetry = []
 		shorelines = []
 
-		for z in zone.objects():
+		for z in zone.objects().exclude('triangles'):
 			if z.ztype == 'zone':
 				#zones.append({'type':'Feature', 'properties':{'zid':z.zid, 'name':z.name}, 'geometry':z.polygon})
 				zones.append({'zid':z.zid, 'name':z.name, 'polygon':z.polygon})
@@ -474,7 +474,7 @@ def uploadData(request):
 						return HttpResponse(json.dumps(res, default=default))
 
 					# subscribed zone check
-					intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=[chull], ztype='zone')]
+					intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=[chull], ztype='zone').exclude('triangles')]
 					subscribed_zones = request.user.subscription_zones
 					if not intersection_zones or list(set(intersection_zones)-set(subscribed_zones)):
 						res['msg'] = 'Some of your data is outside your subscribed zone. Please correct it and try again.'
@@ -541,7 +541,7 @@ def uploadData(request):
 						return HttpResponse(json.dumps(res, default=default))
 
 					# subscribed zone check
-					intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=json.loads(geojson.dumps(line)), ztype='zone')]
+					intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=json.loads(geojson.dumps(line)), ztype='zone').exclude('triangles')]
 					subscribed_zones = request.user.subscription_zones
 					if not intersection_zones or list(set(intersection_zones)-set(subscribed_zones)):
 						res['msg'] = 'Some of your data is outside your subscribed zone. Please correct it and try again.'
@@ -578,7 +578,7 @@ def pointData(request):
 		point = json.loads(point)
 
 		if request.user and point and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry', 'tide', 'current']:
-			intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=point, ztype='zone')]
+			intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=point, ztype='zone').exclude('triangles')]
 			subscribed_zones = request.user.subscription_zones
 			
 			if intersection_zones and not list(set(intersection_zones)-set(subscribed_zones)): # subscribed zone check
