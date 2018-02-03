@@ -597,7 +597,6 @@ def pointData(request):
 					p = model.objects(loc__near=point).first()
 					if p:
 						while from_date<=to_date:
-							p.values
 							day = str(from_date.timetuple().tm_yday)
 							try:
 								for h in p.values[day].keys():
