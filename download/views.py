@@ -602,7 +602,10 @@ def pointData(request):
 								values = p.values
 								for h in values.get(day, {}).keys():
 									if values[day].get(h, None):
-										datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+h, 'v': values[day][h]})
+										if data=='current':
+											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+h, 'v': values[day][h][0]})
+										else:
+											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+h, 'v': values[day][h]})
 							except:
 								pass
 							from_date += timedelta(days=1)
