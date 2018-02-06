@@ -102,8 +102,8 @@ for z in zone.objects(ztype='zone'):
 			w = wave.objects(loc__near=centroid).first()
 			if w:
 				values = w.values
-				day = sorted([int(i) for i in values.keys()])[0]
-				hour = sorted([int(i) for i in values[str(day)]])[0]
+				day = str(sorted([int(i) for i in values.keys()])[0])
+				hour = str(sorted([int(i) for i in values[day]])[0])
 				waveheight_value = round(values[day][hour], 2) 
 			# pipeline = [
 			# 		{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
@@ -118,8 +118,8 @@ for z in zone.objects(ztype='zone'):
 			wp = waveperiod.objects(loc__near=centroid).first()
 			if wp:
 				values = wp.values
-				day = sorted([int(i) for i in values.keys()])[0]
-				hour = sorted([int(i) for i in values[str(day)]])[0]
+				day = str(sorted([int(i) for i in values.keys()])[0])
+				hour = str(sorted([int(i) for i in values[str(day)]])[0])
 				waveperiod_value = round(values[day][hour], 2)
 			# pipeline = [
 			# 		{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
@@ -134,8 +134,8 @@ for z in zone.objects(ztype='zone'):
 			wd = wavedirection.objects(loc__near=centroid).first()
 			if wd:
 				values = wd.values
-				day = sorted([int(i) for i in values.keys()])[0]
-				hour = sorted([int(i) for i in values[str(day)]])[0]
+				day = str(sorted([int(i) for i in values.keys()])[0])
+				hour = str(sorted([int(i) for i in values[str(day)]])[0])
 				wavedirection_value = round(values[day][hour], 2) 
 
 			# tide
