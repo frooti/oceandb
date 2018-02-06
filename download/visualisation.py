@@ -84,8 +84,8 @@ for z in zone.objects(ztype='zone'):
 		for t in triangles:
 			t = transform_polygon([vertices[i-1] for i in t], origin=origin, reverse=True)
 			rt = [[round(i[0], 6), round(i[1], 6)] for i in t]
-			rt = rt+[rt[0]]
 			centroid = [float(sum(col))/len(col) for col in zip(*rt)]
+			rt = rt+[rt[0]]			
 
 			# bathymetry
 			bathy_value = None
