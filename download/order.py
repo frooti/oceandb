@@ -127,17 +127,17 @@ while True:
 
 							while from_date<=to_date:
 								day = str(from_date.timetuple().tm_yday)
-								hour = str(int(from_date.hour))
+								mins = str(int(from_date.hour)*60+int(from_date.minutes))
 								try:
 									row = {}
 									row['long'] = d.loc['coordinates'][0]
 									row['lat'] = d.loc['coordinates'][1]
 									row['date'] = from_date.strftime('%m-%d %H:%M')
-									row[param] = d.values[day][hour]
+									row[param] = d.values[day][mins]
 									writer.writerow(row)
 								except Exception, e:
 									pass 
-								from_date += timedelta(hours=12)
+								from_date += timedelta(minutes=20)
 						except Exception, e:
 							print e
 				f.close()

@@ -289,7 +289,7 @@ def getPrice(data, polygon, month=None):
 						pass
 					from_date += timedelta(days=1)
 
-				datapoints = spatialpoints*available_days*2
+				datapoints = spatialpoints*available_days*72
 				price = 0
 
 				if datapoints:
@@ -603,9 +603,15 @@ def pointData(request):
 								for h in values.get(day, {}).keys():
 									if values[day].get(h, None):
 										if data=='current':
-											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+h, 'v': values[day][h][0]})
+											hour = h/60
+											mins = h%60
+											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': values[day][h][0]})
+										elif data=='tide':
+											hour = h/60
+											mins = h%60
+											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': values[day][h]})
 										else:
-											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+h, 'v': values[day][h]})
+											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+h+'-0', 'v': values[day][h]})
 							except:
 								pass
 							from_date += timedelta(days=1)
