@@ -12,9 +12,9 @@ TIDE = DB.tide
 
 ## CONFIG ##
 file_path = '/tmp/tide.mat'
-grid = (720, 1046)
-date = datetime(day=1, month=5, year=2017) #GMT
-timestep = timedelta(hours=12)
+grid = (720, 1046) # do not edit
+date = datetime(day=1, month=1, year=2018) # GMT
+timestep = timedelta(days=0, hours=0, minutes=30)
 ## CONFIG ##
 
 MAT = scipy.io.loadmat(file_path)
@@ -26,7 +26,7 @@ TIMESTEPS = len(VAL)
 for t in range(0, TIMESTEPS):
 	print 'TIMESTEP: '+str(t)
 	day = str(date.timetuple().tm_yday)
-	hour = str(int(date.hour))
+	mins = str(int(date.hour*60)+int(date.minute))
 	date += timestep
 
 	for i in range(0, grid[0]-1):
@@ -40,7 +40,7 @@ for t in range(0, TIMESTEPS):
 				value = float(VAL[t][i][j])
 				if not isnan(longitude) and  not isnan(latitude) and not isnan(value):
 					loc = {'type': 'Point', 'coordinates': [longitude, latitude]}
-					bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'values.'+day+'.'+hour: value}})
+					bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'values.'+day+'.'+mins: value}})
 			except Exception, e:
 				print e
 		try:
