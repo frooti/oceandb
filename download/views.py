@@ -615,11 +615,11 @@ def pointData(request):
 							except:
 								pass
 							from_date += timedelta(days=1)
+						res['lat'] = p.loc['coordinates'][1]
+						res['lng'] = p.loc['coordinates'][0]
 					res['status'] = True
 					res['msg'] = 'success'
 					res['data'] = datapoints
-					res['lat'] = p.loc['coordinates'][1]
-					res['lng'] = p.loc['coordinates'][0]
 				elif data=='bathymetry':
 					data = []
 					p = bathymetry.objects(loc__near=point).first()
@@ -628,11 +628,11 @@ def pointData(request):
 							data = p.depth
 						except:
 							pass
+						res['lat'] = p.loc['coordinates'][1]
+						res['lng'] = p.loc['coordinates'][0]
 					res['status'] = True
 					res['msg'] = 'success'
-					res['data'] = data
-					res['lat'] = p.loc['coordinates'][1]
-					res['lng'] = p.loc['coordinates'][0]
+					res['data'] = data					
 			else:
 				res['status'] = False
 				res['msg'] = 'Please click inside your subscribed zone.'
