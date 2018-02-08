@@ -603,15 +603,15 @@ def pointData(request):
 								for h in values.get(day, {}).keys():
 									if values[day].get(h, None):
 										if data=='current':
+											h = int(h)
 											hour = h/60
 											mins = h%60
-											total_mins = hour*60+mins
-											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': values[day][total_mins][0]})
+											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': values[day][str(h)][0]})
 										elif data=='tide':
+											h = int(h)
 											hour = h/60
 											mins = h%60
-											total_mins = hour*60+mins
-											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': values[day][total_mins]})
+											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': values[day][str(h)]})
 										else:
 											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+h+'-0', 'v': values[day][h]})
 							except:
