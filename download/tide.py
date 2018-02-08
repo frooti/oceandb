@@ -11,10 +11,10 @@ DB = CONN['ocean']
 TIDE = DB.tide
 
 ## CONFIG ##
-file_path = '/tmp/tide.mat'
+file_path = '/tmp/tide/JANUARY/1_jan_tide.mat'
 grid = (720, 1046) # do not edit
 date = datetime(day=1, month=1, year=2018) # GMT
-timestep = timedelta(days=0, hours=0, minutes=30)
+timestep = timedelta(days=0, hours=0, minutes=20)
 ## CONFIG ##
 
 MAT = scipy.io.loadmat(file_path)
