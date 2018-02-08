@@ -600,7 +600,7 @@ def pointData(request):
 							day = str(from_date.timetuple().tm_yday)
 							try:
 								values = p.values
-								for h in values.get(day, {}).keys():
+								for h in sorted([int(i) for i in values.get(day, {}).keys()]):
 									if values[day].get(h, None):
 										if data=='current':
 											h = int(h)
@@ -613,6 +613,7 @@ def pointData(request):
 											mins = str(h%60)
 											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': values[day][str(h)]})
 										else:
+											h = str(h)
 											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+h+'-0', 'v': values[day][h]})
 							except:
 								pass
