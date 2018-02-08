@@ -601,20 +601,19 @@ def pointData(request):
 							try:
 								values = p.values
 								for h in sorted([int(i) for i in values.get(day, {}).keys()]):
-									if values[day].get(h, None):
-										if data=='current':
-											h = int(h)
-											hour = str(h/60)
-											mins = str(h%60)
-											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': values[day][str(h)][0]})
-										elif data=='tide':
-											h = int(h)
-											hour = str(h/60)
-											mins = str(h%60)
-											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': values[day][str(h)]})
-										else:
-											h = str(h)
-											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+h+'-0', 'v': values[day][h]})
+									if data=='current':
+										h = int(h)
+										hour = str(h/60)
+										mins = str(h%60)
+										datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': values[day][str(h)][0]})
+									elif data=='tide':
+										h = int(h)
+										hour = str(h/60)
+										mins = str(h%60)
+										datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': values[day][str(h)]})
+									else:
+										h = str(h)
+										datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+h+'-0', 'v': values[day][h]})
 							except:
 								pass
 							from_date += timedelta(days=1)
