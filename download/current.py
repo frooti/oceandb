@@ -14,8 +14,8 @@ CURRENT = DB.current
 ## CONFIG ##
 file_path = '/tmp/current.mat'
 grid = (720, 1046)
-date = datetime(day=1, month=5, year=2017) #GMT
-timestep = timedelta(hours=12)
+date = datetime(day=1, month=1, year=2018) #GMT
+timestep = timedelta(days=0, hours=0, minutes=20)
 ## CONFIG ##
 
 MAT = scipy.io.loadmat(file_path)
