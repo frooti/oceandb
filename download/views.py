@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from models import zone, userzone, order, wave, wavedirection, waveperiod, bathymetry, userbathymetry, shoreline, usershoreline, tide, current
+from models import zone, userzone, order, wave, wavedirection, waveperiod, bathymetry, userbathymetry, shoreline, usershoreline, tide, current, currentdirection
 import boto3
 from django.core.mail import EmailMultiAlternatives
 from django.views.decorators.csrf import csrf_exempt
@@ -271,11 +271,13 @@ def getPrice(data, polygon, month=None):
 				else:
 					price = 0
 				return price, datapoints
-			elif data in ['tide', 'current']:
+			elif data in ['tide', 'current', 'currentdirection']:
 				if data=='tide':
 					model = tide
 				elif data=='current':
 					model = current
+				elif data=='currentdirection':
+					model = currentdirection
 
 				spatialpoints = model.objects(__raw__={'l':{'$geoWithin':{'$geometry': polygon}}}).count()
 				available_days = 0
@@ -321,7 +323,7 @@ def fetchPrice(request):
 	try:
 		polygon = json.loads(polygon)
 		
-		if polygon and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry', 'tide', 'current']:
+		if polygon and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry', 'tide', 'current', 'currentdirection']:
 			price, datapoints = getPrice(data, polygon, month)
 
 			res['status'] = True
@@ -358,7 +360,7 @@ def orderData(request):
 		# from_date = dateutil.parser.parse(from_date)
 		# to_date = dateutil.parser.parse(to_date)
 
-		if email and polygon and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry', 'tide', 'current']:
+		if email and polygon and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry', 'tide', 'current', 'currentdirection']:
 			o = order(oid=str(uuid.uuid4()))
 			o.email = user.email
 			o.data = data
@@ -578,12 +580,12 @@ def pointData(request):
 	try:
 		point = json.loads(point)
 
-		if request.user and point and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry', 'tide', 'current']:
+		if request.user and point and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry', 'tide', 'current', 'currentdirection']:
 			intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=point, ztype='zone').exclude('triangles')]
 			subscribed_zones = request.user.subscription_zones
 			
 			if intersection_zones and not list(set(intersection_zones)-set(subscribed_zones)): # subscribed zone check
-				if data in ['waveheight', 'wavedirection', 'waveperiod', 'tide', 'current']:
+				if data in ['waveheight', 'wavedirection', 'waveperiod', 'tide', 'current', 'currentdirection']:
 					datapoints = []
 					model = wave
 					if data=='wavedirection':
@@ -594,6 +596,8 @@ def pointData(request):
 						model = tide
 					elif data=='current':
 						model = current
+					elif data=='currentdirection':
+						model = currentdirection
 
 					p = model.objects(loc__near=point).first()
 					if p:
@@ -602,11 +606,11 @@ def pointData(request):
 							day = str(from_date.timetuple().tm_yday)
 							try:
 								for h in sorted([int(i) for i in values.get(day, {}).keys()]):
-									if data=='current':
+									if data=='current' or data=='currentdirection':
 										h = int(h)
 										hour = str(h/60)
 										mins = str(h%60)
-										v = values[day][str(h)][0]
+										v = values[day][str(h)]
 										if not isnan(v):
 											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': v})
 									elif data=='tide':

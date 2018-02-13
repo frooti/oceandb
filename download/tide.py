@@ -11,9 +11,9 @@ DB = CONN['ocean']
 TIDE = DB.tide
 
 ## CONFIG ##
-file_path = '/tmp/tide/JANUARY/1_jan_tide.mat'
+file_path = '/Users/ravi/Downloads/29_feb_tide.mat'
 grid = (720, 1046) # do not edit
-date = datetime(day=1, month=1, year=2018) # GMT
+date = datetime(day=29, month=2, year=2018) # GMT
 timestep = timedelta(days=0, hours=0, minutes=20)
 ## CONFIG ##
 

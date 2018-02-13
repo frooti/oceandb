@@ -63,6 +63,10 @@ class current(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
 
+class currentdirection(Document):
+	loc = PointField(db_field='l', auto_index=True, required=True)
+	values = DictField()
+
 class tide(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()

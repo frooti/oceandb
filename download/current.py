@@ -10,6 +10,7 @@ import pymongo
 CONN = pymongo.MongoClient("mongodb://ocean:%40cean99@10.24.1.151/ocean?authSource=ocean")
 DB = CONN['ocean']
 CURRENT = DB.current
+CURRENTDIRECTION = DB.currentdirection
 
 ## CONFIG ##
 file_path = '/Users/ravi/Desktop/current/uv/3.5_jan_current.mat'
@@ -34,6 +35,7 @@ for t in range(0, TIMESTEPS):
 	for i in range(0, grid[0]-1):
 		print i
 		bulk = CURRENT.initialize_unordered_bulk_op()
+		bulk2 = CURRENTDIRECTION.initialize_unordered_bulk_op()
 		
 		for j in range(0, grid[1]-1):
 			try:
@@ -45,11 +47,13 @@ for t in range(0, TIMESTEPS):
 				# 	direction += 360
 				if not isnan(longitude) and  not isnan(latitude) and not isnan(value) and not isnan(direction):
 					loc = {'type': 'Point', 'coordinates': [longitude, latitude]}
-					bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'values.'+day+'.'+mins: [value, direction]}})
+					bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'values.'+day+'.'+mins: value}})
+					bulk2.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'values.'+day+'.'+mins: direction}})
 			except Exception, e:
 				print e
 		try:
 			bulk.execute() # batch update
+			bulk2.execute() # batch update
 		except Exception, e:
 			print e
 print 'completed!'
