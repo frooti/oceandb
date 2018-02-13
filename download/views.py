@@ -597,10 +597,10 @@ def pointData(request):
 
 					p = model.objects(loc__near=point).first()
 					if p:
+						values = p.values
 						while from_date<=to_date:
 							day = str(from_date.timetuple().tm_yday)
 							try:
-								values = p.values
 								for h in sorted([int(i) for i in values.get(day, {}).keys()]):
 									if data=='current':
 										h = int(h)
