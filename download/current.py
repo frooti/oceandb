@@ -12,7 +12,7 @@ DB = CONN['ocean']
 CURRENT = DB.current
 
 ## CONFIG ##
-file_path = '/tmp/current/uv/1_jan_current.mat'
+file_path = '/tmp/current/JANUARY/1_jan_current.mat'
 grid = (720, 1046)
 date = datetime(hour=0, day=1, month=1, year=2018) #GMT
 timestep = timedelta(days=0, hours=0, minutes=20)
