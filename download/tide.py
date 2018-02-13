@@ -37,7 +37,7 @@ for t in range(0, TIMESTEPS):
 			try:
 				longitude = round(float(LNG[i][j]), 3)
 				latitude = round(float(LAT[i][j]), 3)
-				value = float(VAL[t][i][j])
+				value = round(float(VAL[t][i][j]), 3)
 				if not isnan(longitude) and  not isnan(latitude) and not isnan(value):
 					loc = {'type': 'Point', 'coordinates': [longitude, latitude]}
 					bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': {'l': loc, 'values.'+day+'.'+mins: value}})
