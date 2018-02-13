@@ -64,13 +64,13 @@ while True:
 				if o.data in ['waveheight', 'wavedirection', 'waveperiod']:
 					if o.data=='waveheight':
 						model = wave
-						param = 'waveheight'
+						param = 'waveheight (m)'
 					elif o.data=='wavedirection':
 						model = wavedirection
-						param = 'wavedirection'
+						param = 'wavedirection (degree N)'
 					else:
 						model = waveperiod
-						param = 'waveperiod'
+						param = 'waveperiod (sec)'
 					fieldnames = ['long', 'lat', param, 'date']
 					writer = csv.DictWriter(f, fieldnames=fieldnames)
 					writer.writeheader()
@@ -106,14 +106,17 @@ while True:
 							writer.writerow({'long': d.loc['coordinates'][0], 'lat': d.loc['coordinates'][1], 'depth': d.depth})
 						except Exception, e:
 							pass
-				elif o.data in ['tide', 'current']:
+				elif o.data in ['tide', 'current', 'currentdirection']:
 					from_date, to_date = monthToDate(o.month)
 					if o.data=='tide':
 						model = tide
-						param = 'tide'
+						param = 'tide(m)'
 					elif o.data=='current':
 						model = current
-						param = 'current'
+						param = 'current velocity(m/s)'
+					elif o.data=='currentdirection':
+						model = currentdirection
+						param = 'current direction'
 					
 					fieldnames = ['long', 'lat', param, 'date']
 					writer = csv.DictWriter(f, fieldnames=fieldnames)
