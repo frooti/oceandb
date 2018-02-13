@@ -133,7 +133,7 @@ while True:
 									row['long'] = d.loc['coordinates'][0]
 									row['lat'] = d.loc['coordinates'][1]
 									row['date'] = from_date.strftime('%m-%d %H:%M')
-									row[param] = d.values[day][mins]
+									row[param] = float(d.values[day][mins])
 									writer.writerow(row)
 								except Exception, e:
 									pass 

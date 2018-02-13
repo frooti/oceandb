@@ -22,6 +22,7 @@ import dateutil.parser
 from decimal import Decimal
 import csv
 from scipy.spatial import ConvexHull
+from math import isnan
 
 ses = boto3.client('ses', region_name='us-east-1')
 
@@ -605,12 +606,16 @@ def pointData(request):
 										h = int(h)
 										hour = str(h/60)
 										mins = str(h%60)
-										datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': values[day][str(h)][0]})
+										v = values[day][str(h)][0]
+										if not isnan(v):
+											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': v})
 									elif data=='tide':
 										h = int(h)
 										hour = str(h/60)
 										mins = str(h%60)
-										datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': values[day][str(h)]})
+										v = values[day][str(h)]
+										if not isnan(v):
+											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': v})
 									else:
 										h = str(h)
 										datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+h+'-0', 'v': values[day][h]})
