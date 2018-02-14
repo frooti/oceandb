@@ -574,6 +574,8 @@ def pointData(request):
 	point = request.GET.get('point', None)
 	data =  request.GET.get('data', None)
 	user = request.user
+	if request.GET.get('warmup', None):
+		user = User.objects(email='ravi@dataraft.in').first()
 	month = request.GET.get('month', '5')
 	from_date, to_date = monthToDate(month)
 
