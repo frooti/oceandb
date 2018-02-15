@@ -176,6 +176,7 @@ while True:
 				o.processed_at = datetime.now()
 				o.download_link = download_link
 				o.save()
+				print 'email sent.'
 	except Exception, e:
 		print e
 	time.sleep(1)
