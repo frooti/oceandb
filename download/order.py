@@ -71,7 +71,7 @@ while True:
 					else:
 						model = waveperiod
 						param = 'waveperiod (sec)'
-					fieldnames = ['long', 'lat', param, 'date']
+					fieldnames = ['long', 'lat', param, 'date (month-day hour-min)']
 					writer = csv.DictWriter(f, fieldnames=fieldnames)
 					writer.writeheader()
 					
@@ -87,7 +87,7 @@ while True:
 									row = {}
 									row['long'] = d.loc['coordinates'][0]
 									row['lat'] = d.loc['coordinates'][1]
-									row['date'] = from_date.strftime('%m-%d %H:%M')
+									row['date (month-day hour-min)'] = from_date.strftime('%m-%d %H:%M')
 									row[param] = d.values[day][hour]
 									writer.writerow(row)
 								except Exception, e:
@@ -118,7 +118,7 @@ while True:
 						model = currentdirection
 						param = 'current direction'
 					
-					fieldnames = ['long', 'lat', param, 'date']
+					fieldnames = ['long', 'lat', param, 'date (month-day hour-min)']
 					writer = csv.DictWriter(f, fieldnames=fieldnames)
 					writer.writeheader()
 					
@@ -130,12 +130,12 @@ while True:
 
 							while from_date<=to_date:
 								day = str(from_date.timetuple().tm_yday)
-								mins = str(int(from_date.hour)*60+int(from_date.minutes))
+								mins = str(int(from_date.hour)*60+int(from_date.minute))
 								try:
 									row = {}
 									row['long'] = d.loc['coordinates'][0]
 									row['lat'] = d.loc['coordinates'][1]
-									row['date'] = from_date.strftime('%m-%d %H:%M')
+									row['date (month-day hour-min)'] = from_date.strftime('%m-%d %H:%M')
 									row[param] = float(d.values[day][mins])
 									writer.writerow(row)
 								except Exception, e:
