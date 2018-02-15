@@ -88,7 +88,7 @@ while True:
 									row['long'] = d.loc['coordinates'][0]
 									row['lat'] = d.loc['coordinates'][1]
 									row['date (month-day hour-min)'] = from_date.strftime('%m-%d %H:%M')
-									row[param] = d.values[day][hour]
+									row[param] = values[day][hour]
 									writer.writerow(row)
 								except Exception, e:
 									pass 
@@ -136,7 +136,7 @@ while True:
 									row['long'] = d.loc['coordinates'][0]
 									row['lat'] = d.loc['coordinates'][1]
 									row['date (month-day hour-min)'] = from_date.strftime('%m-%d %H:%M')
-									row[param] = float(d.values[day][mins])
+									row[param] = float(values[day][mins])
 									writer.writerow(row)
 								except Exception, e:
 									pass 
