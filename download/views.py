@@ -612,14 +612,14 @@ def pointData(request):
 										hour = str(h/60)
 										mins = str(h%60)
 										v = values[day][str(h)]
-										if not isnan(v):
+										if not isnan(v) and not v==-99:
 											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': v})
 									elif data=='tide':
 										h = int(h)
 										hour = str(h/60)
 										mins = str(h%60)
 										v = values[day][str(h)]
-										if not isnan(v):
+										if not isnan(v) and not v==-99:
 											datapoints.append({'d': from_date.strftime('%Y-%m-%d')+'-'+hour+'-'+mins, 'v': v})
 									else:
 										h = str(h)

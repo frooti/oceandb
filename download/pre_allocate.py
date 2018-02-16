@@ -1,5 +1,5 @@
 from download.models import tide, current
-from dateitme import datetime, timedelta
+from datetime import datetime, timedelta
 import copy
 import scipy.io
 from math import isnan
@@ -28,7 +28,7 @@ TIMESTEPS = 72
 for t in range(0, TIMESTEPS):
 	mins = str(int(date.hour*60)+int(date.minute))
 	date += timedelta(days=0, hours=0, minutes=20)
-	value[mins] = [None, None]
+	value[mins] = -99
 
 date = datetime(hour=0, day=1, month=1, year=2018)
 
