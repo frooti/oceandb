@@ -47,4 +47,23 @@ for i in range(0, grid[0]-1):
 		if not isnan(longitude) and  not isnan(latitude):
 			inserts.append({'l': loc, 'values': base})
 	if inserts:
-		CURRENT.insert_many(inserts)
+		TIDE.insert_many(inserts)
+
+
+		
+
+for t in TIDE.object():
+	values = t.values
+	empty = True
+	for d in values:
+		for m in values[d]:
+			if values[d][m] == -99:
+				values[d][m] = None
+			else:
+				empty = False
+
+	if empty:
+		t.delete()
+	else:
+		t.save()
+

@@ -23,6 +23,8 @@ LAT = MAT['data']['Y'][0][0]
 VAL = MAT['data']['Val'][0][0]
 TIMESTEPS = len(VAL)
 
+START = datetime.now()
+
 for t in range(0, TIMESTEPS):
 	print 'TIMESTEP: '+str(t)
 	day = str(date.timetuple().tm_yday)
@@ -48,3 +50,4 @@ for t in range(0, TIMESTEPS):
 		except Exception, e:
 			print e
 print 'completed!'
+print 'TIME: '+datetime.now()-START
