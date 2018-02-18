@@ -50,4 +50,4 @@ for t in range(0, TIMESTEPS):
 		except Exception, e:
 			print e
 print 'completed!'
-print 'TIME: '+datetime.now()-START
+print 'TIME: '+(datetime.now()-START)
