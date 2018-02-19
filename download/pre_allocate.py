@@ -1,4 +1,3 @@
-from download.models import tide, current
 from datetime import datetime, timedelta
 import copy
 import scipy.io
