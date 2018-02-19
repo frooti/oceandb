@@ -14,7 +14,7 @@ CURRENT = DB.current
 TIDE = DB.tide
 
 # CONFIG #
-file_path = '/tmp/tide/JANUARY/1_jan_tide.mat'
+file_path = '/tmp/1_jan_tide.mat'
 grid = (720, 1046)
 date = datetime(hour=0, day=1, month=1, year=2018)
 to_date = datetime(hour=0, day=1, month=1, year=2019)
@@ -23,6 +23,7 @@ to_date = datetime(hour=0, day=1, month=1, year=2019)
 MAT = scipy.io.loadmat(file_path)
 LNG = MAT['data']['X'][0][0]
 LAT = MAT['data']['Y'][0][0]
+VAL = MAT['data']['Val'][0][0]
 TIMESTEPS = 72
 
 for t in range(0, TIMESTEPS):
@@ -43,27 +44,28 @@ for i in range(0, grid[0]-1):
 	for j in range(0, grid[1]-1):
 		longitude = round(float(LNG[i][j]), 3)
 		latitude = round(float(LAT[i][j]), 3)
+		value = round(float(VAL[0][i][j]), 3)
 		loc = {'type': 'Point', 'coordinates': [longitude, latitude]}
-		if not isnan(longitude) and  not isnan(latitude):
+		if not isnan(longitude) and  not isnan(latitude) and not isnan(value):
 			inserts.append({'l': loc, 'values': base})
 	if inserts:
 		TIDE.insert_many(inserts)
 
 
-		
 
-for t in TIDE.object():
-	values = t.values
-	empty = True
-	for d in values:
-		for m in values[d]:
-			if values[d][m] == -99:
-				values[d][m] = None
-			else:
-				empty = False
 
-	if empty:
-		t.delete()
-	else:
-		t.save()
+# for t in TIDE.object():
+# 	values = t.values
+# 	empty = True
+# 	for d in values:
+# 		for m in values[d]:
+# 			if values[d][m] == -99:
+# 				values[d][m] = None
+# 			else:
+# 				empty = False
+
+# 	if empty:
+# 		t.delete()
+# 	else:
+# 		t.save()
 
