@@ -3,7 +3,7 @@ var mapf = function () {
             value = {}
             value[this.v[0]] = {}
             value[this.v[0]][this.v[1]] = this.v[2]
-            emit(this.l, {'l': this.l, 'v': value});
+            emit(JSON.stringify(this.l), {'l': this.l, 'v': value});
           }
 
 var reducef = function (l, docs) {
