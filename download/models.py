@@ -72,7 +72,7 @@ class tide(Document):
 	values = DictField()
 
 class tide_insert(Document):
-	loc = ListField(db_field='l', primary_key=True)
+	loc = ListField(db_field='l')
 	value = ListField(db_field='v', required=True)
 
 class wind(Document):
