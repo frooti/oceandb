@@ -71,6 +71,10 @@ class tide(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
 
+class tide_insert(Document):
+	loc = ListField(db_field='l', primary_key=True)
+	value = ListField(db_field='v', required=True)
+
 class wind(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
