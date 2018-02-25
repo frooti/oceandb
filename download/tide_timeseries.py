@@ -57,7 +57,7 @@ def timeseries():
 	print 'Writing to Output File ...'
 	with open('tide_timeseries.out', 'w') as o:
 		for l in DATA:
-			o.write('{}{}'.format(json.dumps(DATA[l]), os.linesep)
+			o.write('{}{}'.format(json.dumps(DATA[l]), os.linesep))
 
 
 	print 'completed!'
