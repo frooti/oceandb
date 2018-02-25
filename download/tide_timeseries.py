@@ -21,7 +21,7 @@ DATA = {} # lat lng, timeseries
 
 START = datetime.now()
 
-@profile
+#@profile
 def timeseries():
 	global date
 	for f in sorted(glob.glob(file_path)):
@@ -35,7 +35,7 @@ def timeseries():
 		for t in range(0, TIMESTEPS):
 			print 'TIMESTEP: '+str(t)
 			day = str(date.timetuple().tm_yday)
-			mins = '{}{}'.format(date.hour*60, date.minute)
+			mins = '{}'.format(date.hour*60+date.minute)
 			if t!=TIMESTEPS-1:
 				date += timestep
 
@@ -56,7 +56,7 @@ def timeseries():
 	print 'Writing to Output File ...'
 	with open('tide_timeseries.out', 'w') as o:
 		for l in DATA:
-			o.write('{}{}'.format(json.dumps(DATA[l]), os.linesep))
+			o.write('{}-{}{}'.format(l, json.dumps(DATA[l]), os.linesep))
 
 
 	print 'completed!'
