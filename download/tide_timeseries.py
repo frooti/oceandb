@@ -36,7 +36,7 @@ def timeseries():
 			print 'TIMESTEP: '+str(t)
 			day = str(date.timetuple().tm_yday)
 			mins = '{}{}'.format(date.hour*60, date.minute)
-			if t!=TIMESTEPS:
+			if t!=TIMESTEPS-1:
 				date += timestep
 
 			for i in range(0, grid[0]-1):
