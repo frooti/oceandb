@@ -52,9 +52,7 @@ def timeseries():
 						if day not in DATA[key]:
 							DATA[key][day] = {}
 						DATA[key][day][mins] = value
-		f.close()
-		gc.collect()
-
+	
 	print 'Writing to Output File ...'
 	with open('tide_timeseries.out', 'w') as o:
 		for l in DATA:
