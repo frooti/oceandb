@@ -1,3 +1,6 @@
+from memory_profiler import profile
+
+import os
 import sys 
 sys.stdout.flush()
 import glob
@@ -20,45 +23,47 @@ DATA = {} # lat lng, timeseries
 
 START = datetime.now()
 
-for f in sorted(glob.glob(file_path)):
-	print 'PROCESSING: '+str(f)
-	MAT = scipy.io.loadmat(f)
-	LNG = MAT['data']['X'][0][0]
-	LAT = MAT['data']['Y'][0][0]
-	VAL = MAT['data']['Val'][0][0]
-	TIMESTEPS = len(VAL)
-	
-	for t in range(0, TIMESTEPS):
-		print 'TIMESTEP: '+str(t)
-		day = str(date.timetuple().tm_yday)
-		mins = '{}{}'.format(date.hour*60, date.minute)
-		if t!=TIMESTEPS:
-			date += timestep
+@profile
+def main():
+	for f in sorted(glob.glob(file_path)):
+		print 'PROCESSING: '+str(f)
+		MAT = scipy.io.loadmat(f)
+		LNG = MAT['data']['X'][0][0]
+		LAT = MAT['data']['Y'][0][0]
+		VAL = MAT['data']['Val'][0][0]
+		TIMESTEPS = len(VAL)
+		
+		for t in range(0, TIMESTEPS):
+			print 'TIMESTEP: '+str(t)
+			day = str(date.timetuple().tm_yday)
+			mins = '{}{}'.format(date.hour*60, date.minute)
+			if t!=TIMESTEPS:
+				date += timestep
 
-		for i in range(0, grid[0]-1):
-			for j in range(0, grid[1]-1):
-				if not isnan(LNG[i][j]) and  not isnan(LAT[i][j]) and not isnan(VAL[t][i][j]):
-					longitude = round(float(LNG[i][j]), 3)
-					latitude = round(float(LAT[i][j]), 3)
-					value = round(float(VAL[t][i][j]), 3)
-					
-					key = '{}:{}'.format(longitude, latitude)
-					if key not in DATA:
-						DATA[key] = {}
-					if day not in DATA[key]:
-						DATA[key][day] = {}
-					DATA[key][day][mins] = value
-	
-	# clear memory
-	MAT = None
-	LNG = None
-	LAT = None
-	VAL = None
-	gc.collect()
+			for i in range(0, grid[0]-1):
+				for j in range(0, grid[1]-1):
+					if not isnan(LNG[i][j]) and  not isnan(LAT[i][j]) and not isnan(VAL[t][i][j]):
+						longitude = round(float(LNG[i][j]), 3)
+						latitude = round(float(LAT[i][j]), 3)
+						value = round(float(VAL[t][i][j]), 3)
+						
+						key = '{}:{}'.format(longitude, latitude)
+						if key not in DATA:
+							DATA[key] = {}
+						if day not in DATA[key]:
+							DATA[key][day] = {}
+						DATA[key][day][mins] = value
+		f.close()
+		gc.collect()
 
-print 'Writing to Output File ...'
-o = open('tide_timeseries.json', 'w')
-o.write(json.dumps(DATA))
+	print 'Writing to Output File ...'
+	with open('tide_timeseries.out', 'w') as o:
+		for l in DATA:
+			o.write('{}{}'.format(json.dumps(DATA[l]), os.linesep)
 
-print 'completed!'
-print 'TIME: '+str(datetime.now()-START)
+
+	print 'completed!'
+	print 'TIME: '+str(datetime.now()-START)
+
+if __name__ == '__main__':
+	main()
