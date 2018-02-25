@@ -64,8 +64,4 @@ def timeseries():
 	print 'TIME: '+str(datetime.now()-START)
 
 if __name__ == '__main__':
-<<<<<<< Updated upstream
 	timeseries()
-=======
-	main()
->>>>>>> Stashed changes
