@@ -1,5 +1,3 @@
-from memory_profiler import profile
-
 import os
 import sys 
 sys.stdout.flush()
@@ -24,7 +22,7 @@ DATA = {} # lat lng, timeseries
 START = datetime.now()
 
 @profile
-def main():
+def timeseries():
 	for f in sorted(glob.glob(file_path)):
 		print 'PROCESSING: '+str(f)
 		MAT = scipy.io.loadmat(f)
@@ -66,4 +64,4 @@ def main():
 	print 'TIME: '+str(datetime.now()-START)
 
 if __name__ == '__main__':
-	main()
+	timeseries()
