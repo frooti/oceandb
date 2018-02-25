@@ -31,23 +31,24 @@ for f in sorted(glob.glob(file_path)):
 	for t in range(0, TIMESTEPS):
 		print 'TIMESTEP: '+str(t)
 		day = str(date.timetuple().tm_yday)
-		mins = str(int(date.hour*60)+int(date.minute))
+		mins = '{}{}'.format(date.hour*60, date.minute)
 		if t!=TIMESTEPS:
 			date += timestep
 
 		for i in range(0, grid[0]-1):
 			for j in range(0, grid[1]-1):
-				longitude = round(float(LNG[i][j]), 3)
-				latitude = round(float(LAT[i][j]), 3)
-				value = round(float(VAL[t][i][j]), 3)
-				if not isnan(longitude) and  not isnan(latitude) and not isnan(value):
-					key = str(longitude)+':'+str(latitude)
+				if not isnan(LNG[i][j]) and  not isnan(LAT[i][j]) and not isnan(VAL[t][i][j]):
+					longitude = round(float(LNG[i][j]), 3)
+					latitude = round(float(LAT[i][j]), 3)
+					value = round(float(VAL[t][i][j]), 3)
+					
+					key = '{}:{}'.format(longitude, latitude)
 					if key not in DATA:
 						DATA[key] = {}
 					if day not in DATA[key]:
 						DATA[key][day] = {}
 					DATA[key][day][mins] = value
-
+	
 	# clear memory
 	MAT = None
 	LNG = None
