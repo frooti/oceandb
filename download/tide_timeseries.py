@@ -11,7 +11,7 @@ from math import isnan
 from datetime import datetime, timedelta
 
 ## CONFIG ##
-file_path = '/Users/ravi/Downloads/*_jan_tide.mat'
+file_path = '/var/www/dataraft.in/*_jan_tide.mat'
 grid = (720, 1046) # do not edit
 date = datetime(day=1, month=1, year=2018) # GMT
 timestep = timedelta(days=0, hours=0, minutes=20)
@@ -64,4 +64,8 @@ def timeseries():
 	print 'TIME: '+str(datetime.now()-START)
 
 if __name__ == '__main__':
+<<<<<<< Updated upstream
 	timeseries()
+=======
+	main()
+>>>>>>> Stashed changes
