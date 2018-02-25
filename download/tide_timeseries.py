@@ -32,7 +32,8 @@ for f in sorted(glob.glob(file_path)):
 		print 'TIMESTEP: '+str(t)
 		day = str(date.timetuple().tm_yday)
 		mins = str(int(date.hour*60)+int(date.minute))
-		date += timestep
+		if t!=TIMESTEPS:
+			date += timestep
 
 		for i in range(0, grid[0]-1):
 			for j in range(0, grid[1]-1):
