@@ -19,7 +19,7 @@ DATA = {} # lat lng, timeseries
 
 START = datetime.now()
 
-for f in glob.glob(file_path):
+for f in sorted(glob.glob(file_path)):
 	print 'PROCESSING: '+str(f)
 	MAT = scipy.io.loadmat(f)
 	LNG = MAT['data']['X'][0][0]
