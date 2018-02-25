@@ -23,6 +23,7 @@ START = datetime.now()
 
 @profile
 def timeseries():
+	global date
 	for f in sorted(glob.glob(file_path)):
 		print 'PROCESSING: '+str(f)
 		MAT = scipy.io.loadmat(f)
