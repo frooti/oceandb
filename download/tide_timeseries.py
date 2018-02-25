@@ -2,6 +2,7 @@ import sys
 sys.stdout.flush()
 import glob
 import json
+import gc
 
 import scipy.io
 from math import isnan
@@ -26,7 +27,7 @@ for f in sorted(glob.glob(file_path)):
 	LAT = MAT['data']['Y'][0][0]
 	VAL = MAT['data']['Val'][0][0]
 	TIMESTEPS = len(VAL)
-
+	
 	for t in range(0, TIMESTEPS):
 		print 'TIMESTEP: '+str(t)
 		day = str(date.timetuple().tm_yday)
@@ -46,6 +47,12 @@ for f in sorted(glob.glob(file_path)):
 						DATA[key][day] = {}
 					DATA[key][day][mins] = value
 
+	# clear memory
+	MAT = None
+	LNG = None
+	LAT = None
+	VAL = None
+	gc.collect()
 
 print 'Writing to Output File ...'
 o = open('tide_timeseries.json', 'w')
