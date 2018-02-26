@@ -24,7 +24,7 @@ START = datetime.now()
 #@profile
 def timeseries():
 	global date
-	for f in sorted(glob.glob(file_path)):
+	for f in sorted(glob.glob(file_path), key=lambda x: int(x.split('/')[-1].split('_')[0])):
 		print 'PROCESSING: '+str(f)
 		MAT = scipy.io.loadmat(f)
 		LNG = MAT['data']['X'][0][0]
