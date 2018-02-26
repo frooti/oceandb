@@ -15,7 +15,7 @@ DB = CONN['ocean']
 TIDE = DB.tide
 
 ## CONFIG ##
-file_path = 'tide_timeseries.data'
+file_path = '/home/dataraft/projects/oceandb/tide_timeseries.data'
 ## CONFIG ##
 
 START = datetime.now()
@@ -30,7 +30,7 @@ def timeseries():
 			lng, lat = line[0].split(':')
 			data = json.loads(line[1])
 			
-			udpate_dict = {}
+			update_dict = {}
 			for day in data:
 				for mins in data[day]:
 					update_dict['values_'+day+'_'+mins] = data[day][mins]
@@ -43,6 +43,9 @@ def timeseries():
 				bulk = TIDE.initialize_unordered_bulk_op()
 		
 		bulk.execute() # left over
+		print 'completed!'
+		print 'TIME: '+str(datetime.now()-START)
+		
 
 
 if __name__ == '__main__':
