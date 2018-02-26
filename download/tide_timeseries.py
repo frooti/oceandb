@@ -24,6 +24,8 @@ START = datetime.now()
 #@profile
 def timeseries():
 	global date
+	global START
+
 	for f in sorted(glob.glob(file_path), key=lambda x: int(x.split('/')[-1].split('_')[0])):
 		print 'PROCESSING: '+str(f)
 		MAT = scipy.io.loadmat(f)
@@ -54,9 +56,9 @@ def timeseries():
 						DATA[key][day][mins] = value
 	
 	print 'Writing to Output File ...'
-	with open('tide_timeseries.out', 'w') as o:
+	with open('tide_timeseries.out', 'a') as o:
 		for l in DATA:
-			o.write('{}-{}{}'.format(l, json.dumps(DATA[l]), os.linesep))
+			o.write('{}${}{}'.format(l, json.dumps(DATA[l]), os.linesep))
 
 
 	print 'completed!'
