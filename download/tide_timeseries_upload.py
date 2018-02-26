@@ -38,7 +38,7 @@ def timeseries():
 			loc = {'type': 'Point', 'coordinates': [lng, lat]}
 			bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).update({'$set': update_dict})
 
-			if i%1000==0:
+			if i and i%1000==0:
 				bulk.execute() # batch update
 				bulk = TIDE.initialize_unordered_bulk_op()
 		
