@@ -56,7 +56,7 @@ def timeseries():
 						DATA[key][day][mins] = value
 	
 	print 'Writing to Output File ...'
-	with open('tide_timeseries.out', 'a') as o:
+	with open('tide_timeseries.data', 'a') as o:
 		for l in DATA:
 			o.write('{}${}{}'.format(l, json.dumps(DATA[l]), os.linesep))
 

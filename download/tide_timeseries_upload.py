@@ -15,7 +15,7 @@ DB = CONN['ocean']
 TIDE = DB.tide
 
 ## CONFIG ##
-file_path = 'tide_timeseries.out'
+file_path = 'tide_timeseries.data'
 ## CONFIG ##
 
 START = datetime.now()
