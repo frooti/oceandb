@@ -26,7 +26,7 @@ def timeseries():
 	global date
 	global START
 
-	for f in sorted(glob.glob(file_path), key=lambda x: int(x.split('/')[-1].split('_')[0])):
+	for f in sorted(glob.glob(file_path), key=lambda x: int(x.split('/')[-1].split('_')[-1])):
 		print 'PROCESSING: '+str(f)
 		MAT = scipy.io.loadmat(f)
 		LNG = MAT['data']['X'][0][0]
