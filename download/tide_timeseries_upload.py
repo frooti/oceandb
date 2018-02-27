@@ -42,7 +42,7 @@ def timeseries():
 				update_dict['values.'+day] = data[day]
 			update_dict['l'] = loc
 			
-			bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).update({'$set': update_dict})
+			bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': update_dict})
 
 			if i and i%1000==0:
 				bulk.execute() # batch update
