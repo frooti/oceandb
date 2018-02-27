@@ -35,7 +35,7 @@ def timeseries():
 			# 	for mins in data[day]:
 			# 		update_dict['values_'+day+'_'+mins] = data[day][mins]
 
-			udpate_dict = {}
+			update_dict = {}
 			for day in data:
 				update_dict['values_'+day] = data[day]
 
