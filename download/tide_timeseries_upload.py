@@ -30,10 +30,14 @@ def timeseries():
 			lng, lat = line[0].split(':')
 			data = json.loads(line[1])
 			
+			# udpate_dict = {}
+			# for day in data:
+			# 	for mins in data[day]:
+			# 		update_dict['values_'+day+'_'+mins] = data[day][mins]
+
 			udpate_dict = {}
 			for day in data:
-				for mins in data[day]:
-					update_dict['values_'+day+'_'+mins] = data[day][mins]
+				update_dict['values_'+day] = data[day]
 
 			loc = {'type': 'Point', 'coordinates': [lng, lat]}
 			bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).update({'$set': update_dict})
