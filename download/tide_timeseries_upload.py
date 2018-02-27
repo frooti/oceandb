@@ -15,7 +15,7 @@ DB = CONN['ocean']
 TIDE = DB.tide
 
 ## CONFIG ##
-file_path = 'tide_timeseries.data'
+file_path = '/home/dataraft/projects/oceandb/tide_timeseries.data'
 ## CONFIG ##
 
 START = datetime.now()
@@ -39,14 +39,18 @@ def timeseries():
 			for day in data:
 				update_dict['values_'+day] = data[day]
 
-			loc = {'type': 'Point', 'coordinates': [lng, lat]}
+
+			loc = {'type': 'Point', 'coordinates': [float(lng), float(lat)]}
 			bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).update({'$set': update_dict})
 
-			if i%1000==0:
+			if i and i%1000==0:
 				bulk.execute() # batch update
 				bulk = TIDE.initialize_unordered_bulk_op()
 		
 		bulk.execute() # left over
+		print 'completed!'
+		print 'TIME: '+str(datetime.now()-START)
+		
 
 
 if __name__ == '__main__':
