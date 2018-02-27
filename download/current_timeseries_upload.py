@@ -37,7 +37,7 @@ def timeseries():
 
 			update_dict = {}
 			for day in data:
-				update_dict['values_'+day] = data[day]
+				update_dict['values.'+day] = data[day]
 
 
 			loc = {'type': 'Point', 'coordinates': [float(lng), float(lat)]}
