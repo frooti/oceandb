@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 
 ## CONFIG ##
 file_path = '/var/www/dataraft.in/*_jan_tide.mat'
+output_path = 'tide_timeseries.data'
 grid = (720, 1046) # do not edit
 date = datetime(day=1, month=1, year=2018) # GMT
 timestep = timedelta(days=0, hours=0, minutes=20)
@@ -56,7 +57,7 @@ def timeseries():
 						DATA[key][day][mins] = value
 	
 	print 'Writing to Output File ...'
-	with open('tide_timeseries.data', 'a') as o:
+	with open(output_path, 'a') as o:
 		for l in DATA:
 			o.write('{}${}{}'.format(l, json.dumps(DATA[l]), os.linesep))
 
