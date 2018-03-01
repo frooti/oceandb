@@ -45,7 +45,7 @@ def timeseries():
 
 			for i in range(0, grid[0]-1):
 				for j in range(0, grid[1]-1):
-					if not isnan(LNG[i][j]) and  not isnan(LAT[i][j]) and not isnan(VAL[t][i][j]):
+					if not isnan(LNG[i][j]) and  not isnan(LAT[i][j]) and not isnan(XVAL[t][i][j]) and not isnan(YVAL[t][i][j]):t]):
 						longitude = round(float(LNG[i][j]), 3)
 						latitude = round(float(LAT[i][j]), 3)
 						value = round(math.sqrt((XVAL[t][i][j]**2)+(YVAL[t][i][j]**2)), 3)
