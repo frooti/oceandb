@@ -6,12 +6,13 @@ import json
 import gc
 
 import scipy.io
+import math
 from math import isnan
 
 from datetime import datetime, timedelta
 
 ## CONFIG ##
-file_path = '/var/www/dataraft.in/*_current_tide.mat'
+file_path = '/rawdata/current/jan/depth_averaged_velocity_*.mat'
 output_path = 'current_timeseries.data'
 grid = (720, 1046) # do not edit
 date = datetime(day=1, month=1, year=2018) # GMT
