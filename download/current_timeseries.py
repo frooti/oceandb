@@ -48,9 +48,9 @@ def timeseries():
 					if not isnan(LNG[i][j]) and  not isnan(LAT[i][j]) and not isnan(VAL[t][i][j]):
 						longitude = round(float(LNG[i][j]), 3)
 						latitude = round(float(LAT[i][j]), 3)
-						speed = round(math.sqrt((XVAL[t][i][j]**2)+(YVAL[t][i][j]**2)), 3)
-						direction = round(math.degrees(math.atan2(YVAL[t][i][j], XVAL[t][i][j])), 2)
-						value = [speed, direction]
+						value = round(math.sqrt((XVAL[t][i][j]**2)+(YVAL[t][i][j]**2)), 3)
+						#direction = round(math.degrees(math.atan2(YVAL[t][i][j], XVAL[t][i][j])), 2)
+						#value = [speed, direction]
 						
 						key = '{}:{}'.format(longitude, latitude)
 						if key not in DATA:
