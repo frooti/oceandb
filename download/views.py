@@ -181,13 +181,22 @@ def getZone(request):
 def getZoneData(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	zid = request.GET.get('zid', None)
+	month = request.GET.get('month', None)
+
 	try:
 		if zid:
 			z = zone.objects(zid=zid).first()
+			tri = z.triangles
+
+			if z.type=='ztype' and month:
+				for i in range(len(tri)):
+					for j in range(len(tri[i])):
+						if isinstance(tri[i][j], dict):
+							tri[i][j] = tri[i][j][month]
 			if z:
-				res['triangles'] = z.triangles
+				res['triangles'] = tri
 				res['status'] = True
-				res['msg'] = 'success' 
+				res['msg'] = 'success'
 	except Exception,e:
 		print e
 		res['status'] = False
