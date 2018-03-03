@@ -118,8 +118,9 @@ for z in zone.objects(ztype='zone'):
 		vertices = tri_get_vertices('/tmp/visualisation/'+str(z.zid)+'.1.node')
 		triangles = tri_get_triangles('/tmp/visualisation/'+str(z.zid)+'.1.ele')
 		print 'TRIANGLES: '+str(len(triangles))
-		
-		for t in triangles:
+
+		for i, t in enumerate(triangles):
+			print i
 			t = transform_polygon([vertices[i-1] for i in t], origin=origin, reverse=True)
 			rt = [[round(i[0], 6), round(i[1], 6)] for i in t]
 			centroid = [float(sum(col))/len(col) for col in zip(*rt)]
