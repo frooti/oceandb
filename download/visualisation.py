@@ -88,11 +88,11 @@ def monthly_values(values, type=None):
 				except:
 					pass
 				from_day += 1
-			data[m] = highest
+			data[str(m)] = highest
 		else:
 			try:
 				v = values[str(from_day)]['0']
-				data[m] = v
+				data[str(m)] = v
 			except:
 				pass
 	return data
