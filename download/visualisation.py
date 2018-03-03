@@ -8,7 +8,7 @@ import subprocess
 from shapely.geometry import Polygon
 import math
 import numpy as np
-from download.models import zone, wave, wavedirection, waveperiod, bathymetry, tide, current
+from download.models import zone, wave, wavedirection, waveperiod, bathymetry, tide, current, currentdirection
 
 try:
     os.makedirs('/tmp/visualisation')
@@ -63,6 +63,41 @@ def transform_polygon(polygon, origin, reverse=False):
 		return [[round(((v[0]/1.0e6)+origin[0]), 6), round(((v[1]/1.0e6)+origin[1]), 6)] for v in polygon]
 	return [[round((v[0]-origin[0])*1.0e6, 0), round((v[1]-origin[1])*1.0e6, 0)] for v in polygon]
 
+def monthToDate(month):
+	from_date = datetime(day=1, month=int(month), year=2018)
+	to_date = datetime(day=calendar.monthrange(2018, int(month))[1], month=int(month), year=2018)
+	return from_date, to_date
+
+def monthly_values(values, type=None):
+	data = {}
+	year = 2018
+	for m in range(1, 13):
+		from_date, to_date = monthToDate(m)
+		from_day, to_day = from_date.timetuple().tm_yday, to_date.timetuple().tm_yday
+		
+		if type=='high':
+			highest = None
+			while from_day<=to_day:
+				try:
+					for k in values[str(from_day)]:
+						v = values[str(from_day)][k]
+						if v and v>highest:
+							highest = v
+				except:
+					pass
+				from_day += 1
+			data[m] = highest
+		else:
+			try:
+				v = values[str(from_day)]['0']
+				data[m] = v
+			except:
+				pass
+	return data
+
+
+
+
 for z in zone.objects(ztype='zone'):
 	print z.zid
 	data = []
@@ -98,64 +133,49 @@ for z in zone.objects(ztype='zone'):
 				bathy_value = round(q[0].get('depth', 0), 2)
 
 			# waveheight
-			waveheight_value = None
+			waveheight_value = {}
 			w = wave.objects(loc__near=centroid).first()
 			if w:
 				values = w.values
-				day = str(sorted([int(i) for i in values.keys()])[0])
-				hour = str(sorted([int(i) for i in values[day]])[0])
-				waveheight_value = round(values[day][hour], 2) 
-			# pipeline = [
-			# 		{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
-			# 		{ "$group": {"_id": None, "height": { "$avg": "$values.1.0" }} },
-			# 	]
-			# q = list(wave.objects.aggregate(*pipeline))
-			# if q:
-			# 	waveheight_value = round(q[0].get('height', 0), 2)
-
+				waveheight_value = monthly_values(values)
+			
 			# waveperiod
-			waveperiod_value = None
+			waveperiod_value = {}
 			wp = waveperiod.objects(loc__near=centroid).first()
 			if wp:
 				values = wp.values
-				day = str(sorted([int(i) for i in values.keys()])[0])
-				hour = str(sorted([int(i) for i in values[str(day)]])[0])
-				waveperiod_value = round(values[day][hour], 2)
-			# pipeline = [
-			# 		{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
-			# 		{ "$group": {"_id": None, "height": { "$avg": "$values.1.0" }} },
-			# 	]
-			# q = list(waveperiod.objects.aggregate(*pipeline))
-			# if q:
-			# 	waveperiod_value = round(q[0].get('height', 0), 2)
-
+				waveperiod_value = monthly_values(values)
+			
 			# wavedirection
-			wavedirection_value = None
+			wavedirection_value = {}
 			wd = wavedirection.objects(loc__near=centroid).first()
 			if wd:
 				values = wd.values
-				day = str(sorted([int(i) for i in values.keys()])[0])
-				hour = str(sorted([int(i) for i in values[str(day)]])[0])
-				wavedirection_value = round(values[day][hour], 2) 
+				wavedirection_value = monthly_values(values)
 
 			# tide
-			tide_value = None
-			pipeline = [
-					{ "$match": {'l': {'$geoIntersects': {'$geometry': {'type': 'Polygon', 'coordinates': [rt]}}}} },
-					{ "$group": {"_id": None, "height": { "$avg": "$values.121.12" }} },
-				]
-			q = list(tide.objects.aggregate(*pipeline))
-			if q:
-				tide_value = round(q[0].get('height', 0), 2)
+			tide_value = {}
+			t = tide.objects(loc__near=centroid).first()
+			if t:
+				values = t.values
+				tide_value = monthly_values(values)
 
 			# current
-			current_value = None
+			current_value = {}
 			c = current.objects(loc__near=centroid).first()
 			if c:
-				current_value = [round(c.values['121']['12'][0], 3), round(c.values['121']['12'][1], 0)]
+				values = t.values
+				current_value = monthly_values(values)
+
+			# currentdirection
+			currentdirection_value = {}
+			cd = currentdirection.objects(loc__near=centroid).first()
+			if cd:
+				values = cd.values
+				currentdirection_value = monthly_values(values)
 
 
-			data.append([rt, waveheight_value, wavedirection_value, waveperiod_value, bathy_value, tide_value, current_value])
+			data.append([rt, waveheight_value, wavedirection_value, waveperiod_value, bathy_value, tide_value, current_value, currentdirection_value])
 	
 	z.triangles = data
 	z.save()
