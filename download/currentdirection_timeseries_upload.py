@@ -34,14 +34,14 @@ def timeseries():
 			# for day in data:
 			# 	for mins in data[day]:
 			# 		update_dict['values_'+day+'_'+mins] = data[day][mins]
+			loc = {'type': 'Point', 'coordinates': [float(lng), float(lat)]}
 
 			update_dict = {}
 			for day in data:
 				update_dict['values.'+day] = data[day]
+			update_dict['l'] = loc
 
-
-			loc = {'type': 'Point', 'coordinates': [float(lng), float(lat)]}
-			bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).update({'$set': update_dict})
+			bulk.find({'l':{'$geoIntersects': {'$geometry': loc}}}).upsert().update({'$set': update_dict})
 
 			if i and i%1000==0:
 				bulk.execute() # batch update
