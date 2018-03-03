@@ -101,7 +101,7 @@ def monthly_values(values, type=None):
 
 
 for z in zone.objects(ztype='zone'):
-	print z.zid
+	print z.zid, z.name
 	data = []
 	origin = z.polygon['coordinates'][0][0]
 	p = transform_polygon(z.polygon['coordinates'][0], origin=origin)
@@ -117,7 +117,8 @@ for z in zone.objects(ztype='zone'):
 	if 'Writing '+str(z.zid)+'.1.node' and 'Writing '+str(z.zid)+'.1.ele':
 		vertices = tri_get_vertices('/tmp/visualisation/'+str(z.zid)+'.1.node')
 		triangles = tri_get_triangles('/tmp/visualisation/'+str(z.zid)+'.1.ele')
-
+		print 'TRIANGLES: '+str(len(triangles))
+		
 		for t in triangles:
 			t = transform_polygon([vertices[i-1] for i in t], origin=origin, reverse=True)
 			rt = [[round(i[0], 6), round(i[1], 6)] for i in t]
