@@ -4,6 +4,8 @@ import sys
 sys.path.append('/home/dataraft/projects/oceandb')
 sys.stdout.flush()
 
+from datetime import datetime
+import calendar
 import subprocess
 from shapely.geometry import Polygon
 import math
