@@ -26,6 +26,11 @@ from math import isnan
 
 ses = boto3.client('ses', region_name='us-east-1')
 
+### CACHE ###
+from pymemcache.client import base
+MEMCACHE = base.Client(('localhost', 11211))
+### CACHE ###
+
 # utilities
 def default(obj):
     if isinstance(obj, Decimal):
@@ -185,10 +190,17 @@ def getZoneData(request):
 
 	try:
 		if zid:
-			z = zone.objects(zid=zid).fields(triangles=1, ztype=1).first()
-			tri = z.triangles
-
-			if z.ztype=='zone' and month:
+			tri = MEMCACHE.get(zid)
+			if tri:
+				ztype, tri = tri.split(':')
+				tri = json.loads(tri)
+			else:
+				z = zone.objects(zid=zid).fields(triangles=1, ztype=1).first()
+				tri = z.triangles
+				ztype = z.ztype
+				MEMCACHE.set(zid, '{}:{}'.format(z.ztype, json.dumps(tri))
+			
+			if ztype=='zone' and month:
 				for i in range(len(tri)):
 					for j in range(len(tri[i])):
 						if isinstance(tri[i][j], dict):
