@@ -27,6 +27,7 @@ from math import isnan
 ses = boto3.client('ses', region_name='us-east-1')
 
 ### CACHE ###
+import redis
 pool = redis.ConnectionPool(host='localhost', port=6379, db=0)
 REDIS = redis.Redis(connection_pool=pool)
 ### CACHE ###
