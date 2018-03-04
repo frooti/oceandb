@@ -27,8 +27,8 @@ from math import isnan
 ses = boto3.client('ses', region_name='us-east-1')
 
 ### CACHE ###
-from pymemcache.client import base
-MEMCACHE = base.Client(('localhost', 11211))
+pool = redis.ConnectionPool(host='localhost', port=6379, db=0)
+REDIS = redis.Redis(connection_pool=pool)
 ### CACHE ###
 
 # utilities
@@ -190,7 +190,7 @@ def getZoneData(request):
 
 	try:
 		if zid:
-			tri = MEMCACHE.get(zid)
+			tri = REDIS.get(zid)
 			if tri:
 				ztype, tri = tri.split('$')
 				tri = json.loads(tri)
@@ -198,7 +198,8 @@ def getZoneData(request):
 				z = zone.objects(zid=zid).fields(triangles=1, ztype=1).first()
 				tri = z.triangles
 				ztype = z.ztype
-				MEMCACHE.set(zid, '{}${}'.format(z.ztype, json.dumps(tri)))
+				if ztype=='zone':
+					REDIS.set(zid, '{}${}'.format(z.ztype, json.dumps(tri)))
 			
 			if ztype=='zone' and month:
 				for i in range(len(tri)):
