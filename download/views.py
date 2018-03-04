@@ -198,7 +198,7 @@ def getZoneData(request):
 				z = zone.objects(zid=zid).fields(triangles=1, ztype=1).first()
 				tri = z.triangles
 				ztype = z.ztype
-				MEMCACHE.set(zid, '{}:{}'.format(z.ztype, json.dumps(tri))
+				MEMCACHE.set(zid, '{}:{}'.format(z.ztype, json.dumps(tri)))
 			
 			if ztype=='zone' and month:
 				for i in range(len(tri)):
