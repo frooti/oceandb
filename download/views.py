@@ -191,7 +191,7 @@ def getZoneData(request):
 			if z.ztype=='zone' and month:
 				for i in range(len(tri)):
 					for j in range(len(tri[i])):
-						if isinstance(tri[i][j], dict):
+						if type(tri[i][j])==dict:
 							if month in tri[i][j]:
 								tri[i][j] = tri[i][j][month]
 							else:
