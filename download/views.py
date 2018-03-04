@@ -192,7 +192,10 @@ def getZoneData(request):
 				for i in range(len(tri)):
 					for j in range(len(tri[i])):
 						if isinstance(tri[i][j], dict):
-							tri[i][j] = tri[i][j][month]
+							if month in tri[i][j]:
+								tri[i][j] = tri[i][j][month]
+							else:
+								tri[i][j] = None
 			if z:
 				res['triangles'] = tri
 				res['status'] = True
