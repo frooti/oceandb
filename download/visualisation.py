@@ -18,6 +18,12 @@ except OSError as e:
     if e.errno != errno.EEXIST:
         raise 
 
+### CACHE ###
+import redis
+pool = redis.ConnectionPool(host='localhost', port=6379, db=0)
+REDIS = redis.Redis(connection_pool=pool)
+### CACHE ###
+
 def tri_input(polygon):
 	# The outer polyhedron.
 	text = str(len(polygon))+' 2 0 1\n\n' # header
@@ -183,4 +189,6 @@ for z in zone.objects(ztype='zone'):
 	
 	z.triangles = data
 	z.save()
+
+	REDIS.set(z.zid, '{}${}'.format(z.ztype, json.dumps(z.triangles)))
 
