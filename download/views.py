@@ -208,7 +208,7 @@ def getZoneData(request):
 								tri[i][j] = tri[i][j][month]
 							else:
 								tri[i][j] = None
-			if z:
+			if tri:
 				res['triangles'] = tri
 				res['status'] = True
 				res['msg'] = 'success'
