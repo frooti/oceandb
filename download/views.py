@@ -185,8 +185,8 @@ def getZoneData(request):
 
 	try:
 		if zid:
-			z = zone.objects(zid=zid).first()
-			tri = dict(z.triangles)
+			z = zone.objects(zid=zid).fields(triangles=1).first()
+			tri = z.triangles
 
 			if z.ztype=='zone' and month:
 				for i in range(len(tri)):
