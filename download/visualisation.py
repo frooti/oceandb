@@ -20,6 +20,7 @@ except OSError as e:
 
 ### CACHE ###
 import redis
+import json
 pool = redis.ConnectionPool(host='localhost', port=6379, db=0)
 REDIS = redis.Redis(connection_pool=pool)
 ### CACHE ###
