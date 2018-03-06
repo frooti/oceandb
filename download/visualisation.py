@@ -245,18 +245,18 @@ for z in zone.objects(ztype='zone'):
 				cd = t[7].get(str(from_day), None)
 
 				if wh:
-					waveheight_value[from_day] = wh
+					waveheight_value[str(from_day)] = wh
 				if wd:
-					wavedirection_value[from_day] = wd
+					wavedirection_value[str(from_day)] = wd
 				if wp:
-					waveperiod_value[from_day] = wp
+					waveperiod_value[str(from_day)] = wp
 				bathy_value = bm
 				if td:
-					tide_value[from_day] = td
+					tide_value[str(from_day)] = td
 				if cr:
-					current_value[from_day] = cr
+					current_value[str(from_day)] = cr
 				if cd:
-					currentdirection_value[from_day] = cd
+					currentdirection_value[str(from_day)] = cd
 
 				from_day+=1
 
