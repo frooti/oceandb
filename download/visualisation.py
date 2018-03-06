@@ -121,8 +121,8 @@ def daily_values(values, type=None):
 					if (not isnan(v)) and v>highest:
 						highest = v
 				data[day] = highest
-			except Exception, e:
-				print e
+			except:
+				pass
 			from_date+=timedelta(days=1)
 	else:
 		while from_date<=to_date:
