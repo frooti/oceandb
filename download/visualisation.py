@@ -127,7 +127,7 @@ def daily_values(values, type=None):
 	else:
 		while from_date<=to_date:
 			try:
-				day = str(from_date.day)
+				day = str(from_date.timetuple().tm_yday)
 				v = values[day]['0']
 				data[day] = v
 			except:
@@ -206,7 +206,7 @@ for z in zone.objects(ztype='zone'):
 			current_value = {}
 			c = current.objects(loc__near=centroid).first()
 			if c:
-				values = t.values
+				values = c.values
 				current_value = daily_values(values, type='high')
 
 			# currentdirection
