@@ -249,20 +249,21 @@ for z in zone.objects(ztype='zone'):
 				cd = t[7].get(str(from_day), None)
 
 				if wh:
-					waveheight_value[str(from_day)] = wh
+					waveheight_value[str(from_date.day)] = wh
 				if wd:
-					wavedirection_value[str(from_day)] = wd
+					wavedirection_value[str(from_date.day)] = wd
 				if wp:
-					waveperiod_value[str(from_day)] = wp
+					waveperiod_value[str(from_date.day)] = wp
 				bathy_value = bm
 				if td:
-					tide_value[str(from_day)] = td
+					tide_value[str(from_date.day)] = td
 				if cr:
-					current_value[str(from_day)] = cr
+					current_value[str(from_date.day)] = cr
 				if cd:
-					currentdirection_value[str(from_day)] = cd
+					currentdirection_value[str(from_date.day)] = cd
 
 				from_day+=1
+				from_date+= timedelta(days=1)
 
 			monthly_data.append([t[0], waveheight_value, wavedirection_value, waveperiod_value, bathy_value, tide_value, current_value, currentdirection_value])
 
