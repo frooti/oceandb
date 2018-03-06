@@ -4,13 +4,14 @@ import sys
 sys.path.append('/home/dataraft/projects/oceandb')
 sys.stdout.flush()
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import calendar
 import subprocess
 from shapely.geometry import Polygon
 import math
+from math import isnan
 import numpy as np
-from download.models import zone, wave, wavedirection, waveperiod, bathymetry, tide, current, currentdirection
+from download.models import zone, zonedata, wave, wavedirection, waveperiod, bathymetry, tide, current, currentdirection
 
 try:
     os.makedirs('/tmp/visualisation')
@@ -85,9 +86,9 @@ def monthly_values(values, type=None):
 		from_day, to_day = from_date.timetuple().tm_yday, to_date.timetuple().tm_yday
 		
 		if type=='high':
-			highest = None
 			while from_day<=to_day:
 				try:
+					highest = None
 					for k in values[str(from_day)]:
 						v = values[str(from_day)][k]
 						if v and v>highest:
@@ -104,6 +105,36 @@ def monthly_values(values, type=None):
 				pass
 	return data
 
+def daily_values(values, type=None):
+	data = {}
+	today = datetime.now()
+	from_date = datetime(year=today.year, month=1, day=1)
+	to_date = datetime(year=today.year, month=12, day=31)
+
+	if type=='high':
+		while from_date<=to_date:
+			try:
+				highest = None
+				day = str(from_date.timetuple().tm_yday)
+				for t in values[day]:
+					v = values[day][t]
+					if (not isnan(v)) and v>highest:
+						highest = v
+				data[day] = highest
+			except Exception, e:
+				print e
+			from_date+=timedelta(days=1)
+	else:
+		while from_date<=to_date:
+			try:
+				day = str(from_date.day)
+				v = values[day]['0']
+				data[day] = v
+			except:
+				pass
+			from_date+=timedelta(days=1)
+		
+	return data
 
 
 
@@ -148,48 +179,94 @@ for z in zone.objects(ztype='zone'):
 			w = wave.objects(loc__near=centroid).first()
 			if w:
 				values = w.values
-				waveheight_value = monthly_values(values)
+				waveheight_value = daily_values(values, type='high')
 			
 			# waveperiod
 			waveperiod_value = {}
 			wp = waveperiod.objects(loc__near=centroid).first()
 			if wp:
 				values = wp.values
-				waveperiod_value = monthly_values(values)
+				waveperiod_value = daily_values(values)
 			
 			# wavedirection
 			wavedirection_value = {}
 			wd = wavedirection.objects(loc__near=centroid).first()
 			if wd:
 				values = wd.values
-				wavedirection_value = monthly_values(values)
+				wavedirection_value = daily_values(values)
 
 			# tide
 			tide_value = {}
 			t = tide.objects(loc__near=centroid).first()
 			if t:
 				values = t.values
-				tide_value = monthly_values(values)
+				tide_value = daily_values(values, type='high')
 
 			# current
 			current_value = {}
 			c = current.objects(loc__near=centroid).first()
 			if c:
 				values = t.values
-				current_value = monthly_values(values)
+				current_value = daily_values(values, type='high')
 
 			# currentdirection
 			currentdirection_value = {}
 			cd = currentdirection.objects(loc__near=centroid).first()
 			if cd:
 				values = cd.values
-				currentdirection_value = monthly_values(values)
+				currentdirection_value = daily_values(values)
 
 
 			data.append([rt, waveheight_value, wavedirection_value, waveperiod_value, bathy_value, tide_value, current_value, currentdirection_value])
 	
-	z.triangles = data
-	z.save()
+	### PRE PROCESS ###
+	for m in range(1, 13):
+		monthly_data = []
 
-	REDIS.set(z.zid, '{}${}'.format(z.ztype, json.dumps(z.triangles)))
+		for t in data:
+			from_date, to_date = monthToDate(m)
+			from_day, to_day = from_date.timetuple().tm_yday, to_date.timetuple().tm_yday
+			
+			bathy_value = None
+			waveheight_value = {}
+			waveperiod_value = {}
+			wavedirection_value = {}
+			tide_value = {}
+			current_value = {}
+			currentdirection_value = {}
 
+			while from_day<=to_day:
+				wh = t[1].get(str(from_day), None)
+				wd = t[2].get(str(from_day), None)
+				wp = t[3].get(str(from_day), None)
+				bm = t[4]
+				td = t[5].get(str(from_day), None)
+				cr = t[6].get(str(from_day), None)
+				cd = t[7].get(str(from_day), None)
+
+				if wh:
+					waveheight_value[from_day] = wh
+				if wd:
+					wavedirection_value[from_day] = wd
+				if wp:
+					waveperiod_value[from_day] = wp
+				bathy_value = bm
+				if td:
+					tide_value[from_day] = td
+				if cr:
+					current_value[from_day] = cr
+				if cd:
+					currentdirection_value[from_day] = cd
+
+				from_day+=1
+
+			monthly_data.append([t[0], waveheight_value, wavedirection_value, waveperiod_value, bathy_value, tide_value, current_value, currentdirection_value])
+
+		zd = zonedata()
+		zd.zid = z.zid
+		zd.month = m
+		zd.triangles = monthly_data
+		zd.save()
+
+		## cache ##
+		REDIS.set(z.zid+'_'+str(month), '{}${}'.format(z.ztype, json.dumps(z.triangles)))

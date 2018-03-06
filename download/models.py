@@ -20,6 +20,14 @@ class zone(Document):
 	date = DateTimeField(db_field='dt', default=datetime.now)
 	created_at = DateTimeField(db_field='ct', default=datetime.now)
 
+class zonedata(Document):
+	zid = StringField(db_field='zid', max_length=50, required=True)
+	month = IntField(db_field='m', required=True)
+	triangles = ListField(db_field='tr', required=True)
+	meta = {
+        'indexes': [[("zid", 1), ("month", 1)]]
+    }
+
 class userzone(Document):
 	uzid = StringField(db_field='uzid', max_length=50, required=True)
 	email = StringField(db_field='e', max_length=200, required=True)
