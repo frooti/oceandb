@@ -220,6 +220,10 @@ for z in zone.objects(ztype='zone'):
 			data.append([rt, waveheight_value, wavedirection_value, waveperiod_value, bathy_value, tide_value, current_value, currentdirection_value])
 	
 	### PRE PROCESS ###
+
+	# delete existing data
+	zonedata.objects(zid=z.zid).delete()
+
 	for m in range(1, 13):
 		monthly_data = []
 
@@ -269,4 +273,4 @@ for z in zone.objects(ztype='zone'):
 		zd.save()
 
 		## cache ##
-		REDIS.set(z.zid+'_'+str(month), '{}${}'.format(z.ztype, json.dumps(z.triangles)))
+		REDIS.set(z.zid+'_'+str(m), '{}${}'.format(z.ztype, json.dumps(z.triangles)))
