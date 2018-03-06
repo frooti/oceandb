@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from models import zone, userzone, order, wave, wavedirection, waveperiod, bathymetry, userbathymetry, shoreline, usershoreline, tide, current, currentdirection
+from models import zone, zonedata, userzone, order, wave, wavedirection, waveperiod, bathymetry, userbathymetry, shoreline, usershoreline, tide, current, currentdirection
 import boto3
 from django.core.mail import EmailMultiAlternatives
 from django.views.decorators.csrf import csrf_exempt
@@ -188,26 +188,26 @@ def getZoneData(request):
 	res = json.loads(DEFAULT_RESPONSE)
 	zid = request.GET.get('zid', None)
 	month = request.GET.get('month', None)
-
+	day = request.GET.get('day', None)
 	try:
 		if zid:
-			tri = REDIS.get(zid)
+			tri = REDIS.get(zid+'_'+month)
 			if tri:
 				ztype, tri = tri.split('$')
 				tri = json.loads(tri)
 			else:
-				z = zone.objects(zid=zid).fields(triangles=1, ztype=1).first()
+				z = zonedata.objects(zid=zid, month=month).first()
 				tri = z.triangles
 				ztype = z.ztype
 				if ztype=='zone':
-					REDIS.set(zid, '{}${}'.format(z.ztype, json.dumps(tri)))
+					REDIS.set(zid+'_'+month, '{}${}'.format(z.ztype, json.dumps(tri)))
 			
-			if ztype=='zone' and month:
+			if ztype=='zone' and month and day:
 				for i in range(len(tri)):
 					for j in range(len(tri[i])):
 						if isinstance(tri[i][j], dict):
-							if month in tri[i][j]:
-								tri[i][j] = tri[i][j][month]
+							if month in tri[i][j] and day in tri[i][j][month]:
+								tri[i][j] = tri[i][j][month][day]
 							else:
 								tri[i][j] = None
 			if tri:
