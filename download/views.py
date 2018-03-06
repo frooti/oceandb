@@ -190,7 +190,7 @@ def getZoneData(request):
 	month = request.GET.get('month', None)
 	day = request.GET.get('day', None)
 	try:
-		if zid:
+		if zid and month and day:
 			tri = REDIS.get(zid+'_'+month)
 			if tri:
 				ztype, tri = tri.split('$')
@@ -206,8 +206,8 @@ def getZoneData(request):
 				for i in range(len(tri)):
 					for j in range(len(tri[i])):
 						if isinstance(tri[i][j], dict):
-							if month in tri[i][j] and day in tri[i][j][month]:
-								tri[i][j] = tri[i][j][month][day]
+							if day in tri[i][j]:
+								tri[i][j] = tri[i][j][day]
 							else:
 								tri[i][j] = None
 			if tri:
