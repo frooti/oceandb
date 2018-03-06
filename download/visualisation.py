@@ -274,4 +274,4 @@ for z in zone.objects(ztype='zone'):
 		zd.save()
 
 		## cache ##
-		REDIS.set(str(z.zid)+'_'+str(m), '{}${}'.format(z.ztype, json.dumps(z.triangles)))
+		REDIS.set(str(z.zid)+'_'+str(m), '{}${}'.format(z.ztype, json.dumps(zd.triangles)))
