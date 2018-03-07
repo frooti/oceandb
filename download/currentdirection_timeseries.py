@@ -50,7 +50,8 @@ def timeseries():
 						longitude = round(float(LNG[i][j]), 3)
 						latitude = round(float(LAT[i][j]), 3)
 						value = round(math.degrees(math.atan2(YVAL[t][i][j], XVAL[t][i][j])), 2)
-						
+						if value<0:
+							value = 360+value
 						key = '{}:{}'.format(longitude, latitude)
 						if key not in DATA:
 							DATA[key] = {}
