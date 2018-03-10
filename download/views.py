@@ -217,10 +217,11 @@ def getZoneData(request):
 		elif zid: # bathymetry
 			z = zone.objects(zid=zid).first()
 			tri = z.triangles
-			
+
 			if tri:
 				res['triangles'] = tri
 				res['status'] = True
+				res['msg'] = 'success'
 	except Exception,e:
 		print e
 		res['status'] = False
