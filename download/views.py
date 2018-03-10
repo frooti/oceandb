@@ -190,7 +190,7 @@ def getZoneData(request):
 	month = request.GET.get('month', None)
 	day = request.GET.get('day', None)
 	try:
-		if zid and month and day:
+		if zid and month and day: # zone
 			tri = REDIS.get(zid+'_'+month)
 			if tri:
 				ztype, tri = tri.split('$')
@@ -202,7 +202,7 @@ def getZoneData(request):
 				if ztype=='zone':
 					REDIS.set(zid+'_'+month, '{}${}'.format(z.ztype, json.dumps(tri)))
 			
-			if ztype=='zone' and month and day:
+			if ztype=='zone':
 				for i in range(len(tri)):
 					for j in range(len(tri[i])):
 						if isinstance(tri[i][j], dict):
@@ -214,6 +214,13 @@ def getZoneData(request):
 				res['triangles'] = tri
 				res['status'] = True
 				res['msg'] = 'success'
+		elif zid: # bathymetry
+			z = zone.objects(zid=zid).first()
+			tri = z.triangles
+			
+			if tri:
+				res['triangles'] = tri
+				res['status'] = True
 	except Exception,e:
 		print e
 		res['status'] = False
