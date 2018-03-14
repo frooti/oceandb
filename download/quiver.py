@@ -4,6 +4,8 @@ sys.stdout.flush()
 import math
 import numpy as np
 import scipy.io
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from download.models import zone, zonedata, wave, wavedirection, waveperiod, bathymetry, tide, current, currentdirection
 
@@ -53,5 +55,6 @@ for z in zone.objects(zid='b951a954-f3f7-44f6-80a6-0194cbee50a1'):
 		U.append(u)
 		V.append(v)
 
-	Q = plt.quiver(X, Y, U, V)
+	plt.quiver(X, Y, U, V)
+	plt.axis('off')
 	plt.savefig('quiver.png', transparent=True)
