@@ -1,14 +1,17 @@
+import sys 
+sys.path.append('/home/dataraft/projects/oceandb')
+sys.stdout.flush()
 import math
 import numpy as np
 import scipy.io
 import matplotlib.pyplot as plt
 from download.models import zone, zonedata, wave, wavedirection, waveperiod, bathymetry, tide, current, currentdirection
 
-grid_path = '/Users/ravi/Desktop/current/uv/1_jan_current.mat'
+# grid_path = '/Users/ravi/Desktop/current/uv/1_jan_current.mat'
 
-MAT = scipy.io.loadmat(grid_path)
-X = MAT['data']['X'][0][0]
-Y = MAT['data']['Y'][0][0]
+# MAT = scipy.io.loadmat(grid_path)
+# X = MAT['data']['X'][0][0]
+# Y = MAT['data']['Y'][0][0]
 # XVAL = MAT['data']['XComp'][0][0][0]
 # YVAL = MAT['data']['YComp'][0][0][0]
 # Q = plt.quiver(LNG, LAT, XVAL, YVAL)
