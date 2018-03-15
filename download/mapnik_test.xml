@@ -2,7 +2,7 @@
 
   <Style name="Current Style">
     <Rule>
-      <PointSymbolizer file="arrow_north.svg" transform="rotate([d]" /> 
+      <PointSymbolizer file="arrow_north.svg" transform="rotate([d])" /> 
     </Rule>
   </Style>
 
