@@ -1,0 +1,17 @@
+<Map background-color="#00000000" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+
+  <Style name="Current Style">
+    <Rule>
+      <PointSymbolizer file="arrow_north.svg" transform="rotate([d]" /> 
+    </Rule>
+  </Style>
+
+  <Layer name="current" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+    <StyleName>Current Style</StyleName>
+    <Datasource>
+      <Parameter name="type">geojson</Parameter>
+      <Parameter name="file">feature_collection.json</Parameter>
+    </Datasource>
+  </Layer>
+
+</Map>
