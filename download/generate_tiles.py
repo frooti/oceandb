@@ -204,4 +204,5 @@ if __name__ == "__main__":
     if not tile_dir.endswith('/'):
         tile_dir = tile_dir + '/'
 
+    bbox = (80.0408936, 13.3896196, 87.5170898, 19.1218145)
     render_tiles(bbox, mapfile, tile_dir, 0, 19, 'andhrapradesh')
