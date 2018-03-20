@@ -79,6 +79,12 @@ class tide(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
 
+class tide_visualisation(Document):
+	zid = StringField(db_field='zid', max_length=50, required=True)
+	polygon = PolygonField(db_field='pl', required=True)
+	date = DateTimeField(db_field='dt', required=True)
+	depth = FloatField(db_field='d', required=True)
+
 class wind(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
