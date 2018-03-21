@@ -76,7 +76,7 @@ def visualisation():
 							o.write(output_line+'\n')
 
 					date += timestep
-					if date.day>=2:
+					if date.hour>=4:
 						break
 
 if __name__ == '__main__':
