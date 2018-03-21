@@ -53,7 +53,7 @@ def visualisation():
 						element += 1
 						polygon = {'type': 'Polygon', 'coordinates': [[NODES[n][:-1] for n in line]]}
 						polygon['coordinates'][0] += [polygon['coordinates'][0][0]]   
-						depth = np.mean([NODES[n][-1] for n in line])
+						depth = round(np.mean([NODES[n][-1] for n in line]), 2)
 						output_line = json.dumps(polygon)+'$$'+str(depth)
 						o.write(output_line+'\n')
 					except Exception, e:
