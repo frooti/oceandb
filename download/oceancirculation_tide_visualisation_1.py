@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 
 ## CONFIG ##
 file_path = '/tmp/kk.dat'
-output_path = 'oceancirculatin_tide_visualisation.data'
+output_path = 'oceancirculation_tide_visualisation.data'
 date = datetime(day=1, month=1, year=2018) # GMT
 timestep = timedelta(days=0, hours=2, minutes=0)
 UTM_ZONE = 45 

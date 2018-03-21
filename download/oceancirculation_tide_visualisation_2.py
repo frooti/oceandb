@@ -21,8 +21,6 @@ START = datetime.now()
 
 def upload():
 	with open(file_path) as f:
-		bulk = TIDE_VIS.initialize_unordered_bulk_op()
-
 		objects = []
 		for i, line in enumerate(f):
 			print i
@@ -34,10 +32,10 @@ def upload():
 			objects.append({'zid':zid, 'p':polygon, 'd':depth, 'dt':date})
 			
 			if i%1000==0:
-				bulk.insert_many(objects) # batch insert
+				TIDE_VIS.insert_many(objects) # batch insert
 				objects = []
 
-		bulk.insert_many(objects) # left over
+		TIDE_VIS.insert_many(objects) # left over
 		print 'completed!'
 		print 'TIME: '+str(datetime.now()-START)
 
