@@ -12,7 +12,7 @@ from math import isnan
 from datetime import datetime, timedelta
 
 ## CONFIG ##
-file_path = '/var/www/dataraft.in/1_jan_tide.mat'
+file_path = '/tmp/sam_kol.data'
 output_path = 'oceancirculatin_tide_visualisation.data'
 date = datetime(day=1, month=1, year=2018) # GMT
 timestep = timedelta(days=0, hours=2, minutes=0)
@@ -32,7 +32,7 @@ def visualisation():
 
 	with open(output_path, 'a') as o:
 		with open(file_path, 'r') as f:
-			print 'PROCESSING: '+str(f)
+			print 'PROCESSING: '+str(file_path)
 
 			node = 0
 			element = 0
