@@ -36,8 +36,8 @@ def visualisation():
 		with open(file_path, 'r') as f:
 			print 'PROCESSING: '+str(file_path)
 
-			node = 1
-			element = 1
+			node = 0
+			element = 0
 			for line in f:
 				line = line.strip().split(' ')
 				if len(line)==9 or len(line)==4: # NODE
@@ -64,7 +64,7 @@ def visualisation():
 						print e
 
 				if node==NODE_COUNT:
-					node = 1
+					node = 0
 					
 					# write to ourput
 					for E in ELEMENTS:
