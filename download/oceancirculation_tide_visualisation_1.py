@@ -21,7 +21,7 @@ NODE_COUNT = 68604
 ELEMENT_COUNT = 134659
 ## CONFIG ##
 
-NODES = []
+NODES = [[] for i in range(0, NODE_COUNT)]
 
 START = datetime.now()
 
