@@ -64,6 +64,9 @@ def visualisation():
 						print e
 
 				if node==NODE_COUNT:
+					if len(line)==9: # populate ELEMENTS
+						continue
+
 					node = 0
 					
 					# write to ourput
