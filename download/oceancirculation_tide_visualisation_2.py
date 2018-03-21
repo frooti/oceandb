@@ -29,7 +29,7 @@ def upload():
 			depth = float(line[1])
 			date = dateutil.parser.parse(line[2])
 
-			objects.append({'zid':zid, 'p':polygon, 'd':depth, 'dt':date})
+			objects.append({'zid':zid, 'pl':polygon, 'd':depth, 'dt':date})
 			
 			if i%1000==0:
 				TIDE_VIS.insert_many(objects) # batch insert
