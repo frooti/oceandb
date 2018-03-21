@@ -63,10 +63,7 @@ def visualisation():
 					except Exception, e:
 						print e
 
-				if node==NODE_COUNT:
-					if len(line)==9: # populate ELEMENTS
-						continue
-
+				if element==ELEMENT_COUNT and node==NODE_COUNT:
 					node = 0
 					
 					# write to ourput
