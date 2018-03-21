@@ -45,7 +45,7 @@ def visualisation():
 						if len(line)==9:
 							line = [float(i) for i in line]
 							node += 1
-							lng, lat = utm.to_latlon(line[0], line[1], UTM_ZONE, 'U')
+							lat, lng = utm.to_latlon(line[0], line[1], UTM_ZONE, 'U')
 							depth = line[2]
 							NODES[node] = [lng, lat, depth]
 						elif len(line)==4:
