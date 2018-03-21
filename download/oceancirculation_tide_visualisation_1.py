@@ -12,7 +12,7 @@ from math import isnan
 from datetime import datetime, timedelta
 
 ## CONFIG ##
-file_path = '/tmp/sam_kol.data'
+file_path = '/tmp/sam_kol.dat'
 output_path = 'oceancirculatin_tide_visualisation.data'
 date = datetime(day=1, month=1, year=2018) # GMT
 timestep = timedelta(days=0, hours=2, minutes=0)
@@ -37,7 +37,7 @@ def visualisation():
 			node = 0
 			element = 0
 			for line in f:
-				line = line.split(' ')
+				line = line.strip().split(' ')
 				if len(line)==11: # NODE
 					try:
 						line = [float(i) for i in line]
