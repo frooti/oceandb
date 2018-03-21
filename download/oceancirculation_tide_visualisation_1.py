@@ -74,8 +74,10 @@ def visualisation():
 							depth = round(np.mean([NODES[n][-1] for n in E]), 2)
 							output_line = json.dumps(polygon)+'$$'+str(depth)+'$$'+date.isoformat()
 							o.write(output_line+'\n')
-					
-					date += timestep					
+
+					date += timestep
+					if date.day>=2:
+						break
 
 if __name__ == '__main__':
 	visualisation()
