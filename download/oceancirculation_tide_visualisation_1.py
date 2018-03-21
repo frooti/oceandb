@@ -69,7 +69,7 @@ def visualisation():
 					# write to ourput
 					for E in ELEMENTS:
 						if E:
-							polygon = {'type': 'Polygon', 'coordinates': [[NODES[n][:-1] for n in E]}
+							polygon = {'type': 'Polygon', 'coordinates': [[NODES[n][:-1] for n in E]]}
 							polygon['coordinates'][0] += [polygon['coordinates'][0][0]]
 							depth = round(np.mean([NODES[n][-1] for n in E]), 2)
 							output_line = json.dumps(polygon)+'$$'+str(depth)+'$$'+date.isoformat()
