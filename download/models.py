@@ -85,7 +85,7 @@ class tide_visualisation(Document):
 	date = DateTimeField(db_field='dt', required=True)
 	depth = FloatField(db_field='d', required=True)
 	meta = {
-        'indexes': [[("polygon", "2dsphere"), ("zid", 1), ("date", 1)]]
+        'indexes': [[("pl", "2dsphere"), ("zid", 1), ("dt", 1)]]
     }
 
 class wind(Document):
