@@ -66,18 +66,17 @@ def visualisation():
 				if element==ELEMENT_COUNT and node==NODE_COUNT:
 					node = 0
 					
-					# write to ourput
-					for E in ELEMENTS:
-						if E:
-							polygon = {'type': 'Polygon', 'coordinates': [[NODES[n][:-1] for n in E]]}
-							polygon['coordinates'][0] += [polygon['coordinates'][0][0]]
-							depth = round(np.mean([NODES[n][-1] for n in E]), 2)
-							output_line = json.dumps(polygon)+'$$'+str(depth)+'$$'+date.isoformat()
-							o.write(output_line+'\n')
+					if date.hour==0:
+						# write to ourput
+						for E in ELEMENTS:
+							if E:
+								polygon = {'type': 'Polygon', 'coordinates': [[NODES[n][:-1] for n in E]]}
+								polygon['coordinates'][0] += [polygon['coordinates'][0][0]]
+								depth = round(np.mean([NODES[n][-1] for n in E]), 2)
+								output_line = json.dumps(polygon)+'$$'+str(depth)+'$$'+date.isoformat()
+								o.write(output_line+'\n')
 
 					date += timestep
-					if date.hour>=4:
-						break
 
 if __name__ == '__main__':
 	visualisation()
