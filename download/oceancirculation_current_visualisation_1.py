@@ -62,7 +62,7 @@ def visualisation():
 							line = [float(i) for i in line]
 							node += 1
 							u, v = line[1], line[2]
-							speed = math.sqrt(u^2+v^2)
+							speed = math.sqrt(u**2+v**2)
 							direction = round(math.degrees(math.atan2(v, u)), 2)
 							# Nautical convention
 							if direction>0 and direction<=90:
