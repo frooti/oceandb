@@ -45,7 +45,7 @@ def visualisation():
 							node += 1
 							lat, lng = utm.to_latlon(line[0], line[1], UTM_ZONE, 'U')
 							u, v = line[3], line[4]
-							speed = math.sqrt(u^2+v^2)
+							speed = math.sqrt(u**2+v**2)
 							direction = round(math.degrees(math.atan2(v, u)), 2)
 							# Nautical convention
 							if direction>0 and direction<=90:
