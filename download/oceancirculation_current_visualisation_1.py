@@ -53,9 +53,9 @@ def visualisation():
 							elif direction>90 and direction<=180:
 								direction = 450-direction
 							elif direction>-90 and direction<=0:
-								direction = 90+math.abs(direction)
+								direction = 90+abs(direction)
 							elif direction>-180 and direction<=-90:
-								 direction = 90+math.abs(direction)
+								 direction = 90+abs(direction)
 
 							NODES[node] = [lng, lat, speed, direction]
 						elif len(line)==4:
@@ -70,9 +70,9 @@ def visualisation():
 							elif direction>90 and direction<=180:
 								direction = 450-direction
 							elif direction>-90 and direction<=0:
-								direction = 90+math.abs(direction)
+								direction = 90+abs(direction)
 							elif direction>-180 and direction<=-90:
-								 direction = 90+math.abs(direction)
+								 direction = 90+abs(direction)
 							NODES[node][2] = speed
 							NODES[node][3] = direction
 					except Exception, e:
