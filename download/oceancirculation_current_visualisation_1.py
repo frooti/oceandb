@@ -88,7 +88,7 @@ def visualisation():
 								point = {'type': 'Point', 'coordinates': n[:-2]}
 								speed = n[2]
 								direction = n[3]
-								output_line = json.dumps(polygon)+'$$'+str(speed)+'$$'+str(direction)+'$$'+date.isoformat()
+								output_line = json.dumps(point)+'$$'+str(speed)+'$$'+str(direction)+'$$'+date.isoformat()
 								o.write(output_line+'\n')
 
 					date += timestep
