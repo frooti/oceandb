@@ -85,9 +85,9 @@ def visualisation():
 						# write to ourput
 						for n in NODES:
 							if n:
-								point = {'type': 'Point', 'coordinates': NODES[n][:-2]}
-								speed = NODES[n][2]
-								direction = NODES[n][3]
+								point = {'type': 'Point', 'coordinates': n[:-2]}
+								speed = n[2]
+								direction = n[3]
 								output_line = json.dumps(polygon)+'$$'+str(speed)+'$$'+str(direction)+'$$'+date.isoformat()
 								o.write(output_line+'\n')
 
