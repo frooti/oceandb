@@ -7,6 +7,7 @@ import gc
 import numpy as np
 import utm
 
+import math
 from math import isnan
 
 from datetime import datetime, timedelta
