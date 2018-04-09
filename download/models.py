@@ -75,7 +75,7 @@ class currentdirection(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
 
-class currentvisualisation(Document):
+class current_visualisation(Document):
 	zid = StringField(db_field='zid', max_length=50, required=True)
 	loc =  PointField(db_field='l', required=True)
 	date = DateTimeField(db_field='dt', required=True)
