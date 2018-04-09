@@ -33,7 +33,7 @@ def visualisation():
 				for p in points:
 					values.append(p['values']['1']['0'])
 
-				tv = tidevisualisation(zid=z.zid)
+				tv = tide_visualisation(zid=z.zid)
 				tv.date = datetime(year=2018, month=1, day=1)
 				tv.polygon = mapping(e)
 				tv.depth = mean(values)
