@@ -67,6 +67,25 @@ class waveperiod(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
 
+class wave_visualisation(Document):
+	zid = StringField(db_field='zid', max_length=50, required=True)
+	polygon = PolygonField(db_field='pl', required=True)
+	date = DateTimeField(db_field='dt', required=True)
+	height = FloatField(db_field='d', required=True)
+	meta = {
+        'indexes': [[("pl", "2dsphere"), ("zid", 1), ("dt", 1)]]
+    }
+
+class wavedirection_visualisation(Document):
+	zid = StringField(db_field='zid', max_length=50, required=True)
+	loc =  PointField(db_field='l', required=True)
+	date = DateTimeField(db_field='dt', required=True)
+	height = FloatField(db_field='h', required=True)
+	direction = FloatField(db_field='d', required=True)
+	meta = {
+        'indexes': [[("l", "2dsphere"), ("zid", 1), ("dt", 1)]]
+    }
+
 class current(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
