@@ -19,9 +19,9 @@ def visualisation():
 		for j in GRID[1]:
 			if i!=GRID[0]-1 and j!=GRID[1]-1:
 				p1 = [round(longitude1+(longitude_delta*j), 3), round(latitude1+(latitude_delta*i), 3)]
-				p2 = [round(longitude1+(longitude_delta*j+1), 3), round(latitude1+(latitude_delta*i), 3)]
-				p3 = [round(longitude1+(longitude_delta*j+1), 3), round(latitude1+(latitude_delta*i-1), 3)]
-				p4 = [round(longitude1+(longitude_delta*j), 3), round(latitude1+(latitude_delta*i-1), 3)]
+				p2 = [round(longitude1+(longitude_delta*(j+1)), 3), round(latitude1+(latitude_delta*i), 3)]
+				p3 = [round(longitude1+(longitude_delta*(j+1)), 3), round(latitude1+(latitude_delta*(i+1)), 3)]
+				p4 = [round(longitude1+(longitude_delta*j), 3), round(latitude1+(latitude_delta*(i+1)), 3)]
 				elements.append(asShape({'type': 'Polygon', 'coordinates': [[p1, p2, p3, p4, p1]]}))
 
 	for z in zone.objects(zid='b951a954-f3f7-44f6-80a6-0194cbee50a1'):

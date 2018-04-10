@@ -126,6 +126,14 @@ class bathymetry(Document):
 	depth = FloatField(db_field='d', required=True)
 	zid = StringField(db_field='zid', max_length=50, required=True)
 
+class bathymetry_visualisation(Document):
+	zid = StringField(db_field='zid', max_length=50, required=True)
+	polygon = PolygonField(db_field='pl', required=True)
+	depth = FloatField(db_field='d', required=True)
+	meta = {
+        'indexes': [[("pl", "2dsphere"), ("zid", 1), ("dt", 1)]]
+    }
+
 class shoreline(Document):
 	lid = StringField(db_field='uzid', max_length=50, required=True)
 	line = LineStringField(db_field='ln', auto_index=True, required=True)
