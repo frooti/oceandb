@@ -29,15 +29,16 @@ def visualisation():
 		for e in elements:
 			if e.intersects(zpolygon):
 				points = [t for t in tide.objects(loc__geo_intersects=mapping(e))]
-				values = []
-				for p in points:
-					values.append(p['values']['1']['0'])
+				for i in range(1,366):
+					values = []
+					for p in points:
+						values.append(p['values'][str(i)]['0'])
 
-				tv = tide_visualisation(zid=z.zid)
-				tv.date = datetime(year=2018, month=1, day=1)
-				tv.polygon = mapping(e)
-				tv.depth = mean(values)
-				tv.save()
+					tv = tide_visualisation(zid=z.zid)
+					tv.date = datetime(year=2018, month=1, day=i)
+					tv.polygon = mapping(e)
+					tv.depth = mean(values)
+					tv.save()
 
 if __name__ == '__main__':
 	visualisation()
