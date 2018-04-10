@@ -29,16 +29,17 @@ def visualisation():
 		for e in elements:
 			if e.intersects(zpolygon):
 				points = [w for w in wave.objects(loc__geo_intersects=mapping(e))]
-				for i in range(1,366):
-					values = []
-					for p in points:
-						values.append(p['values'][str(i)]['0'])
+				if points:
+					for i in range(1,366):
+						values = []
+						for p in points:
+							values.append(p['values'][str(i)]['0'])
 
-					wv = wave_visualisation(zid=z.zid)
-					wv.date = datetime(year=2018, month=1, day=i)
-					wv.polygon = mapping(e)
-					wv.height = mean(values)
-					wv.save()
+						wv = wave_visualisation(zid=z.zid)
+						wv.date = datetime(year=2018, month=1, day=i)
+						wv.polygon = mapping(e)
+						wv.height = mean(values)
+						wv.save()
 
 if __name__ == '__main__':
 	visualisation()

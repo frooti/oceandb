@@ -27,13 +27,14 @@ def visualisation():
 				point = current.objects(loc__geo_intersects=mapping(e)).first()
 				point2 = currentdirection.objects(loc__geo_intersects=mapping(e)).first()
 
-				for i in range(1,366):
-					cv = current_visualisation(zid=z.zid)
-					cv.date = datetime(year=2018, month=1, day=i)
-					cv.loc = mapping(e)
-					cv.speed = point['values'][str(i)]['0']
-					cv.direction = point2['values'][str(i)]['0']
-					cv.save()
+				if point and point2:
+					for i in range(1,366):
+						cv = current_visualisation(zid=z.zid)
+						cv.date = datetime(year=2018, month=1, day=i)
+						cv.loc = mapping(e)
+						cv.speed = point['values'][str(i)]['0']
+						cv.direction = point2['values'][str(i)]['0']
+						cv.save()
 
 if __name__ == '__main__':
 	visualisation()

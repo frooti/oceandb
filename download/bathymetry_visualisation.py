@@ -30,15 +30,15 @@ def visualisation():
 		for e in elements:
 			if e.intersects(zpolygon):
 				points = [b for b in bathymetry.objects(loc__geo_intersects=mapping(e))]
-				
-				values = []
-				for p in points:
-					values.append(p.depth)
+				if points:
+					values = []
+					for p in points:
+						values.append(p.depth)
 
-				bv = wave_visualisation(zid=z.zid)
-				bv.polygon = mapping(e)
-				bv.depth = mean(values)
-				bv.save()
+					bv = wave_visualisation(zid=z.zid)
+					bv.polygon = mapping(e)
+					bv.depth = mean(values)
+					bv.save()
 
 if __name__ == '__main__':
 	visualisation()

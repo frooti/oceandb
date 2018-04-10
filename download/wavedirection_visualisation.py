@@ -27,13 +27,14 @@ def visualisation():
 				point = wave.objects(loc__geo_intersects=mapping(e)).first()
 				point2 = wavedirection.objects(loc__geo_intersects=mapping(e)).first()
 				
-				for i in range(1,366):
-					wdv = wavedirection_visualisation(zid=z.zid)
-					wdv.date = datetime(year=2018, month=1, day=i)
-					wdv.loc = mapping(e)
-					wdv.height = point['values'][str(i)]['0']
-					wdv.direction = point2['values'][str(i)]['0']
-					wdv.save()
+				if point and point2:
+					for i in range(1,366):
+						wdv = wavedirection_visualisation(zid=z.zid)
+						wdv.date = datetime(year=2018, month=1, day=i)
+						wdv.loc = mapping(e)
+						wdv.height = point['values'][str(i)]['0']
+						wdv.direction = point2['values'][str(i)]['0']
+						wdv.save()
 
 if __name__ == '__main__':
 	visualisation()
