@@ -47,7 +47,7 @@ with open(file_path, 'r') as f:
 					zid = z.zid
 			if zid:
 				for i in range(1, 13):
-					month = i
+					month = str(i)
 					quantity = float(values[i+3])
 					if quantity:
 						loc = {'type': 'Point', 'coordinates': [longitute, latitude]}
