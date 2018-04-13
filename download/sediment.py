@@ -51,7 +51,7 @@ with open(file_path, 'r') as f:
 					quantity = float(values[i+3])
 					if quantity:
 						loc = {'type': 'Point', 'coordinates': [longitute, latitude]}
-						data.append(sediment(loc=loc, value=quantity, month=month, angle=angle))
+						data.append(sediment(loc=loc, zid=zid, value=quantity, month=month, angle=angle))
 	else:
 		if data:
 			sediment.objects.insert(data)
