@@ -237,7 +237,7 @@ def getSedimentData(request):
 		if zid and month: # zone
 			data = []
 			for s in sediment.objects(zid=zid, month=month):
-				data.append([s.loc, s.angle, s.value])
+				data.append([s.loc, s.angle, round(s.value, 2)])
 
 			res['data'] = data
 			res['status'] = True
