@@ -41,7 +41,7 @@ with open(file_path, 'r') as f:
 			
 			zid = None
 			for z in zone.objects(ztype='zone'):
-				zpolygon = shape(z.polygon)
+				zpolygon = asShape(z.polygon)
 				point = asShape({'type':'Point', 'coordinates':[longitute, latitude]})
 				if zpolygon.intersects(point):
 					zid = z.zid
