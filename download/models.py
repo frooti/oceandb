@@ -154,5 +154,13 @@ class usershoreline(Document):
 	email = StringField(db_field='e', max_length=200, required=True)
 	date = DateTimeField(db_field='dt', default=datetime.now)
 	created_at = DateTimeField(db_field='ct', default=datetime.now)
-	
+
+class sediment(Document):
+	loc = PointField(db_field='l', auto_index=True, required=True)
+	zid = StringField(db_field='zid', max_length=50, required=True)
+	month = StringField(db_field='m', required=True)
+	value = FloatField(db_field='v', required=True)
+	meta = {
+        'indexes': [[("zid", 1), ("month", 1)]]
+    }
 
