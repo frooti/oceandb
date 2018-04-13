@@ -25,7 +25,7 @@ with open(file_path, 'r') as f:
 				data = []
 				print i
 		else:
-			values = r.split(',')a
+			values = r.split(',')
 			longitute = float(values[1])
 			latitude = float(values[2])
 			angle = float(values[3])
