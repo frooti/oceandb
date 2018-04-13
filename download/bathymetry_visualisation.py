@@ -1,4 +1,4 @@
-import shapely.geometry import asShape, mapping
+from shapely.geometry import asShape, mapping
 from statistics import mean
 from download.models import zone, wave, bathymetry_visualisation
 from datetime import datetime, timedelta

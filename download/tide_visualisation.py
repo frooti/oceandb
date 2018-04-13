@@ -1,5 +1,5 @@
 import scipy.io
-import shapely.geometry import asShape, mapping
+from shapely.geometry import asShape, mapping
 from statistics import mean
 from download.models import zone, tide, tide_visualisation
 from datetime import datetime, timedelta

@@ -159,6 +159,7 @@ class sediment(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	zid = StringField(db_field='zid', max_length=50, required=True)
 	month = StringField(db_field='m', required=True)
+	angle = FloatField(db_field='a', required=True)
 	value = FloatField(db_field='v', required=True)
 	meta = {
         'indexes': [[("zid", 1), ("month", 1)]]
