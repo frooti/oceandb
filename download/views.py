@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from models import zone, zonedata, userzone, order, wave, wavedirection, waveperiod, bathymetry, userbathymetry, shoreline, usershoreline, tide, current, currentdirection
+from models import zone, zonedata, userzone, order, wave, wavedirection, waveperiod, bathymetry, userbathymetry, shoreline, usershoreline, tide, current, currentdirection, sediment
 import boto3
 from django.core.mail import EmailMultiAlternatives
 from django.views.decorators.csrf import csrf_exempt
@@ -229,6 +229,26 @@ def getZoneData(request):
 
 	return HttpResponse(json.dumps(res, separators=(',', ':'), default=default))
 
+def getSedimentData(request):
+	res = json.loads(DEFAULT_RESPONSE)
+	zid = request.GET.get('zid', None)
+	month = request.GET.get('month', None)
+	try:
+		if zid and month: # zone
+			data = []
+			for s in sediment.objects(zid=zid, month=month):
+				data.append([s.loc, s.angle, s.value])
+
+			if data:
+				res['data'] = data
+				res['status'] = True
+				res['msg'] = 'success'
+	except Exception,e:
+		print e
+		res['status'] = False
+		res['msg'] = 'Someting went wrong.'
+
+	return HttpResponse(json.dumps(res, default=default))
 
 def getShoreLine(request):
 	res = json.loads(DEFAULT_RESPONSE)

@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^heatmap/$', views.heatMap, name='heatMap'),
     url(r'^zone/$', views.getZone, name='getZone'),
     url(r'^zonedata/$', views.getZoneData, name='getZoneData'),
+    url(r'^sedimentdata/$', views.getSedimentData, name='getSedimentData'),
     url(r'^shoreline/$', views.getShoreLine, name='getShoreLine'),
     url(r'^upload/$', views.uploadData, name='uploadData'),
     url(r'^point/$', views.pointData, name='pointData'),
