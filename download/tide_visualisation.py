@@ -26,8 +26,11 @@ def visualisation():
 				p2 = [round(float(LNG[i][j+1]), 3), round(float(LAT[i][j+1]), 3)]
 				p3 = [round(float(LNG[i+1][j+1]), 3), round(float(LAT[i+1][j+1]), 3)]
 				p4 = [round(float(LNG[i+1][j]), 3), round(float(LAT[i+1][j]), 3)]
-				elements.append(asShape({'type': 'Polygon', 'coordinates': [[p1, p2, p3, p4, p1]]}))
-
+				try:
+					elements.append(asShape({'type': 'Polygon', 'coordinates': [[p1, p2, p3, p4, p1]]}))
+				except:
+					pass
+	
 	for z in zone.objects(zid='b3913413-5b23-4021-a41b-182166e9fd2f'):
 		zpolygon = asShape(z.polygon)
 		for e in elements:
