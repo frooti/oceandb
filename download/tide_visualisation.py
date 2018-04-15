@@ -5,7 +5,7 @@ from download.models import zone, tide, tide_visualisation
 from datetime import datetime, timedelta
 
 ## CONFIG ##
-grid_file = 'current/uv/1.5_jan_current.mat'
+grid_file = '/rawdata/tide/jan/water_level_Jan_1.mat'
 ## CONFIG ##
 
 MAT = scipy.io.loadmat(grid_file)
@@ -24,8 +24,8 @@ def visualisation():
 				p4 = [round(float(LNG[i+1][j]), 3), round(float(LAT[i+1][j]]), 3)]
 				elements.append(asShape({'type': 'Polygon', 'coordinates': [[p1, p2, p3, p4, p1]]}))
 
-	for z in zone.objects(zid='b951a954-f3f7-44f6-80a6-0194cbee50a1'):
-		zpolygon = shape(z.polygon)
+	for z in zone.objects(zid='b3913413-5b23-4021-a41b-182166e9fd2f'):
+		zpolygon = asShape(z.polygon)
 		for e in elements:
 			if e.intersects(zpolygon):
 				points = [t for t in tide.objects(loc__geo_intersects=mapping(e))]
