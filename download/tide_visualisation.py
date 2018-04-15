@@ -1,3 +1,7 @@
+import sys 
+sys.path.append('/home/dataraft/projects/oceandb')
+sys.stdout.flush()
+
 import scipy.io
 from shapely.geometry import asShape, mapping
 from statistics import mean
