@@ -48,11 +48,12 @@ def visualisation():
 							except:
 								pass
 
-						tv = tide_visualisation(zid=z.zid)
-						tv.date = datetime(year=2018, month=1, day=1)+timedelta(days=i-1)
-						tv.polygon = mapping(e)
-						tv.depth = mean(values)
-						tv.save()
+						if values:
+							tv = tide_visualisation(zid=z.zid)
+							tv.date = datetime(year=2018, month=1, day=1)+timedelta(days=i-1)
+							tv.polygon = mapping(e)
+							tv.depth = mean(values)
+							tv.save()
 
 if __name__ == '__main__':
 	visualisation()
