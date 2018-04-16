@@ -9,7 +9,7 @@ from download.models import zone, current, currentdirection, current_visualisati
 from datetime import datetime, timedelta
 
 ## CONFIG ##
-grid_file = '/rawdata/current/1.5_jan_current.mat'
+grid_file = '/rawdata/current/jan/depth_averaged_velocity_jan_1.mat'
 ## CONFIG ##
 
 MAT = scipy.io.loadmat(grid_file)
@@ -19,8 +19,8 @@ GRID = MAT['data']['X'][0][0].shape
 
 def visualisation():
 	elements = []
-	for i in GRID[0]:
-		for j in GRID[1]:
+	for i in range(0, GRID[0]):
+		for j in range(0, GRID[1]):
 			p = [round(float(LNG[i][j]), 3), round(float(LAT[i][j]), 3)]
 			try:
 				point = asShape({'type': 'Point', 'coordinates': p})
