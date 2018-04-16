@@ -46,12 +46,13 @@ def visualisation():
 						if data:
 							current_visualisation.objects.insert(data)
 							data = []
-						cv = current_visualisation(zid=z.zid)
-						cv.date = datetime(year=2018, month=1, day=1)+timedelta(days=i-1)
-						cv.loc = mapping(e)
-						cv.speed = point[str(i)]['0']
-						cv.direction = point2[str(i)]['0']
-						data.append(cv)
+						if str(i) in point and str(i) in point2:
+							cv = current_visualisation(zid=z.zid)
+							cv.date = datetime(year=2018, month=1, day=1)+timedelta(days=i-1)
+							cv.loc = mapping(e)
+							cv.speed = point[str(i)]['0']
+							cv.direction = point2[str(i)]['0']
+							data.append(cv)
 					else:
 						if data:
 							current_visualisation.objects.insert(data)
