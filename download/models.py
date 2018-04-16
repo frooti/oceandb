@@ -100,9 +100,6 @@ class current_visualisation(Document):
 	date = DateTimeField(db_field='dt', required=True)
 	speed = FloatField(db_field='s', required=True)
 	direction = FloatField(db_field='d', required=True)
-	meta = {
-        'indexes': [[("l", "2dsphere"), ("zid", 1), ("dt", 1)]]
-    }
 
 class tide(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
