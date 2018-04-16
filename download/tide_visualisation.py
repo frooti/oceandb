@@ -42,7 +42,11 @@ def visualisation():
 				points = [t['values'] for t in tide.objects(loc__geo_intersects=mapping(e))]
 				
 				if points:
+					data = []
 					for i in range(1,366):
+						if data:
+							tide_visualisation.objects.insert(data)
+						data = []
 						values = []
 						for p in points:
 							try:
@@ -55,7 +59,10 @@ def visualisation():
 							tv.date = datetime(year=2018, month=1, day=1)+timedelta(days=i-1)
 							tv.polygon = mapping(e)
 							tv.depth = mean(values)
-							tv.save()
+							data.append(tv)
+					else:
+						if data:
+							tide_visualisation.objects.insert(data)
 
 if __name__ == '__main__':
 	START = datetime.now()
