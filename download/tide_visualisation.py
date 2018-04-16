@@ -37,14 +37,14 @@ def visualisation():
 		zpolygon = asShape(z.polygon)
 		for e in elements:
 			if e.intersects(zpolygon):
-				points = [t for t in tide.objects(loc__geo_intersects=mapping(e))]
+				points = [t['values'] for t in tide.objects(loc__geo_intersects=mapping(e))]
 				
 				if points:
 					for i in range(1,366):
 						values = []
 						for p in points:
 							try:
-								values.append(p['values'][str(i)]['0'])
+								values.append(p[str(i)]['0'])
 							except:
 								pass
 
