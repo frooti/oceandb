@@ -39,16 +39,18 @@ def visualisation():
 				point2 = currentdirection.objects(loc__geo_intersects=mapping(e)).first()
 
 				if point and point2:
+					point = point['values']
+					point2 = point2['values']
 					data = []
 					for i in range(1,366):
 						if data:
 							current_visualisation.objects.insert(data)
 							data = []
 						cv = current_visualisation(zid=z.zid)
-						cv.date = datetime(year=2018, month=1, day=i)
+						cv.date = datetime(year=2018, month=1, day=1)+timedelta(days=i-1)
 						cv.loc = mapping(e)
-						cv.speed = point['values'][str(i)]['0']
-						cv.direction = point2['values'][str(i)]['0']
+						cv.speed = point[str(i)]['0']
+						cv.direction = point2[str(i)]['0']
 						data.append(cv)
 					else:
 						if data:
