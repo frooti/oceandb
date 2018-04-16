@@ -46,7 +46,7 @@ def visualisation():
 					for i in range(1,366):
 						if data:
 							tide_visualisation.objects.insert(data)
-						data = []
+							data = []
 						values = []
 						for p in points:
 							try:
@@ -63,6 +63,7 @@ def visualisation():
 					else:
 						if data:
 							tide_visualisation.objects.insert(data)
+							data = []
 
 if __name__ == '__main__':
 	START = datetime.now()
