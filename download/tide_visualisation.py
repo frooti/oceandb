@@ -34,9 +34,11 @@ def visualisation():
 					pass
 
 	for z in zone.objects(zid='b3913413-5b23-4021-a41b-182166e9fd2f'):
+		print 'PROCESSING: '+str(z.zid)+' '+str(z.name)
 		zpolygon = asShape(z.polygon)
 		for e in elements:
 			if zpolygon.intersects(e):
+				print mapping(e)
 				points = [t['values'] for t in tide.objects(loc__geo_intersects=mapping(e))]
 				
 				if points:
