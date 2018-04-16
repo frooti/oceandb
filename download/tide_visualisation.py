@@ -56,4 +56,7 @@ def visualisation():
 							tv.save()
 
 if __name__ == '__main__':
+	START = datetime.now()
 	visualisation()
+	print 'TIME: '+str(datetime.now()-START)
+	print 'completed!'
