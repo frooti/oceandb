@@ -31,7 +31,7 @@ def visualisation():
 
 	for z in zone.objects(zid='b951a954-f3f7-44f6-80a6-0194cbee50a1'):
 		print 'PROCESSING: '+str(z.zid)+' '+str(z.name)
-		zpolygon = shape(z.polygon)
+		zpolygon = asShape(z.polygon)
 		for e in elements:
 			if zpolygon.intersects(e):
 				print mapping(e)
