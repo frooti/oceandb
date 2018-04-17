@@ -1,3 +1,7 @@
+import sys 
+sys.path.append('/home/dataraft/projects/oceandb')
+sys.stdout.flush()
+
 from shapely.geometry import asShape, mapping
 from statistics import mean
 from download.models import zone, wave, bathymetry_visualisation
@@ -22,23 +26,40 @@ def visualisation():
 				p2 = [round(Angle(longitude1+(longitude_delta*(j+1))).degree, 10), round(Angle(latitude1+(latitude_delta*i)).degree, 10)]
 				p3 = [round(Angle(longitude1+(longitude_delta*(j+1))).degree, 10), round(Angle(latitude1+(latitude_delta*(i+1))).degree, 10)]
 				p4 = [round(Angle(longitude1+(longitude_delta*j)).degree, 10), round(Angle(latitude1+(latitude_delta*(i+1))).degree, 10)]
+				try:
+					polygon = asShape({'type': 'Polygon', 'coordinates': [[p1, p2, p3, p4, p1]]})
+					if polygon.is_valid:
+						elements.append(polygon)
+				except:
+					pass
 
-				elements.append(asShape({'type': 'Polygon', 'coordinates': [[p1, p2, p3, p4, p1]]}))
-
-	for z in zone.objects(zid='b951a954-f3f7-44f6-80a6-0194cbee50a1'):
+	for z in zone.objects(zid='b3913413-5b23-4021-a41b-182166e9fd2f'):
+		print 'PROCESSING: '+str(z.zid)+' '+str(z.name)
 		zpolygon = shape(z.polygon)
+		
+		data = []
 		for e in elements:
-			if e.intersects(zpolygon):
-				points = [b for b in bathymetry.objects(loc__geo_intersects=mapping(e))]
+			if data and len(data)%1000==0:
+				bathymetry_visualisation.objects.insert(data)
+				data = []
+
+			if zpolygon.intersects(e):
+				print mapping(e)
+				points = [b['values'] for b in bathymetry.objects(loc__geo_intersects=mapping(e))]
+				
 				if points:
 					values = []
 					for p in points:
 						values.append(p.depth)
 
-					bv = wave_visualisation(zid=z.zid)
+					bv = bathymetry_visualisation(zid=z.zid)
 					bv.polygon = mapping(e)
 					bv.depth = mean(values)
-					bv.save()
+					data.append(bv)
+		else:
+			if data:
+				bathymetry_visualisation.objects.insert(data)
+				data = []
 
 if __name__ == '__main__':
 	visualisation()

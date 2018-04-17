@@ -1,3 +1,7 @@
+import sys 
+sys.path.append('/home/dataraft/projects/oceandb')
+sys.stdout.flush()
+
 import scipy.io
 from shapely.geometry import asShape, mapping
 from statistics import mean
@@ -15,26 +19,48 @@ latitude_delta = (latitude2-latitude1)/(grid[0]-1)
 
 def visualisation():
 	elements = []
-	for i in GRID[0]:
-		for j in GRID[1]:
+	for i in range(0, GRID[0]):
+		for j in range(0, GRID[1]):
 			p = [round(longitude1+(longitude_delta*j), 3), round(latitude1+(latitude_delta*i), 3)]
-			elements.append(asShape({'type': 'Point', 'coordinates': p}))
+			try:
+				point = asShape({'type': 'Point', 'coordinates': p})
+				if point.is_valid:
+					elements.append(point)
+			except:
+				pass
 
-	for z in zone.objects(zid='b951a954-f3f7-44f6-80a6-0194cbee50a1'):
-		zpolygon = shape(z.polygon)
+	for z in zone.objects(zid='b3913413-5b23-4021-a41b-182166e9fd2f'):
+		print 'PROCESSING: '+str(z.zid)+' '+str(z.name)
+		zpolygon = asShape(z.polygon)
 		for e in elements:
-			if e.intersects(zpolygon):
+			if zpolygon.intersects(e):
+				print mapping(e)
 				point = wave.objects(loc__geo_intersects=mapping(e)).first()
 				point2 = wavedirection.objects(loc__geo_intersects=mapping(e)).first()
-				
+				data = []
+
 				if point and point2:
+					point = point['values']
+					point2 = point2['values']
+					data = []
 					for i in range(1,366):
-						wdv = wavedirection_visualisation(zid=z.zid)
-						wdv.date = datetime(year=2018, month=1, day=i)
-						wdv.loc = mapping(e)
-						wdv.height = point['values'][str(i)]['0']
-						wdv.direction = point2['values'][str(i)]['0']
-						wdv.save()
+						if data:
+							wavedirection_visualisation.objects.insert(data)
+							data = []
+						if str(i) in point and str(i) in point2:
+							wdv = wavedirection_visualisation(zid=z.zid)
+							wdv.date = datetime(year=2018, month=1, day=i)
+							wdv.loc = mapping(e)
+							wdv.height = point[str(i)]['0']
+							wdv.direction = point2[str(i)]['0']
+							data.append(wdv)
+					else:
+						if data:
+							wavedirection_visualisation.objects.insert(data)
+							data = []
 
 if __name__ == '__main__':
+	START = datetime.now()
 	visualisation()
+	print 'TIME: '+str(datetime.now()-START)
+	print 'completed!'
