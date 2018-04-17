@@ -72,9 +72,9 @@ class wave_visualisation(Document):
 	polygon = PolygonField(db_field='pl', required=True)
 	date = DateTimeField(db_field='dt', required=True)
 	height = FloatField(db_field='d', required=True)
-	meta = {
-        'indexes': [[("pl", "2dsphere"), ("zid", 1), ("dt", 1)]]
-    }
+	# meta = {
+ #        'indexes': [[("pl", "2dsphere"), ("zid", 1), ("dt", 1)]]
+ #    }
 
 class wavedirection_visualisation(Document):
 	zid = StringField(db_field='zid', max_length=50, required=True)
@@ -82,9 +82,9 @@ class wavedirection_visualisation(Document):
 	date = DateTimeField(db_field='dt', required=True)
 	height = FloatField(db_field='h', required=True)
 	direction = FloatField(db_field='d', required=True)
-	meta = {
-        'indexes': [[("l", "2dsphere"), ("zid", 1), ("dt", 1)]]
-    }
+	# meta = {
+ #        'indexes': [[("l", "2dsphere"), ("zid", 1), ("dt", 1)]]
+ #    }
 
 class current(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
@@ -110,9 +110,9 @@ class tide_visualisation(Document):
 	polygon = PolygonField(db_field='pl', required=True)
 	date = DateTimeField(db_field='dt', required=True)
 	depth = FloatField(db_field='d', required=True)
-	meta = {
-        'indexes': [[("pl", "2dsphere"), ("zid", 1), ("dt", 1)]]
-    }
+	# meta = {
+ #        'indexes': [[("pl", "2dsphere"), ("zid", 1), ("dt", 1)]]
+ #    }
 
 class wind(Document):
 	loc = PointField(db_field='l', auto_index=True, required=True)
@@ -127,9 +127,9 @@ class bathymetry_visualisation(Document):
 	zid = StringField(db_field='zid', max_length=50, required=True)
 	polygon = PolygonField(db_field='pl', required=True)
 	depth = FloatField(db_field='d', required=True)
-	meta = {
-        'indexes': [[("pl", "2dsphere"), ("zid", 1), ("dt", 1)]]
-    }
+	# meta = {
+ #        'indexes': [[("pl", "2dsphere"), ("zid", 1), ("dt", 1)]]
+ #    }
 
 class shoreline(Document):
 	lid = StringField(db_field='uzid', max_length=50, required=True)
