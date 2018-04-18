@@ -19,8 +19,8 @@ latitude_delta = 30
 
 def visualisation():
 	elements = []
-	for i in GRID[0]:
-		for j in GRID[1]:
+	for i in range(0, GRID[0]):
+		for j in range(0, GRID[1]):
 			if i!=GRID[0]-1 and j!=GRID[1]-1:
 				p1 = [round(Angle(longitude1+(longitude_delta*j)).degree, 10), round(Angle(latitude1+(latitude_delta*i)).degree, 10)]
 				p2 = [round(Angle(longitude1+(longitude_delta*(j+1))).degree, 10), round(Angle(latitude1+(latitude_delta*i)).degree, 10)]
@@ -35,7 +35,7 @@ def visualisation():
 
 	for z in zone.objects(zid='b3913413-5b23-4021-a41b-182166e9fd2f'):
 		print 'PROCESSING: '+str(z.zid)+' '+str(z.name)
-		zpolygon = shape(z.polygon)
+		zpolygon = asShape(z.polygon)
 		
 		data = []
 		for e in elements:
@@ -62,4 +62,7 @@ def visualisation():
 				data = []
 
 if __name__ == '__main__':
+	START = datetime.now()
 	visualisation()
+	print 'TIME: '+str(datetime.now()-START)
+	print 'completed!'
