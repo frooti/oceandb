@@ -22,10 +22,10 @@ def visualisation():
 	for i in range(0, GRID[0]):
 		for j in range(0, GRID[1]):
 			if i!=GRID[0]-1 and j!=GRID[1]-1:
-				p1 = [round(Angle(longitude1+(longitude_delta*j)).degree, 10), round(Angle(latitude1+(latitude_delta*i)).degree, 10)]
-				p2 = [round(Angle(longitude1+(longitude_delta*(j+1))).degree, 10), round(Angle(latitude1+(latitude_delta*i)).degree, 10)]
-				p3 = [round(Angle(longitude1+(longitude_delta*(j+1))).degree, 10), round(Angle(latitude1+(latitude_delta*(i+1))).degree, 10)]
-				p4 = [round(Angle(longitude1+(longitude_delta*j)).degree, 10), round(Angle(latitude1+(latitude_delta*(i+1))).degree, 10)]
+				p1 = [round(Angle(str(longitude1+(longitude_delta*j))+'s').degree, 10), round(Angle(str(latitude1+(latitude_delta*i))+'s').degree, 10)]
+				p2 = [round(Angle(str(longitude1+(longitude_delta*(j+1)))+'s').degree, 10), round(Angle(str(latitude1+(latitude_delta*i))+'s').degree, 10)]
+				p3 = [round(Angle(str(longitude1+(longitude_delta*(j+1)))+'s').degree, 10), round(Angle(str(latitude1+(latitude_delta*(i+1)))+'s').degree, 10)]
+				p4 = [round(Angle(str(longitude1+(longitude_delta*j))+'s').degree, 10), round(Angle(str(latitude1+(latitude_delta*(i+1)))+'s').degree, 10)]
 				try:
 					polygon = asShape({'type': 'Polygon', 'coordinates': [[p1, p2, p3, p4, p1]]})
 					if polygon.is_valid:

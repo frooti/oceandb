@@ -47,7 +47,7 @@ def visualisation():
 						if data:
 							wavedirection_visualisation.objects.insert(data)
 							data = []
-						if str(i) in point and str(i) in point2:
+						if str(i) in point and point[str(i)].get('0', None) and str(i) in point2 and point2[str(i)].get('0', None):
 							wdv = wavedirection_visualisation(zid=z.zid)
 							wdv.date = datetime(year=2018, month=1, day=1)+timedelta(days=i-1)
 							wdv.loc = mapping(e)
