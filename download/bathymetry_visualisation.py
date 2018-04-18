@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from astropy.coordinates import Angle
 
 ## CONFIG ##
-GRID = (9600, 10,800) 
+GRID = (9600, 10800) 
 latitude1, longitude1 = (108000, 108030)
 latitude2, longitude2 = (-180000, 432030)
 ## CONFIG ##
