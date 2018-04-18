@@ -55,7 +55,7 @@ def visualisation():
 
 						if values:
 							wv = wave_visualisation(zid=z.zid)
-							wv.date = datetime(year=2018, month=1, day=i)
+							wv.date = datetime(year=2018, month=1, day=1)+timedelta(days=i-1)
 							wv.polygon = mapping(e)
 							wv.height = mean(values)
 							data.append(wv)

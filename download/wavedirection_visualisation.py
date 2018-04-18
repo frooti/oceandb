@@ -49,7 +49,7 @@ def visualisation():
 							data = []
 						if str(i) in point and str(i) in point2:
 							wdv = wavedirection_visualisation(zid=z.zid)
-							wdv.date = datetime(year=2018, month=1, day=i)
+							wdv.date = datetime(year=2018, month=1, day=1)+timedelta(days=i-1)
 							wdv.loc = mapping(e)
 							wdv.height = point[str(i)]['0']
 							wdv.direction = point2[str(i)]['0']
