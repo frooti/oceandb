@@ -14,8 +14,8 @@ latitude1, longitude1 = (30.0, 30.0)
 latitude2, longitude2 = (-50.0, 120.0)
 ## CONFIG ##
 
-longitude_delta = (longitude2-longitude1)/(grid[1]-1)
-latitude_delta = (latitude2-latitude1)/(grid[0]-1)
+longitude_delta = (longitude2-longitude1)/(GRID[1]-1)
+latitude_delta = (latitude2-latitude1)/(GRID[0]-1)
 
 def visualisation():
 	elements = []
