@@ -33,7 +33,7 @@ def visualisation():
 				except:
 					pass
 
-	for z in zone.objects(zid='b3913413-5b23-4021-a41b-182166e9fd2f'):
+	for z in zone.objects(ztype='zone'):
 		print 'PROCESSING: '+str(z.zid)+' '+str(z.name)
 		zpolygon = asShape(z.polygon)
 		for e in elements:
