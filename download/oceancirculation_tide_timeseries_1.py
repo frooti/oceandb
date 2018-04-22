@@ -65,10 +65,10 @@ def timeseries():
 				date += timestep
 				print 'TIMESTEP: '+str(date)
 
-			print 'Writing to Output File ...'
-			with open(output_path, 'a') as o:
-				for l in DATA:
-					o.write('{}${}{}'.format(l, json.dumps(DATA[l]), os.linesep))
+	print 'Writing to Output File ...'
+	with open(output_path, 'a') as o:
+		for l in DATA:
+			o.write('{}${}{}'.format(l, json.dumps(DATA[l]), os.linesep))
 
 
 if __name__ == '__main__':
