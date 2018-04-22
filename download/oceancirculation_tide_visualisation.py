@@ -56,6 +56,7 @@ def visualisation():
 								elements.append(polygon)
 						except:
 							pass
+				break
 
 
 	for z in zone.objects(ztype='project', zid=zid):
