@@ -37,7 +37,10 @@ def timeseries():
 			line = line.strip().split(' ')
 			if len(line)==9 or len(line)==4: # NODE
 				if len(line)==9:
-					line = [float(i) for i in line]
+					try:
+						line = [float(i) for i in line]
+					except Exception, e:
+						print e						
 					node += 1
 					lat, lng = utm.to_latlon(line[0], line[1], UTM_ZONE, 'U')
 					depth = line[2]
@@ -55,7 +58,11 @@ def timeseries():
 					key = NODE_KEY[node]
 					day = str(date.timetuple().tm_yday)
 					mins = '{}'.format(date.hour*60+date.minute)
-					DATA[key][day][mins] = depth
+					if day in DATA[key]:
+						DATA[key][day][mins] = depth
+					else:
+						DATA[key][day] = {}
+						DATA[key][day][mins] = depth
 			
 			if node==NODE_COUNT:
 				node = 0
