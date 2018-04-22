@@ -94,11 +94,17 @@ class current(Document):
 	zid = StringField(db_field='zid', max_length=50, required=True)
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
+	meta = {
+		'indexes': [{'fields': [("zid", 1), ("loc", "2dsphere")], 'sparse': True}]
+	}
 
 class currentdirection(Document):
 	zid = StringField(db_field='zid', max_length=50, required=True)
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
+	meta = {
+		'indexes': [{'fields': [("zid", 1), ("loc", "2dsphere")], 'sparse': True}]
+	}
 
 class current_visualisation(Document):
 	zid = StringField(db_field='zid', max_length=50, required=True)
@@ -111,6 +117,9 @@ class tide(Document):
 	zid = StringField(db_field='zid', max_length=50, required=True)
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
+	meta = {
+		'indexes': [{'fields': [("zid", 1), ("loc", "2dsphere")], 'sparse': True}]
+	}
 
 class tide_visualisation(Document):
 	zid = StringField(db_field='zid', max_length=50, required=True)
