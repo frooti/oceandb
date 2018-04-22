@@ -40,7 +40,8 @@ def timeseries():
 					try:
 						line = [float(i) for i in line]
 					except Exception, e:
-						print e						
+						print e
+						continue												
 					node += 1
 					lat, lng = utm.to_latlon(line[0], line[1], UTM_ZONE, 'U')
 					depth = line[2]
