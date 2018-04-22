@@ -21,9 +21,12 @@ NODE_COUNT = 68604
 ELEMENT_COUNT = 134659
 ## CONFIG ##
 
+DATA = {}
+NODE_KEY = {}
+
 def timeseries():
 	global date
-	global NODES
+	global DATA
 	global NODE_KEY
 
 	with open(file_path, 'r') as f:
@@ -43,9 +46,9 @@ def timeseries():
 						day = str(date.timetuple().tm_yday)
 						mins = '{}'.format(date.hour*60+date.minute)
 						NODE_KEY[node] = key
-						NODES[key] = {}
-						NODES[key][day] = {}
-						NODES[key][day][mins] = depth
+						DATA[key] = {}
+						DATA[key][day] = {}
+						DATA[key][day][mins] = depth
 					elif len(line)==4:
 						line = [float(i) for i in line]
 						node += 1
@@ -53,7 +56,7 @@ def timeseries():
 						key = NODE_KEY[node]
 						day = str(date.timetuple().tm_yday)
 						mins = '{}'.format(date.hour*60+date.minute)
-						NODES[key][day][mins] = depth
+						DATA[key][day][mins] = depth
 				except Exception, e:
 					print e
 
@@ -64,8 +67,8 @@ def timeseries():
 
 			print 'Writing to Output File ...'
 			with open(output_path, 'a') as o:
-				for l in NODES:
-					o.write('{}${}{}'.format(l, json.dumps(NODES[l]), os.linesep))
+				for l in DATA:
+					o.write('{}${}{}'.format(l, json.dumps(DATA[l]), os.linesep))
 
 
 if __name__ == '__main__':
