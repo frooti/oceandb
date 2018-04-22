@@ -48,7 +48,7 @@ def visualisation():
 			if element==ELEMENT_COUNT and node==NODE_COUNT:
 				for E in ELEMENTS:
 					if E:
-						polygon = {'type': 'Polygon', 'coordinates': [[NODES[n][:-1] for n in E]]}
+						polygon = {'type': 'Polygon', 'coordinates': [[NODES[n] for n in E]]}
 						try:
 							polygon = asShape(polygon)
 							if polygon.is_valid:
