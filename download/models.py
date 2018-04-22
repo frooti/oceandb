@@ -96,7 +96,7 @@ class current(Document):
 	values = DictField()
 	meta = {
 		'index_background': True,
-		'indexes': [{'fields': [("zid", 1), ("loc", "2dsphere")], 'sparse': True}]
+		'indexes': [{'fields': [("zid", 1), ("loc", "2dsphere")], 'sparse': True}, {'fields': ["zid"], 'sparse': True}]
 	}
 
 class currentdirection(Document):
@@ -105,7 +105,7 @@ class currentdirection(Document):
 	values = DictField()
 	meta = {
 		'index_background': True,
-		'indexes': [{'fields': [("zid", 1), ("loc", "2dsphere")], 'sparse': True}]
+		'indexes': [{'fields': [("zid", 1), ("loc", "2dsphere")], 'sparse': True}, {'fields': ["zid"], 'sparse': True}]
 	}
 
 class current_visualisation(Document):
@@ -121,7 +121,7 @@ class tide(Document):
 	values = DictField()
 	meta = {
 		'index_background': True,
-		'indexes': [{'fields': [("zid", 1), ("loc", "2dsphere")], 'sparse': True}]
+		'indexes': [{'fields': [("zid", 1), ("loc", "2dsphere")], 'sparse': True}, {'fields': ["zid"], 'sparse': True}]
 	}
 
 class tide_visualisation(Document):
