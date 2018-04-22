@@ -36,30 +36,27 @@ def timeseries():
 		for line in f:
 			line = line.strip().split(' ')
 			if len(line)==9 or len(line)==4: # NODE
-				try:
-					if len(line)==9:
-						line = [float(i) for i in line]
-						node += 1
-						lat, lng = utm.to_latlon(line[0], line[1], UTM_ZONE, 'U')
-						depth = line[2]
-						key = '{}:{}'.format(lng, lat)
-						day = str(date.timetuple().tm_yday)
-						mins = '{}'.format(date.hour*60+date.minute)
-						NODE_KEY[node] = key
-						DATA[key] = {}
-						DATA[key][day] = {}
-						DATA[key][day][mins] = depth
-					elif len(line)==4:
-						line = [float(i) for i in line]
-						node += 1
-						depth = line[0]
-						key = NODE_KEY[node]
-						day = str(date.timetuple().tm_yday)
-						mins = '{}'.format(date.hour*60+date.minute)
-						DATA[key][day][mins] = depth
-				except Exception, e:
-					print e
-
+				if len(line)==9:
+					line = [float(i) for i in line]
+					node += 1
+					lat, lng = utm.to_latlon(line[0], line[1], UTM_ZONE, 'U')
+					depth = line[2]
+					key = '{}:{}'.format(lng, lat)
+					day = str(date.timetuple().tm_yday)
+					mins = '{}'.format(date.hour*60+date.minute)
+					NODE_KEY[node] = key
+					DATA[key] = {}
+					DATA[key][day] = {}
+					DATA[key][day][mins] = depth
+				elif len(line)==4:
+					line = [float(i) for i in line]
+					node += 1
+					depth = line[0]
+					key = NODE_KEY[node]
+					day = str(date.timetuple().tm_yday)
+					mins = '{}'.format(date.hour*60+date.minute)
+					DATA[key][day][mins] = depth
+			
 			if node==NODE_COUNT:
 				node = 0
 				date += timestep
