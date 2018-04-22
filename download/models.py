@@ -57,14 +57,17 @@ class order(Document):
 	processed_at = DateTimeField(db_field='pt', default=None)
 
 class wave(Document):
+	zid = StringField(db_field='zid', max_length=50, required=True)
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
 
 class wavedirection(Document):
+	zid = StringField(db_field='zid', max_length=50, required=True)
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
 
 class waveperiod(Document):
+	zid = StringField(db_field='zid', max_length=50, required=True)
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
 
@@ -88,10 +91,12 @@ class wavedirection_visualisation(Document):
  #    }
 
 class current(Document):
+	zid = StringField(db_field='zid', max_length=50, required=True)
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
 
 class currentdirection(Document):
+	zid = StringField(db_field='zid', max_length=50, required=True)
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
 
@@ -103,6 +108,7 @@ class current_visualisation(Document):
 	direction = FloatField(db_field='d', required=True)
 
 class tide(Document):
+	zid = StringField(db_field='zid', max_length=50, required=True)
 	loc = PointField(db_field='l', auto_index=True, required=True)
 	values = DictField()
 
