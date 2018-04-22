@@ -49,32 +49,7 @@ BATHY_DATAPOINT_PRICE = 1
 
 def login(request):
 	res = json.loads(DEFAULT_RESPONSE)
-	# ## available dates ##
-	# height = {'from_date': None, 'to_date': None}
-	# period = {'from_date': None, 'to_date': None}
-	# direction = {'from_date': None, 'to_date': None}
-
-	# w = wave.objects().first()
-	# if w:
-	# 	from_day = sorted(w.values.keys())[0]
-	# 	to_day = sorted(w.values.keys())[-1]
-	# 	height['from_date'] = (datetime(year=2015, month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
-	# 	height['to_date'] = (datetime(year=2015, month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
-
-	# wp = waveperiod.objects().first()
-	# if wp:
-	# 	from_day = sorted(wp.values.keys())[0]
-	# 	to_day = sorted(wp.values.keys())[-1]
-	# 	height['from_date'] = (datetime(year=2015, month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
-	# 	height['to_date'] = (datetime(year=2015, month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
-
-	# wd = wavedirection.objects().first()
-	# if wd:
-	# 	from_day = sorted(wd.values.keys())[0]
-	# 	to_day = sorted(wd.values.keys())[-1]
-	# 	height['from_date'] = (datetime(year=2015, month=1, day=1)+timedelta(days=int(from_day)-1)).isoformat()
-	# 	height['to_date'] = (datetime(year=2015, month=1, day=1)+timedelta(days=int(to_day)-1)).isoformat()
-
+	
 	## session check ##
 	if request.user:
 		res['msg'] = 'session active.'
@@ -82,11 +57,6 @@ def login(request):
 		res['data'] = {'email': request.user.email, 'subscription_type': request.user.subscription_type, 'subscription_zones': request.user.subscription_zones, 'is_active': request.user.is_active}
 		# userzones
 		res['data']['userzones'] = [[uz.uzid, uz.polygon] for uz in userzone.objects(email=request.user.email)]
-		# available dates
-		# res['data']['dates'] = {}
-		# res['data']['dates']['waveheight'] = height
-		# res['data']['dates']['waveperiod'] = period
-		# res['data']['dates']['wavedirection'] = direction
 		return HttpResponse(json.dumps(res, default=default))
 
 	## jugaad ##
@@ -104,11 +74,6 @@ def login(request):
 		res['data'] = {'email': email, 'subscription_type': user.subscription_type, 'subscription_zones': user.subscription_zones, 'is_active':user.is_active}
 		# userzones
 		res['data']['userzones'] = [[uz.uzid, uz.polygon] for uz in userzone.objects(email=request.user.email)]
-		# available dates
-		# res['data']['dates'] = {}
-		# res['data']['dates']['waveheight'] = height
-		# res['data']['dates']['waveperiod'] = period
-		# res['data']['dates']['wavedirection'] = direction
 	else:
 		res['msg'] = 'email/password does not match.'
 		res['status'] = False
