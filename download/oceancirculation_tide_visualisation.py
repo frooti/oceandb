@@ -20,7 +20,7 @@ ELEMENTS = [[] for i in range(0, ELEMENT_COUNT+1)]
 
 def visualisation():
 	elements = []
-	with open(file_path, 'r') as f:
+	with open(grid_file, 'r') as f:
 		print 'POPULATING ELEMENTS ...'
 
 		node = 0
