@@ -58,7 +58,7 @@ def login(request):
 		# userzones
 		res['data']['userzones'] = [[uz.uzid, uz.polygon] for uz in userzone.objects(email=request.user.email)]
 		# projects
-		res['data']['projects'] = [[z.zid, z.polygon] for z in zone.objects(email=request.user.email)]
+		res['data']['projects'] = [[z.zid, z.polygon] for z in zone.objects(ztype='project', email=request.user.email)]
 		return HttpResponse(json.dumps(res, default=default))
 
 	## jugaad ##
@@ -77,7 +77,7 @@ def login(request):
 		# userzones
 		res['data']['userzones'] = [[uz.uzid, uz.polygon] for uz in userzone.objects(email=request.user.email)]
 		# projects
-		res['data']['projects'] = [[z.zid, z.polygon] for z in zone.objects(email=request.user.email)]
+		res['data']['projects'] = [[z.zid, z.polygon] for z in zone.objects(ztype='project', email=request.user.email)]
 	else:
 		res['msg'] = 'email/password does not match.'
 		res['status'] = False
