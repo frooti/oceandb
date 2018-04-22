@@ -49,15 +49,15 @@ def visualisation():
 				for E in ELEMENTS:
 					if E:
 						polygon = {'type': 'Polygon', 'coordinates': [[NODES[n][:-1] for n in E]]}
-						polygon['coordinates'][0] += [polygon['coordinates'][0][0]]
 						try:
 							polygon = asShape(polygon)
 							if polygon.is_valid:
 								elements.append(polygon)
 						except:
 							pass
+				
+				print 'ELEMENTS: '+str(len(elements))
 				break
-
 
 	for z in zone.objects(ztype='project', zid=zid):
 		print 'PROCESSING: '+str(z.zid)+' '+str(z.name)
