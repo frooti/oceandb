@@ -2,6 +2,7 @@ import sys
 sys.path.append('/home/dataraft/projects/oceandb')
 sys.stdout.flush()
 
+import utm
 from shapely.geometry import asShape, mapping
 from statistics import mean
 from download.models import zone, tide, tide_visualisation
