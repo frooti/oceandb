@@ -48,7 +48,7 @@ def timeseries():
 					u = line[3]
 					v = line[4]
 					speed = round(math.sqrt((u**2)+(v**2)), 3)
-					direction = round(math.degrees(math.atan2(y, u)), 2)
+					direction = round(math.degrees(math.atan2(v, u)), 2)
 					# NORTH
 					if direction>0 and direction<=90: # Q1
 						direction = 90-direction
