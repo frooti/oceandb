@@ -72,7 +72,7 @@ def timeseries():
 					u = line[1]
 					v = line[2]
 					speed = round(math.sqrt((u**2)+(v**2)), 3)
-					direction = round(math.degrees(math.atan2(y, u)), 2)
+					direction = round(math.degrees(math.atan2(v, u)), 2)
 					key = NODE_KEY[node]
 					day = str(date.timetuple().tm_yday)
 					mins = '{}'.format(date.hour*60+date.minute)
