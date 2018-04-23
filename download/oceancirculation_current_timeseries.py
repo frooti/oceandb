@@ -58,6 +58,7 @@ def timeseries():
 						direction = 90-direction
 					if direction>-180 and direction<=-90: # Q3
 						direction = 90-direction
+					direction = round(direction, 2)
 
 					key = '{}:{}'.format(lng, lat)
 					day = str(date.timetuple().tm_yday)
@@ -82,6 +83,7 @@ def timeseries():
 						direction = 90-direction
 					if direction>-180 and direction<=-90: # Q3
 						direction = 90-direction
+					direction = round(direction, 2)
 
 					key = NODE_KEY[node]
 					day = str(date.timetuple().tm_yday)
