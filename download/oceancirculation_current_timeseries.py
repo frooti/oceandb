@@ -73,6 +73,16 @@ def timeseries():
 					v = line[2]
 					speed = round(math.sqrt((u**2)+(v**2)), 3)
 					direction = round(math.degrees(math.atan2(v, u)), 2)
+					# NORTH
+					if direction>0 and direction<=90: # Q1
+						direction = 90-direction
+					if direction>90 and direction<=180: # Q4
+						direction = 450-direction
+					if direction>-90 and direction<=0: # Q2
+						direction = 90-direction
+					if direction>-180 and direction<=-90: # Q3
+						direction = 90-direction
+
 					key = NODE_KEY[node]
 					day = str(date.timetuple().tm_yday)
 					mins = '{}'.format(date.hour*60+date.minute)
@@ -88,7 +98,7 @@ def timeseries():
 				print 'TIMESTEP: '+str(date)
 
 	print 'Writing to Output File ...'
-	with open(output_path, 'a') as o:
+	with open(output_path, 'w') as o:
 		for l in DATA:
 			o.write('{}${}{}'.format(l, json.dumps(DATA[l]), os.linesep))
 

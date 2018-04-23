@@ -71,7 +71,7 @@ def timeseries():
 				print 'TIMESTEP: '+str(date)
 
 	print 'Writing to Output File ...'
-	with open(output_path, 'a') as o:
+	with open(output_path, 'w') as o:
 		for l in DATA:
 			o.write('{}${}{}'.format(l, json.dumps(DATA[l]), os.linesep))
 
