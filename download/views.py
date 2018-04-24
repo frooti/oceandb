@@ -605,7 +605,7 @@ def pointData(request):
 
 		if request.user and point and data in ['waveheight', 'wavedirection', 'waveperiod', 'bathymetry', 'tide', 'current', 'currentdirection']:
 			intersection_zones = [z.zid for z in zone.objects(polygon__geo_intersects=point, ztype__in=['zone', 'project']).exclude('triangles')]
-			subscribed_zones = request.user.subscription_zones
+			subscribed_zones = request.user.subscription_zones+request.user.projects
 			
 			if intersection_zones and not list(set(intersection_zones)-set(subscribed_zones)): # subscribed zone check
 				if data in ['waveheight', 'wavedirection', 'waveperiod', 'tide', 'current', 'currentdirection']:
