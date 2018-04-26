@@ -210,7 +210,7 @@ def getSedimentData(request):
 				if key in data:
 					data[key][int(s.month)] = round(s.value, 2)
 				else:
-					data[key] = [None] * 12
+					data[key] = [None] * 13
 
 			res['data'] = data
 			res['status'] = True
