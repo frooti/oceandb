@@ -213,7 +213,14 @@ def getSedimentData(request):
 					data[key] = [None] * 13
 					data[key][int(s.month)] = round(s.value, 2)
 
-			res['data'] = data
+			values = []
+			for key in data:
+				point = json.loads(key.split('$')[0])
+				angle = round(float(key.split('$')[1]), 2)
+				value = data[key]
+				values.append([point, angle, value])
+
+			res['data'] = values
 			res['status'] = True
 			res['msg'] = 'success'
 	except Exception,e:
