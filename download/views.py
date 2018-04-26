@@ -211,6 +211,7 @@ def getSedimentData(request):
 					data[key][int(s.month)] = round(s.value, 2)
 				else:
 					data[key] = [None] * 13
+					data[key][int(s.month)] = round(s.value, 2)
 
 			res['data'] = data
 			res['status'] = True
