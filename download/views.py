@@ -204,9 +204,13 @@ def getSedimentData(request):
 	month = request.GET.get('month', None)
 	try:
 		if zid and month: # zone
-			data = []
-			for s in sediment.objects(zid=zid, month=month):
-				data.append([s.loc, s.angle, round(s.value, 2)])
+			data = {}
+			for s in sediment.objects(zid=zid):
+				key = json.dumps(s.loc['corrdinates'])+'$'+str(s.angle)
+				if key in data:
+					data[key][int(s.month)] = round(s.value, 2)
+				else:
+					data[key] = []
 
 			res['data'] = data
 			res['status'] = True
